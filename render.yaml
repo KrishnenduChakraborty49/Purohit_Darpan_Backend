@@ -11,12 +11,34 @@ services:
         value: org.postgresql.Driver
       - key: DB_DIALECT
         value: org.hibernate.dialect.PostgreSQLDialect
-      - key: DB_URL
+      - key: DB_HOST
         fromDatabase:
           name: purohit-db
-          property: connectionString
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: purohit-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: purohit-db
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: purohit-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: purohit-db
+          property: password
+      - key: DB_URL
+        value: "jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}"
       - key: FIREBASE_MOCK_ENABLED
-        value: "false"
+        value: "true"
+      - key: PANCHANG_USE_MOCK
+        value: "true"
+      - key: JWT_SECRET
+        value: "purohit-darpan-secure-cloud-key-256-bit-minimum-required"
 
 databases:
   - name: purohit-db
