@@ -33,8 +33,6 @@ services:
         fromDatabase:
           name: purohit-db
           property: password
-      - key: DB_URL
-        value: "jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}"
       - key: FIREBASE_MOCK_ENABLED
         value: "true"
       - key: PANCHANG_USE_MOCK
