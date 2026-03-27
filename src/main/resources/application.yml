@@ -58,6 +58,8 @@ firebase:
 
 panchang:
   api:
+    base-url: ${PANCHANG_API_BASE_URL:https://api.example.com}
+    key: ${PANCHANG_API_KEY:dummy-key}
     use-mock: ${PANCHANG_USE_MOCK:true}
 
 cors:
@@ -107,7 +109,7 @@ spring:
       maximum-pool-size: 10
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
