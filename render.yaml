@@ -39,8 +39,10 @@ services:
         value: "true"
       - key: PANCHANG_USE_MOCK
         value: "true"
+      - key: AI_RAG_ENABLED
+        value: "false"
       - key: JWT_SECRET
-        value: "purohit-darpan-secure-cloud-key-256-bit-minimum-required"
+        value: "purohit-darpan-secure-cloud-key-2026-deployment-fix"
 
 databases:
   - name: purohit-db
