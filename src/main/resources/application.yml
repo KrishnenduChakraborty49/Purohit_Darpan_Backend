@@ -1,0 +1,182 @@
+spring:
+  application:
+    name: purohit-darpan
+  profiles:
+    active: dev
+  autoconfigure:
+    # Spring AI Qdrant auto-config tries to connect to Qdrant during startup.
+    # We handle Qdrant wiring ourselves (only when `ai.rag.enabled=true`),
+    # so the app can start even when Qdrant is offline.
+    exclude:
+      - org.springframework.ai.vectorstore.qdrant.autoconfigure.QdrantVectorStoreAutoConfiguration
+
+  datasource:
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:purohit_darpan}?useSSL=false&serverTimezone=Asia/Kolkata&useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD}
+    driver-class-name: 
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: 
+        format_sql: true
+        use_sql_comments: true
+        default_batch_fetch_size: 25
+    open-in-view: true
+
+  sql:
+    init:
+      mode: never
+      schema-locations: classpath:schema.sql
+      data-locations: classpath:seed_data.sql
+      encoding: UTF-8
+
+  cache:
+    type: simple
+
+  scheduling:
+    enabled: true
+
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+  web:
+    resources:
+      static-locations: classpath:/static/
+
+  ai:
+    ollama:
+      base-url: http://127.0.0.1:11434
+      chat:
+        options:
+          model: llama3.2:1b
+          temperature: 0.3
+          num-predict: 350
+      embedding:
+        options:
+          model: mxbai-embed-large
+
+    vectorstore:
+      qdrant:
+        host: ${QDRANT_HOST:127.0.0.1}
+        port: ${QDRANT_GRPC_PORT:6334}
+        collection-name: ${QDRANT_COLLECTION:purohit_darpan_puja}
+        initialize-schema: ${QDRANT_INIT_SCHEMA:true}
+
+ai:
+  rag:
+    enabled: true
+
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
+  error:
+    include-message: always
+    include-binding-errors: always
+
+# JWT Configuration
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION:86400000}   # 24 hours in ms
+  refresh-expiration: ${JWT_REFRESH_EXPIRATION:604800000}  # 7 days
+
+# Firebase
+firebase:
+  service-account-path: ${FIREBASE_SERVICE_ACCOUNT_PATH:firebase-service-account.json}
+  project-id: 
+  mock-enabled: ${FIREBASE_MOCK_ENABLED:false}
+
+# Panchang External API
+panchang:
+  api:
+    base-url: ${PANCHANG_API_URL:https://api.vedicastroapi.com/v3-json}
+    key: ${PANCHANG_API_KEY:mock}
+    timezone: 5.5
+    lang: en
+    use-mock: ${PANCHANG_USE_MOCK:true}
+
+# CORS
+cors:
+  allowed-origins: ${CORS_ORIGINS:http://localhost:5173,http://localhost:3000}
+  allowed-methods: GET,POST,PUT,DELETE,OPTIONS,PATCH
+  allowed-headers: "*"
+  max-age: 3600
+
+# Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
+
+logging:
+  level:
+    com.purohitdarpan: DEBUG
+    org.springframework.security: INFO
+    org.springframework.ai: DEBUG
+    org.hibernate.SQL: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  ai:
+    rag:
+      index-on-startup: true
+      reindex-on-startup: true
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+  sql:
+    init:
+      mode: always
+
+logging:
+  level:
+    com.purohitdarpan: DEBUG
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  ai:
+    rag:
+      index-on-startup: false
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+  datasource:
+    hikari:
+      maximum-pool-size: 50
+
+logging:
+  level:
+    com.purohitdarpan: INFO
+
+
+
+

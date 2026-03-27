@@ -1,0 +1,19 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+
+# Ignore the build directory
+/target/
+
+# Ignore local environment variables
+.env
+
+# Ignore IntelliJ IDEA internal files
+.idea/
+*.iml
+
+# Ignore compiled class files
+*.class
+
+# Firebase credentials
+firebase-service-account.json
