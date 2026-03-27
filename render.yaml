@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: purohit-darpan-backend
+    env: docker
+    plan: free
+    region: ohio
+    dockerContext: .
+    dockerfilePath: Dockerfile
+    envVars:
+      - key: DB_DRIVER
+        value: org.postgresql.Driver
+      - key: DB_DIALECT
+        value: org.hibernate.dialect.PostgreSQLDialect
+      - key: DB_URL
+        fromDatabase:
+          name: purohit-db
+          property: connectionString
+      - key: FIREBASE_MOCK_ENABLED
+        value: "false"
+
+databases:
+  - name: purohit-db
+    plan: free
+    region: ohio
