@@ -7,6 +7,8 @@ services:
     dockerContext: .
     dockerfilePath: Dockerfile
     envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
       - key: DB_DRIVER
         value: org.postgresql.Driver
       - key: DB_DIALECT
