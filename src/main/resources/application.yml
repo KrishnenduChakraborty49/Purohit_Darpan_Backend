@@ -34,11 +34,24 @@ spring:
 
   ai:
     ollama:
-      base-url: http://127.0.0.1:11434
+      base-url: ${OLLAMA_BASE_URL:http://127.0.0.1:11434}
+    # These are used when `ai.rag.enabled=true`
     vectorstore:
       qdrant:
         host: ${QDRANT_HOST:127.0.0.1}
         port: ${QDRANT_GRPC_PORT:6334}
+
+  # These exact keys match the QdrantVectorStoreConfig @Value annotations
+  ai:
+    vectorstore:
+      qdrant:
+        host: ${QDRANT_HOST:127.0.0.1}
+        port: ${QDRANT_GRPC_PORT:6334}
+        collection-name: ${QDRANT_COLLECTION_NAME:purohit_darpan_puja}
+        api-key: ${QDRANT_API_KEY:}
+        initialize-schema: ${QDRANT_INIT_SCHEMA:false}
+    rag:
+      reindex-on-startup: ${AI_RAG_REINDEX:true}
 
 ai:
   rag:
@@ -53,7 +66,7 @@ jwt:
 
 firebase:
   service-account-path: ${FIREBASE_SERVICE_ACCOUNT_PATH:firebase-service-account.json}
-  project-id: 
+  project-id: ${FIREBASE_PROJECT_ID:purohit-darpan}
   mock-enabled: ${FIREBASE_MOCK_ENABLED:false}
 
 panchang:
@@ -116,6 +129,13 @@ spring:
   ai:
     rag:
       enabled: false
+      reindex-on-startup: false
+  # Redundant setting under `spring.` to match code @Value accurately
+  ai:
+    vectorstore:
+      qdrant:
+        host: localhost
+        port: 6334
 
 logging:
   level:
