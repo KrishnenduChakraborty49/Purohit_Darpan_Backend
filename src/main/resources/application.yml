@@ -2,23 +2,24 @@ spring:
   application:
     name: purohit-darpan
   profiles:
-    active: prod
+    active: dev
   datasource:
-    url: jdbc:postgresql://${DB_HOST:dpg-d738kqffte5s73et8ar0-a.ohio-postgres.render.com}:${DB_PORT:5432}/${DB_NAME:purohit_db_kd3e}
-    username: ${DB_USERNAME:purohit_db_kd3e_user}
-    password: ${DB_PASSWORD}
-    driver-class-name: org.postgresql.Driver
+    # Default (Local) MySQL configuration
+    url: ${DB_URL:jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:purohit_darpan}?useSSL=false&serverTimezone=Asia/Kolkata&useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:}
+    driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       maximum-pool-size: 10
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+        dialect: org.hibernate.dialect.MySQLDialect
   sql:
     init:
-      mode: always
+      mode: never
 
 server:
   port: ${PORT:8080}
@@ -33,3 +34,24 @@ cors:
 logging:
   level:
     com.purohitdarpan: INFO
+
+---
+# Production Profile for Render (PostgreSQL)
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:dpg-d738kqffte5s73et8ar0-a.ohio-postgres.render.com}:${DB_PORT:5432}/${DB_NAME:purohit_db_kd3e}
+    username: ${DB_USERNAME:purohit_db_kd3e_user}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  sql:
+    init:
+      mode: always
