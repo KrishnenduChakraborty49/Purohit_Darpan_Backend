@@ -35,14 +35,6 @@ spring:
   ai:
     ollama:
       base-url: ${OLLAMA_BASE_URL:http://127.0.0.1:11434}
-    # These are used when `ai.rag.enabled=true`
-    vectorstore:
-      qdrant:
-        host: ${QDRANT_HOST:127.0.0.1}
-        port: ${QDRANT_GRPC_PORT:6334}
-
-  # These exact keys match the QdrantVectorStoreConfig @Value annotations
-  ai:
     vectorstore:
       qdrant:
         host: ${QDRANT_HOST:127.0.0.1}
@@ -51,11 +43,8 @@ spring:
         api-key: ${QDRANT_API_KEY:}
         initialize-schema: ${QDRANT_INIT_SCHEMA:false}
     rag:
+      enabled: ${AI_RAG_ENABLED:true}
       reindex-on-startup: ${AI_RAG_REINDEX:true}
-
-ai:
-  rag:
-    enabled: true
 
 server:
   port: ${SERVER_PORT:8080}
@@ -130,12 +119,10 @@ spring:
     rag:
       enabled: false
       reindex-on-startup: false
-  # Redundant setting under `spring.` to match code @Value accurately
-  ai:
     vectorstore:
       qdrant:
-        host: localhost
-        port: 6334
+        host: ${QDRANT_HOST:localhost}
+        port: ${QDRANT_GRPC_PORT:6334}
 
 logging:
   level:
