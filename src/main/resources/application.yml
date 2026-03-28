@@ -2,109 +2,10 @@ spring:
   application:
     name: purohit-darpan
   profiles:
-    active: dev
-  autoconfigure:
-    exclude:
-      - org.springframework.ai.vectorstore.qdrant.autoconfigure.QdrantVectorStoreAutoConfiguration
-
+    active: prod
   datasource:
-    url: ${DB_URL:jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:purohit_darpan}?useSSL=false&serverTimezone=Asia/Kolkata&useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true}
-    username: ${DB_USERNAME:root}
-    password: ${DB_PASSWORD:}
-    driver-class-name: ${DB_DRIVER:com.mysql.cj.jdbc.Driver}
-    hikari:
-      maximum-pool-size: 20
-      minimum-idle: 5
-      connection-timeout: 30000
-
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: false
-    properties:
-      hibernate:
-        dialect: ${DB_DIALECT:org.hibernate.dialect.MySQLDialect}
-        format_sql: true
-        use_sql_comments: true
-    open-in-view: true
-
-  sql:
-    init:
-      mode: never
-
-  ai:
-    ollama:
-      base-url: ${OLLAMA_BASE_URL:http://127.0.0.1:11434}
-    vectorstore:
-      qdrant:
-        host: ${QDRANT_HOST:127.0.0.1}
-        port: ${QDRANT_GRPC_PORT:6334}
-        collection-name: ${QDRANT_COLLECTION_NAME:purohit_darpan_puja}
-        api-key: ${QDRANT_API_KEY:}
-        initialize-schema: ${QDRANT_INIT_SCHEMA:false}
-    rag:
-      enabled: ${AI_RAG_ENABLED:true}
-      reindex-on-startup: ${AI_RAG_REINDEX:true}
-
-server:
-  port: ${PORT:8080}
-
-jwt:
-  secret: ${JWT_SECRET:purohit-darpan-secure-key-2026-fallback-only}
-  expiration: ${JWT_EXPIRATION:86400000}
-
-firebase:
-  service-account-path: ${FIREBASE_SERVICE_ACCOUNT_PATH:firebase-service-account.json}
-  project-id: ${FIREBASE_PROJECT_ID:purohit-darpan}
-  mock-enabled: ${FIREBASE_MOCK_ENABLED:false}
-
-panchang:
-  api:
-    base-url: ${PANCHANG_API_BASE_URL:https://api.example.com}
-    key: ${PANCHANG_API_KEY:dummy-key}
-    use-mock: ${PANCHANG_USE_MOCK:true}
-
-cors:
-  allowed-origins: "*"
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info,metrics
-
-logging:
-  level:
-    com.purohitdarpan: INFO
-
----
-spring:
-  config:
-    activate:
-      on-profile: dev
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
-    show-sql: true
-  sql:
-    init:
-      mode: always
-  ai:
-    rag:
-      enabled: true
-
-logging:
-  level:
-    com.purohitdarpan: DEBUG
-
----
-spring:
-  config:
-    activate:
-      on-profile: prod
-  datasource:
-    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
-    username: ${DB_USERNAME}
+    url: jdbc:postgresql://${DB_HOST:dpg-d738kqffte5s73et8ar0-a.ohio-postgres.render.com}:${DB_PORT:5432}/${DB_NAME:purohit_db_kd3e}
+    username: ${DB_USERNAME:purohit_db_kd3e_user}
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
     hikari:
@@ -115,14 +16,19 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-  ai:
-    rag:
-      enabled: false
-      reindex-on-startup: false
-    vectorstore:
-      qdrant:
-        host: ${QDRANT_HOST:localhost}
-        port: ${QDRANT_GRPC_PORT:6334}
+  sql:
+    init:
+      mode: always
+
+server:
+  port: ${PORT:8080}
+
+jwt:
+  secret: ${JWT_SECRET:purohit-darpan-secure-key-2026-fallback-only}
+  expiration: 86400000
+
+cors:
+  allowed-origins: "*"
 
 logging:
   level:
