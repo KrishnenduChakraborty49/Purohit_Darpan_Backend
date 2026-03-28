@@ -47,7 +47,7 @@ spring:
       reindex-on-startup: ${AI_RAG_REINDEX:true}
 
 server:
-  port: ${SERVER_PORT:8080}
+  port: ${PORT:8080}
 
 jwt:
   secret: ${JWT_SECRET:purohit-darpan-secure-key-2026-fallback-only}
