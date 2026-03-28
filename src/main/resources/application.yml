@@ -1,11 +1,13 @@
-spring:
+﻿spring:
   application:
     name: purohit-darpan
   profiles:
     active: dev
+  autoconfigure:
+    exclude:
+      - org.springframework.ai.vectorstore.qdrant.autoconfigure.QdrantVectorStoreAutoConfiguration
   datasource:
-    # Default (Local) MySQL configuration
-    url: ${DB_URL:jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:purohit_darpan}?useSSL=false&serverTimezone=Asia/Kolkata&useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true}
+    url: ${DB_URL:jdbc:mysql://localhost:3306/purohit_darpan?useSSL=false&serverTimezone=Asia/Kolkata&useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true}
     username: ${DB_USERNAME:root}
     password: ${DB_PASSWORD:}
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -14,12 +16,16 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+    show-sql: false
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
   sql:
     init:
       mode: never
+  ai:
+    ollama:
+      base-url: ${OLLAMA_BASE_URL:http://127.0.0.1:11434}
 
 server:
   port: ${PORT:8080}
@@ -36,23 +42,28 @@ logging:
     com.purohitdarpan: INFO
 
 ---
-# Production Profile for Render (PostgreSQL)
 spring:
   config:
     activate:
       on-profile: prod
+  autoconfigure:
+    exclude:
+      - org.springframework.ai.vectorstore.qdrant.autoconfigure.QdrantVectorStoreAutoConfiguration
+      - org.springframework.ai.autoconfigure.ollama.OllamaAutoConfiguration
   datasource:
-    # Updated with ?sslmode=require for Render
-    url: ${DB_URL:jdbc:postgresql://dpg-d738kqffte5s73et8ar0-a.ohio-postgres.render.com:5432/purohit_db_kd3e}?sslmode=require
+    url: jdbc:postgresql://dpg-d738kqffte5s73et8ar0-a.ohio-postgres.render.com:5432/purohit_db_kd3e?sslmode=require
     username: ${DB_USERNAME:purohit_db_kd3e_user}
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 5
   jpa:
     hibernate:
       ddl-auto: update
+    show-sql: false
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
   sql:
     init:
-      mode: always
+      mode: never
