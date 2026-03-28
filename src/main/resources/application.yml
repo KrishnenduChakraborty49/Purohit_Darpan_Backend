@@ -31,6 +31,16 @@
   ai:
     ollama:
       base-url: ${OLLAMA_BASE_URL:http://127.0.0.1:11434}
+    rag:
+      index-on-startup: false
+      reindex-on-startup: false
+    vectorstore:
+      qdrant:
+        host: ${QDRANT_HOST:localhost}
+        port: ${QDRANT_PORT:6334}
+        api-key: ${QDRANT_API_KEY:dummy-key}
+        collection-name: ${QDRANT_COLLECTION:purohit-darpan}
+        initialize-schema: false
 
 panchang:
   api:
@@ -42,15 +52,15 @@ firebase:
   service-account-path: ${FIREBASE_SERVICE_ACCOUNT_PATH:firebase-service-account.json}
   project-id: ${FIREBASE_PROJECT_ID:purohit-darpan}
 
+cors:
+  allowed-origins: ${CORS_ALLOWED_ORIGINS:*}
+
 server:
   port: ${PORT:8080}
 
 jwt:
   secret: ${JWT_SECRET:purohit-darpan-secure-key-2026-fallback-only}
   expiration: 86400000
-
-cors:
-  allowed-origins: "*"
 
 logging:
   level:
@@ -87,6 +97,16 @@ spring:
   ai:
     ollama:
       base-url: http://127.0.0.1:11434
+    rag:
+      index-on-startup: false
+      reindex-on-startup: false
+    vectorstore:
+      qdrant:
+        host: localhost
+        port: 6334
+        api-key: dummy-key
+        collection-name: purohit-darpan
+        initialize-schema: false
 
 panchang:
   api:
@@ -97,3 +117,6 @@ panchang:
 firebase:
   service-account-path: ${FIREBASE_SERVICE_ACCOUNT_PATH:firebase-service-account.json}
   project-id: ${FIREBASE_PROJECT_ID:purohit-darpan}
+
+cors:
+  allowed-origins: ${CORS_ALLOWED_ORIGINS:*}
