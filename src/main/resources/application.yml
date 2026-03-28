@@ -38,6 +38,10 @@ panchang:
     key: ${PANCHANG_API_KEY:dummy-key}
     use-mock: ${PANCHANG_USE_MOCK:true}
 
+firebase:
+  service-account-path: ${FIREBASE_SERVICE_ACCOUNT_PATH:firebase-service-account.json}
+  project-id: ${FIREBASE_PROJECT_ID:purohit-darpan}
+
 server:
   port: ${PORT:8080}
 
@@ -89,3 +93,7 @@ panchang:
     base-url: ${PANCHANG_API_BASE_URL:https://api.vedicrishi.in}
     key: ${PANCHANG_API_KEY:dummy-key}
     use-mock: ${PANCHANG_USE_MOCK:true}
+
+firebase:
+  service-account-path: ${FIREBASE_SERVICE_ACCOUNT_PATH:firebase-service-account.json}
+  project-id: ${FIREBASE_PROJECT_ID:purohit-darpan}
