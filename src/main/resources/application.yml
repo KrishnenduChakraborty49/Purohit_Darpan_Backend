@@ -32,6 +32,12 @@
     ollama:
       base-url: ${OLLAMA_BASE_URL:http://127.0.0.1:11434}
 
+panchang:
+  api:
+    base-url: ${PANCHANG_API_BASE_URL:https://api.vedicrishi.in}
+    key: ${PANCHANG_API_KEY:dummy-key}
+    use-mock: ${PANCHANG_USE_MOCK:true}
+
 server:
   port: ${PORT:8080}
 
@@ -70,7 +76,6 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-        format_sql: true
     open-in-view: true
   sql:
     init:
@@ -78,3 +83,9 @@ spring:
   ai:
     ollama:
       base-url: http://127.0.0.1:11434
+
+panchang:
+  api:
+    base-url: ${PANCHANG_API_BASE_URL:https://api.vedicrishi.in}
+    key: ${PANCHANG_API_KEY:dummy-key}
+    use-mock: ${PANCHANG_USE_MOCK:true}
