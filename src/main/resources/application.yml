@@ -12,7 +12,9 @@
     password: ${DB_PASSWORD:}
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
-      maximum-pool-size: 10
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 30000
   jpa:
     hibernate:
       ddl-auto: update
@@ -20,6 +22,9 @@
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+        use_sql_comments: true
+    open-in-view: true
   sql:
     init:
       mode: never
@@ -49,7 +54,6 @@ spring:
   autoconfigure:
     exclude:
       - org.springframework.ai.vectorstore.qdrant.autoconfigure.QdrantVectorStoreAutoConfiguration
-      - org.springframework.ai.autoconfigure.ollama.OllamaAutoConfiguration
   datasource:
     url: jdbc:postgresql://dpg-d738kqffte5s73et8ar0-a.ohio-postgres.render.com:5432/purohit_db_kd3e?sslmode=require
     username: ${DB_USERNAME:purohit_db_kd3e_user}
@@ -57,6 +61,8 @@ spring:
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 5
+      minimum-idle: 1
+      connection-timeout: 30000
   jpa:
     hibernate:
       ddl-auto: update
@@ -64,6 +70,11 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    open-in-view: true
   sql:
     init:
       mode: never
+  ai:
+    ollama:
+      base-url: http://127.0.0.1:11434
