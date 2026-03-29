@@ -1,4 +1,4 @@
-﻿-- ============================================================
+-- ============================================================
 -- Purohit Darpan - Seed Data
 -- Festivals 2025-2026, Sample Pujas, Mantras, Samagri
 -- ============================================================
@@ -213,7 +213,7 @@ INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, descriptio
 -- -------------------------------------------------------
 -- STEP_MANTRAS - map mantras to steps
 -- -------------------------------------------------------
-INSERT INTO step_mantras (step_id, mantra_id, sequence_order) VALUES
+INSERT INTO step_mantras (puja_step_id, mantra_id, sequence_order) VALUES
 (1, 1, 1);
 
 -- -------------------------------------------------------
