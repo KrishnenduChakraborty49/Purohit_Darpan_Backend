@@ -30,7 +30,7 @@ spring:
     open-in-view: true
   ai:
     openai:
-      base-url: ${GROQ_BASE_URL:https://api.groq.com/openai/v1}
+        base-url: ${GROQ_BASE_URL:https://api.groq.com/openai/v1}
         api-key: ${GROQ_API_KEY:dummy}
         chat:
           options:
