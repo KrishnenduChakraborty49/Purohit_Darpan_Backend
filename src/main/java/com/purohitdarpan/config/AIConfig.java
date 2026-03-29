@@ -1,4 +1,4 @@
-﻿package com.purohitdarpan.config;
+package com.purohitdarpan.config;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.openai.OpenAiChatModel;
