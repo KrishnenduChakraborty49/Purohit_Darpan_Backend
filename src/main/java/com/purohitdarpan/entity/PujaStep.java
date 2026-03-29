@@ -1,4 +1,4 @@
-﻿package com.purohitdarpan.entity;
+package com.purohitdarpan.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
