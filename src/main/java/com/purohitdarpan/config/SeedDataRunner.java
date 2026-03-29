@@ -54,7 +54,6 @@ public class SeedDataRunner implements CommandLineRunner {
         } catch (Exception e) {
             logger.error("Error running SeedDataRunner: ", e);
         }
-    } catch (Exception e) {}
-        }).start();
+    }).start();
     }
 }
