@@ -81,7 +81,7 @@ spring:
     exclude:
       - org.springframework.ai.vectorstore.qdrant.autoconfigure.QdrantVectorStoreAutoConfiguration
   datasource:
-    url: jdbc:postgresql://dpg-d738kqffte5s73et8ar0-a.ohio-postgres.render.com:5432/purohit_db_kd3e?sslmode=require
+    url: jdbc:postgresql://${DB_HOST:localhost}:/?sslmode=require
     username: ${DB_USERNAME:purohit_db_kd3e_user}
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
