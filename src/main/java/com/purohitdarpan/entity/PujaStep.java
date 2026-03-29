@@ -1,4 +1,4 @@
-package com.purohitdarpan.entity;
+﻿package com.purohitdarpan.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -41,13 +41,13 @@ public class PujaStep {
     @Column(name = "title_sanskrit", length = 300)
     private String titleSanskrit;
 
-    @Column(columnDefinition = "MEDIUMTEXT")
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @Column(name = "video_url", length = 500)
     private String videoUrl;
 
-    @Column(name = "video_transcript", columnDefinition = "LONGTEXT")
+    @Column(name = "video_transcript", columnDefinition = "TEXT")
     private String videoTranscript;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -72,3 +72,4 @@ public class PujaStep {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 }
+

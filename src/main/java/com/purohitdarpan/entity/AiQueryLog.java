@@ -1,4 +1,4 @@
-package com.purohitdarpan.entity;
+﻿package com.purohitdarpan.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -38,7 +38,7 @@ public class AiQueryLog {
     @Column(name = "context_shlok", columnDefinition = "TEXT")
     private String contextShlok;
 
-    @Column(name = "response_text", columnDefinition = "LONGTEXT")
+    @Column(name = "response_text", columnDefinition = "TEXT")
     private String responseText;
 
     @Column(name = "tokens_used")
@@ -53,3 +53,4 @@ public class AiQueryLog {
 
     public enum QueryType { WORD_QUERY, SHLOK_QUERY, GENERAL_QUESTION }
 }
+
