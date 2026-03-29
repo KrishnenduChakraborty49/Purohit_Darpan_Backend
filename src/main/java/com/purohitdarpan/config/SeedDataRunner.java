@@ -1,4 +1,4 @@
-﻿package com.purohitdarpan.config;
+package com.purohitdarpan.config;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
