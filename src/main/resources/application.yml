@@ -16,6 +16,7 @@
       minimum-idle: 5
       connection-timeout: 30000
   jpa:
+    defer-datasource-initialization: true
     hibernate:
       ddl-auto: update
     show-sql: false
@@ -88,6 +89,7 @@ spring:
       minimum-idle: 1
       connection-timeout: 30000
   jpa:
+    defer-datasource-initialization: true
     hibernate:
       ddl-auto: update
     show-sql: false
@@ -128,6 +130,7 @@ firebase:
 
 cors:
   allowed-origins: ${CORS_ALLOWED_ORIGINS:https://purohit-darpan-frontend.vercel.app}
+
 
 
 
