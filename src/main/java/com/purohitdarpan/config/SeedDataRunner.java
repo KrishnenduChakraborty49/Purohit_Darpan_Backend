@@ -1,7 +1,8 @@
-package com.purohitdarpan.config;
+﻿package com.purohitdarpan.config;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -10,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Component
+@Lazy(false)
 public class SeedDataRunner implements CommandLineRunner {
     private static final Logger logger = LoggerFactory.getLogger(SeedDataRunner.class);
     private final JdbcTemplate jdbcTemplate;
@@ -53,4 +55,5 @@ public class SeedDataRunner implements CommandLineRunner {
         }
     }
 }
+
 

@@ -1,4 +1,6 @@
 ﻿spring:
+  main:
+    lazy-initialization: true
   application:
     name: purohit-darpan
   profiles:
@@ -70,6 +72,8 @@ logging:
 
 ---
 spring:
+  main:
+    lazy-initialization: true
   config:
     activate:
       on-profile: prod
@@ -124,6 +128,7 @@ firebase:
 
 cors:
   allowed-origins: ${CORS_ALLOWED_ORIGINS:https://purohit-darpan-frontend.vercel.app}
+
 
 
 
