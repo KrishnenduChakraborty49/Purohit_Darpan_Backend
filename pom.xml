@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -103,13 +103,13 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- Spring AI — Ollama -->
+        <!-- Spring AI â€” Ollama -->
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-starter-model-ollama</artifactId>
         </dependency>
 
-        <!-- Spring AI Vector Store — Qdrant -->
+        <!-- Spring AI Vector Store â€” Qdrant -->
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-starter-vector-store-qdrant</artifactId>
@@ -229,4 +229,5 @@
         </pluginRepository>
     </pluginRepositories>
 </project>
+
 
