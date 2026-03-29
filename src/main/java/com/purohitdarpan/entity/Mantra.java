@@ -25,7 +25,7 @@ public class Mantra {
     @Column(columnDefinition = "TEXT")
     private String transliteration;
 
-    @Column(name = "word_meanings", columnDefinition = "JSON")
+    @Column(name = "word_meanings", columnDefinition = "TEXT")
     private String wordMeanings; // JSON stored as String, parsed in service layer
 
     @Column(name = "audio_url", length = 500)
