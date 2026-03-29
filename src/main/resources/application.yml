@@ -1,4 +1,4 @@
-﻿spring:
+spring:
   main:
     lazy-initialization: true
   application:
@@ -30,11 +30,11 @@
     open-in-view: true
   ai:
     openai:
-      base-url: ${GROQ_BASE_URL:https://api.groq.com/openai}
-      api-key: ${GROQ_API_KEY:dummy}
-      chat:
-        options:
-          model: ${GROQ_MODEL:llama-3.3-70b-versatile}
+      base-url: ${GROQ_BASE_URL:https://api.groq.com/openai/v1}
+        api-key: ${GROQ_API_KEY:dummy}
+        chat:
+          options:
+            model: ${GROQ_MODEL:llama3-8b-8192}
     rag:
       index-on-startup: false
       reindex-on-startup: false
@@ -100,11 +100,11 @@ spring:
     open-in-view: true
   ai:
     openai:
-      base-url: ${GROQ_BASE_URL:https://api.groq.com/openai}
-      api-key: ${GROQ_API_KEY:dummy}
-      chat:
-        options:
-          model: ${GROQ_MODEL:llama-3.3-70b-versatile}
+      base-url: ${GROQ_BASE_URL:https://api.groq.com/openai/v1}
+        api-key: ${GROQ_API_KEY:dummy}
+        chat:
+          options:
+            model: ${GROQ_MODEL:llama3-8b-8192}
     rag:
       index-on-startup: false
       reindex-on-startup: false
