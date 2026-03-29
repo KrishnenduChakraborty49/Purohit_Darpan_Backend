@@ -1,10 +1,10 @@
--- ============================================================
--- Purohit Darpan — Complete Database Schema
+﻿-- ============================================================
+-- Purohit Darpan â€” Complete Database Schema
 -- MySQL 8 | ENGINE=InnoDB | utf8mb4_unicode_ci
 -- ============================================================
 
 -- Drop all tables in reverse dependency order (for clean restarts in dev)
-SET FOREIGN_KEY_CHECKS = 0;
+
 DROP TABLE IF EXISTS user_notification_preferences;
 DROP TABLE IF EXISTS notification_logs;
 DROP TABLE IF EXISTS user_saved_events;
@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS samagri;
 DROP TABLE IF EXISTS mantras;
 DROP TABLE IF EXISTS pujas;
 DROP TABLE IF EXISTS users;
-SET FOREIGN_KEY_CHECKS = 1;
+
 
 SET NAMES utf8mb4;
 SET CHARACTER SET utf8mb4;
