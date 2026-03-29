@@ -106,7 +106,7 @@
         <!-- Spring AI â€” Ollama -->
         <dependency>
             <groupId>org.springframework.ai</groupId>
-            <artifactId>spring-ai-starter-model-ollama</artifactId>
+            <artifactId>spring-ai-starter-model-openai</artifactId>
         </dependency>
 
         <!-- Spring AI Vector Store â€” Qdrant -->
@@ -229,5 +229,6 @@
         </pluginRepository>
     </pluginRepositories>
 </project>
+
 
 
