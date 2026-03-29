@@ -33,6 +33,7 @@ public class Puja {
     private Integer durationMinutes;
 
     @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     @Column(length = 20)
     @Builder.Default
     private Difficulty difficulty = Difficulty.BEGINNER;
