@@ -37,7 +37,7 @@ public class SeedDataRunner implements CommandLineRunner {
                     logger.warn("Could not truncate tables or reset sequences, they might be empty already. Proceeding to insert...");
                 }
 
-                String sql = new String(FileCopyUtils.copyToByteArray(new ClassPathResource("data.sql").getInputStream()), StandardCharsets.UTF8);
+                String sql = new String(FileCopyUtils.copyToByteArray(new ClassPathResource("data.sql").getInputStream()), StandardCharsets.UTF_8);
                 String[] statements = sql.split(";");
                 for (String stmt : statements) {
                     if (!stmt.trim().isEmpty()) {
@@ -53,3 +53,4 @@ public class SeedDataRunner implements CommandLineRunner {
         }
     }
 }
+
