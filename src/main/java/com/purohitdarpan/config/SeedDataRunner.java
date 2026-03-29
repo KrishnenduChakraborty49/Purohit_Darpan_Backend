@@ -27,7 +27,7 @@ public class SeedDataRunner implements CommandLineRunner {
                 try {
                     jdbcTemplate.execute("UPDATE pujas SET is_active = true WHERE is_active IS NULL");
             Long count = jdbcTemplate.queryForObject("SELECT count(*) FROM pujas", Long.class);
-            if (true) // Force fresh seeding to clear corrupted partial data {
+            if (true) { // Force fresh seeding
                 logger.info("Database is empty. Seeding initial data...");
                 
                 try {
