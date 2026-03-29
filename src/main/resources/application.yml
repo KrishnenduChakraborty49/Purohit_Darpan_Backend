@@ -99,7 +99,6 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     open-in-view: true
   ai:
-    ai:
       openai:
         base-url: ${GROQ_BASE_URL:https://api.groq.com/openai/v1}
         api-key: ${GROQ_API_KEY:dummy}
