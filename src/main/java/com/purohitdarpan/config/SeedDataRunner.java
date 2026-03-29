@@ -7,6 +7,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.jdbc.core.JdbcTemplate;
 import javax.sql.DataSource;
+import java.nio.charset.StandardCharsets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,9 +26,9 @@ public class SeedDataRunner implements CommandLineRunner {
     @Override
     public void run(String... args) {
         try {
-            logger.info("Initializing database with robust seeding...");
+            logger.info("Initializing database with UTF-8 robust seeding...");
             
-            // Clean up old data to ensure a fresh, consistent state
+            // Cleanup to ensure fresh state
             try {
                 jdbcTemplate.execute("TRUNCATE TABLE users, samagri, pujas, mantras, puja_steps, step_mantras, step_samagri, resources, hindu_festivals, user_notification_preferences CASCADE");
                 jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS pujas_id_seq RESTART WITH 1");
@@ -35,11 +36,12 @@ public class SeedDataRunner implements CommandLineRunner {
                 jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS mantras_id_seq RESTART WITH 1");
                 jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS puja_steps_id_seq RESTART WITH 1");
             } catch (Exception e) {
-                logger.warn("Seeding cleanup: Tables might already be empty.");
+                logger.warn("Seeding cleanup: Tables might already be empty or sequence names differ.");
             }
 
             ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
             populator.addScript(new ClassPathResource("data.sql"));
+            populator.setSqlScriptEncoding(StandardCharsets.UTF_8.name());
             populator.setContinueOnError(true);
             populator.setIgnoreFailedDrops(true);
             populator.execute(dataSource);
