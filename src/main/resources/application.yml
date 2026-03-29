@@ -99,25 +99,27 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     open-in-view: true
   ai:
-      openai:
-        base-url: ${GROQ_BASE_URL:https://api.groq.com/openai/v1}
-        api-key: ${GROQ_API_KEY:dummy}
-        chat:
-          options:
-            model: ${GROQ_MODEL:llama3-8b-8192}
+    openai:
+      base-url: ${GROQ_BASE_URL:https://api.groq.com/openai/v1}
+      api-key: ${GROQ_API_KEY:dummy}
+      chat:
+        options:
+          model: ${GROQ_MODEL:llama3-8b-8192}
+    rag:
       index-on-startup: false
-      reindex-on-startup: false
+    rag:
+      index-on-startup: false
     vectorstore:
       qdrant:
         host: localhost
         port: 6334
-        api-key: dummy-key
+      api-key: ${GROQ_API_KEY:dummy}
         collection-name: purohit-darpan
         initialize-schema: false
 
 panchang:
   api:
-    base-url: ${PANCHANG_API_BASE_URL:https://api.vedicrishi.in}
+      base-url: ${GROQ_BASE_URL:https://api.groq.com/openai/v1}
     key: ${PANCHANG_API_KEY:dummy-key}
     use-mock: ${PANCHANG_USE_MOCK:true}
 
