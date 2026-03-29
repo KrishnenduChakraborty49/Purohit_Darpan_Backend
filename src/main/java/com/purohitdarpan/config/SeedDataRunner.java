@@ -22,6 +22,7 @@ public class SeedDataRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
+        new Thread(() -> {
         try {
             Long count = jdbcTemplate.queryForObject("SELECT count(*) FROM pujas", Long.class);
             if (count == null || count == 0) {
@@ -53,7 +54,7 @@ public class SeedDataRunner implements CommandLineRunner {
         } catch (Exception e) {
             logger.error("Error running SeedDataRunner: ", e);
         }
+    } catch (Exception e) {}
+        }).start();
     }
 }
-
-
