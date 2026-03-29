@@ -52,7 +52,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/pujas/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/panchang/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/festivals/**").permitAll()
-                        .requestMatchers("/actuator/health").permitAll()
+                        .requestMatchers("/actuator/health").permitAll().requestMatchers("/api/diagnostics/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/ai/health").permitAll()
                         .requestMatchers("/pdfs/**", "/images/**", "/docs/**").permitAll()
                         // Protected
