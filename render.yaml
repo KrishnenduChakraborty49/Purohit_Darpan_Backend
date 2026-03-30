@@ -1,11 +1,9 @@
 services:
   - type: web
     name: purohit-darpan-backend
-    env: docker
+    image: ghcr.io/krishnenduchakraborty49/purohit-darpan-backend:latest
     plan: free
     region: ohio
-    dockerContext: .
-    dockerfilePath: Dockerfile
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: prod
