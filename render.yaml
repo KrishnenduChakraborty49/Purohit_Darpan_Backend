@@ -1,7 +1,9 @@
 services:
   - type: web
     name: purohit-darpan-backend
-    image: ghcr.io/krishnenduchakraborty49/purohit-darpan-backend:latest
+    runtime: image
+    image:
+      url: ghcr.io/krishnenduchakraborty49/purohit-darpan-backend:latest
     plan: free
     region: ohio
     envVars:
