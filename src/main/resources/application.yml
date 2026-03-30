@@ -89,7 +89,7 @@ spring:
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 2
-      minimum-idle: 1
+      initialization-fail-timeout: 0
       connection-timeout: 30000
   jpa:
     defer-datasource-initialization: true
@@ -99,15 +99,10 @@ spring:
   ai:
     openai:
       enabled: false
-    vectorstore:
-      qdrant:
-        enabled: false
 
 server:
   port: ${PORT:8080}
   address: 0.0.0.0
-  error:
-    include-message: always
 
 logging:
   level:
