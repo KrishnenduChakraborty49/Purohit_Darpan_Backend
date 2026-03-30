@@ -28,7 +28,7 @@ public class SeedDataRunner implements CommandLineRunner {
         new Thread(() -> {
             try {
                 // Wait slightly for server boot to stabilize
-                Thread.sleep(10000);
+                // Reduced delay for native startup
                 logger.info("Initializing database with UTF-8 robust seeding...");
                 
                 try {
