@@ -1,11 +1,11 @@
 services:
   - type: web
     name: purohit-darpan-backend
-    env: docker
+    env: java
     plan: free
     region: ohio
-    dockerContext: .
-    dockerfilePath: Dockerfile
+    buildCommand: mvn clean package -DskipTests
+    startCommand: java -jar target/*.jar
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: prod
