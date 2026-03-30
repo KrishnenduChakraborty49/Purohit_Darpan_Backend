@@ -88,13 +88,13 @@ spring:
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
     hikari:
-      maximum-pool-size: 2
+      maximum-pool-size: 1
       initialization-fail-timeout: 0
       connection-timeout: 30000
   jpa:
     defer-datasource-initialization: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     show-sql: false
   ai:
     openai:
