@@ -9,12 +9,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/diagnostics")
-@RequiredArgsConstructor
 public class DiagnosticsController {
     private final JdbcTemplate jdbcTemplate;
 
-    @GetMapping("/db-status")
+    public DiagnosticsController(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    @GetMapping("/api/health")
+    public String health() {
+        return "BACKEND_OK";
+    }
+
+    @GetMapping("/api/diagnostics/db-status")
     public Map<String, Object> getDbStatus() {
         Map<String, Object> status = new HashMap<>();
         try {

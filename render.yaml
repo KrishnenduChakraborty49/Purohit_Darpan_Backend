@@ -7,14 +7,8 @@ services:
     dockerContext: .
     dockerfilePath: Dockerfile
     envVars:
-      - key: PORT
-        value: 8080
       - key: SPRING_PROFILES_ACTIVE
         value: prod
-      - key: DB_DRIVER
-        value: org.postgresql.Driver
-      - key: DB_DIALECT
-        value: org.hibernate.dialect.PostgreSQLDialect
       - key: DB_HOST
         fromDatabase:
           name: purohit-db
@@ -35,14 +29,10 @@ services:
         fromDatabase:
           name: purohit-db
           property: password
-      - key: FIREBASE_MOCK_ENABLED
-        value: "true"
-      - key: PANCHANG_USE_MOCK
-        value: "true"
+      - key: CORS_ALLOWED_ORIGINS
+        value: https://purohit-darpan-frontend.vercel.app
       - key: AI_RAG_ENABLED
         value: "false"
-      - key: JWT_SECRET
-        value: "purohit-darpan-secure-cloud-key-2026-deployment-fix"
 
 databases:
   - name: purohit-db

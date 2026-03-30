@@ -25,30 +25,29 @@ public class SeedDataRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        try {
-            logger.info("Initializing database with UTF-8 robust seeding...");
-            
-            // Cleanup to ensure fresh state
+        new Thread(() -> {
             try {
-                jdbcTemplate.execute("TRUNCATE TABLE users, samagri, pujas, mantras, puja_steps, step_mantras, step_samagri, resources, hindu_festivals, user_notification_preferences CASCADE");
-                jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS pujas_id_seq RESTART WITH 1");
-                jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS samagri_id_seq RESTART WITH 1");
-                jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS mantras_id_seq RESTART WITH 1");
-                jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS puja_steps_id_seq RESTART WITH 1");
-            } catch (Exception e) {
-                logger.warn("Seeding cleanup: Tables might already be empty or sequence names differ.");
-            }
+                // Wait slightly for server boot to stabilize
+                Thread.sleep(10000);
+                logger.info("Initializing database with UTF-8 robust seeding...");
+                
+                try {
+                    jdbcTemplate.execute("TRUNCATE TABLE users, samagri, pujas, mantras, puja_steps, step_mantras, step_samagri, resources, hindu_festivals, user_notification_preferences CASCADE");
+                } catch (Exception e) {
+                    logger.warn("Seeding cleanup: Tables might already be empty.");
+                }
 
-            ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-            populator.addScript(new ClassPathResource("data.sql"));
-            populator.setSqlScriptEncoding(StandardCharsets.UTF_8.name());
-            populator.setContinueOnError(true);
-            populator.setIgnoreFailedDrops(true);
-            populator.execute(dataSource);
-            
-            logger.info("Database seeding completed successfully!");
-        } catch (Exception e) {
-            logger.error("FATAL: Database seeding failed: ", e);
-        }
+                ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
+                populator.addScript(new ClassPathResource("data.sql"));
+                populator.setSqlScriptEncoding(StandardCharsets.UTF_8.name());
+                populator.setContinueOnError(true);
+                populator.setIgnoreFailedDrops(true);
+                populator.execute(dataSource);
+                
+                logger.info("Database seeding completed successfully!");
+            } catch (Exception e) {
+                logger.error("Database seeding background thread error: ", e);
+            }
+        }).start();
     }
 }
