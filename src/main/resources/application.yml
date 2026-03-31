@@ -1,4 +1,4 @@
-spring:
+﻿spring:
   main:
     lazy-initialization: true
   application:
@@ -92,9 +92,9 @@ spring:
       initialization-fail-timeout: 0
       connection-timeout: 30000
   jpa:
-    defer-datasource-initialization: true
+    defer-datasource-initialization: false
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     show-sql: false
   ai:
     openai:
