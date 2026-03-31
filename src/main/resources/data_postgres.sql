@@ -4,13 +4,12 @@
 -- ============================================================
 
 
-
-
 -- -------------------------------------------------------
 -- ADMIN USER
 -- password: Admin@123 (BCrypt hash)
 -- -------------------------------------------------------
-INSERT INTO users (id, username, email, password_hash, full_name, role, is_active) VALUES
+INSERT INTO users (username, email, password_hash, full_name, role, is_active)
+VALUES
 ('admin', 'admin@purohitdarpan.com',
  '$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMlLLIezHSmVBYGVa5RkBHG0q2',
  'Platform Admin', 'ADMIN', TRUE),
@@ -24,7 +23,7 @@ INSERT INTO users (id, username, email, password_hash, full_name, role, is_activ
 -- -------------------------------------------------------
 -- SAMAGRI (ritual items)
 -- -------------------------------------------------------
-INSERT INTO samagri (id, name, name_devanagari, description) VALUES
+INSERT INTO samagri (name, name_devanagari, description) VALUES
 ('Kalash', 'कलश', 'Sacred water pot, symbolizes deity residence'),
 ('Mango Leaves', 'आम के पत्ते', 'Fresh mango leaves placed on Kalash'),
 ('Coconut', 'नारियल', 'Placed on top of Kalash, symbolizes Lord Shiva'),
@@ -49,7 +48,7 @@ INSERT INTO samagri (id, name, name_devanagari, description) VALUES
 -- -------------------------------------------------------
 -- PUJAS
 -- -------------------------------------------------------
-INSERT INTO pujas (id, name, name_devanagari, description, duration_minutes, difficulty, category, thumbnail_url, created_by) VALUES
+INSERT INTO pujas (name, name_devanagari, description, duration_minutes, difficulty, category, thumbnail_url, created_by) VALUES
 ('Ganesh Puja', 'गणेश पूजा',
  'The foundational puja performed at the beginning of every ritual. Lord Ganesha is the remover of obstacles and is invoked first to bless any endeavor.',
  60, 'BEGINNER', 'Vighnaharta', '/images/ganesh-puja.jpg', 1),
@@ -81,7 +80,7 @@ INSERT INTO pujas (id, name, name_devanagari, description, duration_minutes, dif
 -- -------------------------------------------------------
 -- MANTRAS (Devanagari)
 -- -------------------------------------------------------
-INSERT INTO mantras (id, shlok_text, transliteration, word_meanings, source_text) VALUES
+INSERT INTO mantras (shlok_text, transliteration, word_meanings, source_text) VALUES
 
 -- Ganesh Vandana
 ('वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ।\nनिर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा॥',
@@ -128,7 +127,7 @@ INSERT INTO mantras (id, shlok_text, transliteration, word_meanings, source_text
 -- -------------------------------------------------------
 -- PUJA STEPS - Ganesh Puja (puja_id = 1)
 -- -------------------------------------------------------
-INSERT INTO puja_steps (id, puja_id, step_order, title, title_devanagari, description, video_url, video_transcript) VALUES
+INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, description, video_url, video_transcript) VALUES
 
 (1, 1, 'Achamana - Ritual Purification', 'आचमन',
  '<h3>आचमन - Ritual Sipping of Water</h3>
@@ -265,7 +264,7 @@ INSERT INTO step_samagri (step_id, samagri_id, quantity, notes) VALUES
 -- -------------------------------------------------------
 -- RESOURCES (PDF books)
 -- -------------------------------------------------------
-INSERT INTO resources (id, puja_id, title, resource_type, file_url, page_count, is_downloadable) VALUES
+INSERT INTO resources (puja_id, title, resource_type, file_url, page_count, is_downloadable) VALUES
 (1, 'Ganesh Puja Paddhati', 'PDF', '/pdfs/ganesh-paddhati.pdf', 45, FALSE),
 (2, 'Lakshmi Puja Manual', 'PDF', '/pdfs/lakshmi-paddhati.pdf', 60, FALSE),
 (3, 'Satyanarayan Vrat Katha', 'PDF', '/pdfs/satyanarayan-katha.pdf', 80, TRUE),
@@ -276,7 +275,7 @@ INSERT INTO resources (id, puja_id, title, resource_type, file_url, page_count, 
 -- -------------------------------------------------------
 -- HINDU FESTIVALS 2025 - 2026
 -- -------------------------------------------------------
-INSERT INTO hindu_festivals (id, name, name_devanagari, description, puja_id, event_date, days_duration, notification_days_before) VALUES
+INSERT INTO hindu_festivals (name, name_devanagari, description, puja_id, event_date, days_duration, notification_days_before) VALUES
 
 ('Makar Sankranti', 'मकर संक्रांति',
  'The festival marking the transition of the sun into Capricorn. Celebrated with horse bathing at holy rivers and kite flying. Begins the auspicious Uttarayan period.',
@@ -409,7 +408,9 @@ INSERT INTO hindu_festivals (id, name, name_devanagari, description, puja_id, ev
 -- -------------------------------------------------------
 -- USER NOTIFICATION PREFERENCES
 -- -------------------------------------------------------
-INSERT INTO user_notification_preferences (id, user_id, festival_reminders, panchang_alerts, learning_reminders, puja_practice, reminder_days_before) VALUES
+INSERT INTO user_notification_preferences
+    (user_id, festival_reminders, panchang_alerts, learning_reminders, puja_practice, reminder_days_before)
+VALUES
 (1, TRUE, TRUE, TRUE, TRUE, 20),
 (2, TRUE, TRUE, TRUE, TRUE, 20),
 (3, TRUE, TRUE, TRUE, TRUE, 20);
