@@ -32,13 +32,13 @@ public class SeedDataRunner implements CommandLineRunner {
                 logger.info("Initializing database with UTF-8 robust seeding...");
                 
                 try {
-                    jdbcTemplate.execute("TRUNCATE TABLE users, samagri, pujas, mantras, puja_steps, step_mantras, step_samagri, resources, hindu_festivals, user_notification_preferences CASCADE");
+                    jdbcTemplate.execute("TRUNCATE TABLE users, samagri, pujas, mantras, puja_steps, step_mantras, step_samagri, resources, hindu_festivals, user_notification_preferences RESTART IDENTITY CASCADE");
                 } catch (Exception e) {
                     logger.warn("Seeding cleanup: Tables might already be empty.");
                 }
 
                 ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-                populator.addScript(new ClassPathResource("data.sql"));
+                populator.addScript(new ClassPathResource("data_postgres.sql"));
                 populator.setSqlScriptEncoding(StandardCharsets.UTF_8.name());
                 populator.setContinueOnError(true);
                 populator.setIgnoreFailedDrops(true);
