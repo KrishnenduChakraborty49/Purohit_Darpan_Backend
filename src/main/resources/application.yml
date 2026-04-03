@@ -8,6 +8,7 @@
   autoconfigure:
     exclude:
       - org.springframework.ai.vectorstore.qdrant.autoconfigure.QdrantVectorStoreAutoConfiguration
+
   datasource:
     url: ${DB_URL:jdbc:mysql://localhost:3306/purohit_darpan?useSSL=false&serverTimezone=Asia/Kolkata&useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true}
     username: ${DB_USERNAME:root}
@@ -35,16 +36,6 @@
       chat:
         options:
           model: ${GROQ_MODEL:llama3-8b-8192}
-    rag:
-      index-on-startup: false
-      reindex-on-startup: false
-    vectorstore:
-      qdrant:
-        host: ${QDRANT_HOST:localhost}
-        port: ${QDRANT_PORT:6334}
-        api-key: ${QDRANT_API_KEY:dummy-key}
-        collection-name: ${QDRANT_COLLECTION:purohit-darpan}
-        initialize-schema: false
 
 panchang:
   api:
@@ -56,58 +47,21 @@ firebase:
   service-account-path: ${FIREBASE_SERVICE_ACCOUNT_PATH:firebase-service-account.json}
   project-id: ${FIREBASE_PROJECT_ID:purohit-darpan}
 
-cors:
-  allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173}
-
-server:
-  port: ${PORT:8080}
-
 jwt:
   secret: ${JWT_SECRET:purohit-darpan-secure-key-2026-fallback-only}
   expiration: 86400000
 
-logging:
-  level:
-    com.purohitdarpan: INFO
-
----
-spring:
-  main:
-    lazy-initialization: true
-  application:
-    name: purohit-darpan
-  profiles:
-    active: dev
-  autoconfigure:
-    exclude:
-      - org.springframework.ai.vectorstore.qdrant.autoconfigure.QdrantVectorStoreAutoConfiguration
-  datasource:
-    url: ${DB_URL:jdbc:mysql://localhost:3306/purohit_darpan?useSSL=false&serverTimezone=Asia/Kolkata&useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true}
-    username: ${DB_USERNAME:root}
-    password: ${DB_PASSWORD:}
-    driver-class-name: com.mysql.cj.jdbc.Driver
-  jpa:
-    defer-datasource-initialization: false
-    hibernate:
-      ddl-auto: update
-    show-sql: false
-  ai:
-    openai:
-      base-url: ${GROQ_BASE_URL:https://api.groq.com/openai/v1}
-      api-key: ${GROQ_API_KEY:dummy}
-
 cors:
   allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173,https://purohit-darpan-frontend.vercel.app}
 
----
 ---
 spring:
   config:
     activate:
       on-profile: prod
   datasource:
-    # UPDATED THIS FOR RENDER STABILITY
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:purohit_db}?sslmode=require}
+    # UPDATED FOR RENDER STABILITY - TRY ALL FALLBACKS
+    url: ${SPRING_DATASOURCE_URL:${DATABASE_URL:${JDBC_DATABASE_URL:jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:purohit_db}?sslmode=require}}}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
@@ -124,3 +78,8 @@ cors:
 server:
   port: ${PORT:8080}
   address: 0.0.0.0
+
+logging:
+  level:
+    root: INFO
+    org.springframework: INFO
