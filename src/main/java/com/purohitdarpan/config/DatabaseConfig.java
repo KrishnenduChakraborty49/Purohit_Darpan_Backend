@@ -17,19 +17,29 @@ public class DatabaseConfig {
     @Bean
     @Primary
     public DataSource dataSource() throws URISyntaxException {
+        // Render provides DATABASE_URL in postgres:// format
         String databaseUrl = System.getenv("DATABASE_URL");
 
-        if (databaseUrl == null) {
-            // Use default builder if not on Render/Heroku
-            return DataSourceBuilder.create().build();
+        if (databaseUrl == null || !databaseUrl.startsWith("postgres://")) {
+            // Local dev (MySQL) will use application.properties instead
+            return null;
         }
 
         logger.info("Detected Render Database URL. Converting to JDBC...");
         URI dbUri = new URI(databaseUrl);
 
-        String username = dbUri.getUserInfo().split(":")[0];
-        String password = dbUri.getUserInfo().split(":")[1];
-        String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath() + "?sslmode=require";
+        String userInfo = dbUri.getUserInfo();
+        String username = userInfo.split(":")[0];
+        String password = userInfo.split(":")[1];
+
+        // CRITICAL FIX: Render internal URIs often omit the port,
+        // causing Java's URI parser to return -1. We must force 5432.
+        int port = dbUri.getPort();
+        if (port == -1) port = 5432;
+
+        String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ":" + port + dbUri.getPath() + "?sslmode=require";
+
+        logger.info("Generated JDBC URL: {}", dbUrl);
 
         return DataSourceBuilder.create()
                 .url(dbUrl)
@@ -39,4 +49,3 @@ public class DatabaseConfig {
                 .build();
     }
 }
-
