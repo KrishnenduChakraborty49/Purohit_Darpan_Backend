@@ -98,7 +98,7 @@ spring:
     show-sql: false
   ai:
     openai:
-      enabled: false
+      enabled: true
 
 server:
   port: ${PORT:8080}
