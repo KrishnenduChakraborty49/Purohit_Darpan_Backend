@@ -48,34 +48,36 @@ INSERT INTO samagri (name, name_devanagari, description) VALUES
 -- -------------------------------------------------------
 -- PUJAS
 -- -------------------------------------------------------
-INSERT INTO pujas (name, name_devanagari, description, duration_minutes, difficulty, category, thumbnail_url, created_by) VALUES
+INSERT INTO pujas (name, name_devanagari, description, duration_minutes, difficulty, category, thumbnail_url, created_by, is_active) VALUES
+
 ('Ganesh Puja', 'गणेश पूजा',
  'The foundational puja performed at the beginning of every ritual. Lord Ganesha is the remover of obstacles and is invoked first to bless any endeavor.',
- 60, 'BEGINNER', 'Vighnaharta', '/images/ganesh-puja.jpg', 1),
+ 60, 'BEGINNER', 'Vighnaharta', '/images/ganesh-puja.jpg', 1, TRUE),
 
 ('Lakshmi Puja', 'लक्ष्मी पूजा',
  'Worship of Goddess Lakshmi, the deity of wealth and prosperity. Performed especially on Diwali and Fridays.',
- 90, 'BEGINNER', 'Wealth', '/images/lakshmi-puja.jpg', 1),
+ 90, 'BEGINNER', 'Wealth', '/images/lakshmi-puja.jpg', 1, TRUE),
 
 ('Satyanarayan Katha', 'सत्यनारायण कथा',
  'A complete Vishnu puja with the reading of Satyanarayan Vrat Katha. Performed on Purnima and for special occasions.',
- 180, 'INTERMEDIATE', 'Vrat', '/images/satyanarayan.jpg', 1),
+ 180, 'INTERMEDIATE', 'Vrat', '/images/satyanarayan.jpg', 1, TRUE),
 
 ('Rudrabhishek', 'रुद्राभिषेक',
  'Sacred ritual bathing of Shiva Linga with Panchamrit and Gangajal while chanting the Sri Rudram.',
- 120, 'ADVANCED', 'Shaivite', '/images/rudrabhishek.jpg', 1),
+ 120, 'ADVANCED', 'Shaivite', '/images/rudrabhishek.jpg', 1, TRUE),
 
 ('Navratri Devi Puja', 'नवरात्रि देवी पूजा',
  'Nine-day worship of the nine forms of Goddess Durga during Navratri. Includes Durga Saptashati recitation.',
- 150, 'INTERMEDIATE', 'Shakti', '/images/navratri.jpg', 1),
+ 150, 'INTERMEDIATE', 'Shakti', '/images/navratri.jpg', 1, TRUE),
 
 ('Griha Pravesh', 'गृह प्रवेश',
  'Housewarming ceremony invoking Vastu Purusha and Panchdeva for blessing the new home.',
- 240, 'ADVANCED', 'Samskara', '/images/griha-pravesh.jpg', 1),
+ 240, 'ADVANCED', 'Samskara', '/images/griha-pravesh.jpg', 1, TRUE),
 
 ('Durga Puja', 'दुर्गा पूजा',
  'The grand celebration of Goddess Durga''s victory over the demon Mahishasura. Worship of the Divine Mother for strength, intellect, and prosperity.',
- 300, 'ADVANCED', 'Shakti', '/images/durga-puja.jpg', 1);
+ 300, 'ADVANCED', 'Shakti', '/images/durga-puja.jpg', 1, TRUE);
+
 
 -- -------------------------------------------------------
 -- MANTRAS (Devanagari)
