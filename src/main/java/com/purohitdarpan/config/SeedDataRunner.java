@@ -2,8 +2,12 @@ package com.purohitdarpan.config;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.beans.factory.annotation.Value;
+import javax.sql.DataSource;
+import java.nio.charset.StandardCharsets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,29 +15,47 @@ import org.slf4j.LoggerFactory;
 public class SeedDataRunner implements CommandLineRunner {
     private static final Logger logger = LoggerFactory.getLogger(SeedDataRunner.class);
     private final JdbcTemplate jdbcTemplate;
+    private final DataSource dataSource;
 
     @Value("${spring.profiles.active:dev}")
     private String activeProfile;
 
-    public SeedDataRunner(JdbcTemplate jdbcTemplate) {
+    public SeedDataRunner(JdbcTemplate jdbcTemplate, DataSource dataSource) {
         this.jdbcTemplate = jdbcTemplate;
+        this.dataSource = dataSource;
     }
 
     @Override
     public void run(String... args) {
+        // Robust startup: Wrap the entire seeder in a try-catch to keep the app ALIVE!
         try {
-            if (activeProfile.contains("prod")) {
-                logger.info("Stable Production Seeding starting...");
-                // Added IF EXISTS logic via catch block or direct SQL to prevent crashing if migration is incomplete
+            boolean isProd = activeProfile.contains("prod");
+            logger.info("Initializing seeder for profile: " + activeProfile);
+
+            if (isProd) {
+                // Production (Render/Postgres) Seeding Logic
                 try {
-                    jdbcTemplate.execute("TRUNCATE TABLE pujas RESTART IDENTITY CASCADE");
-                    logger.info("Database cleaned successfully.");
-                } catch (Exception e) {
-                    logger.warn("Cleanup skipped: " + e.getMessage());
+                    logger.info("Wiping database for fresh start...");
+                    jdbcTemplate.execute("TRUNCATE TABLE user_notification_preferences, hindu_festivals, resources, step_samagri, step_mantras, puja_steps, samagri, mantras, pujas, users RESTART IDENTITY CASCADE");
+
+                    logger.info("Running script: data_postgres.sql...");
+                    ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
+                    populator.addScript(new ClassPathResource("data_postgres.sql"));
+                    populator.setSqlScriptEncoding(StandardCharsets.UTF_8.name());
+                    populator.execute(dataSource);
+
+                    // Final safety: Force all pujas to be live
+                    jdbcTemplate.execute("UPDATE pujas SET is_active = true");
+
+                    logger.info("PRODUCTION SEEDING SUCCESS!");
+                } catch (Exception se) {
+                    logger.warn("Seeding Warning (skipped): " + se.getMessage());
                 }
+            } else {
+                logger.info("Dev profile detected. Skipping production truncate.");
             }
         } catch (Exception e) {
-            logger.error("Non-critical seeding issue: " + e.getMessage());
+            logger.error("Critical Seeder Crash: " + e.getMessage());
         }
     }
 }
