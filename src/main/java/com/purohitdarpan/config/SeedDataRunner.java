@@ -26,7 +26,7 @@ public class SeedDataRunner implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) {
+    public void run_delayed(String... args) {
         // Robust startup: Wrap the entire seeder in a try-catch to keep the app ALIVE!
         try {
             boolean isProd = activeProfile.contains("prod");
