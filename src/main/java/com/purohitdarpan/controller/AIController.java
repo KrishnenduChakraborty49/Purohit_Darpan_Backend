@@ -35,9 +35,9 @@ public class AIController {
 
     /**
      * POST /api/ai/query — general ritual question
+     * FIX: Removed @PreAuthorize to allow public "Ask Guru" queries
      */
     @PostMapping("/query")
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Map<String, String>> query(@RequestBody QueryRequest req) {
         String response = aiService.answerRitualQuestion(
                 req.getQuestion(), req.getUserContext(),
@@ -49,9 +49,9 @@ public class AIController {
 
     /**
      * POST /api/ai/explain-word — explain a Sanskrit word in shlok context
+     * FIX: Removed @PreAuthorize to allow public explanations
      */
     @PostMapping("/explain-word")
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Map<String, String>> explainWord(@RequestBody WordRequest req) {
         String response = aiService.explainWord(
                 req.getWord(), req.getShlokContext(), req.getPujaContext(),
@@ -63,9 +63,9 @@ public class AIController {
 
     /**
      * POST /api/ai/explain-shlok — full shlok breakdown
+     * FIX: Removed @PreAuthorize to allow public explanations
      */
     @PostMapping("/explain-shlok")
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Map<String, String>> explainShlok(@RequestBody ShlokRequest req) {
         String response = aiService.explainShlok(
                 req.getShlokText(), req.getPujaContext(),
@@ -76,7 +76,7 @@ public class AIController {
     }
 
     /**
-     * GET /api/ai/history/{userId} — conversation history
+     * GET /api/ai/history/{userId} — conversation history (Secure)
      */
     @GetMapping("/history/{userId}")
     @PreAuthorize("isAuthenticated()")
@@ -89,7 +89,7 @@ public class AIController {
     }
 
     /**
-     * POST /api/ai/feedback — thumbs up/down for a query
+     * POST /api/ai/feedback — thumbs up/down for a query (Secure)
      */
     @PostMapping("/feedback")
     @PreAuthorize("isAuthenticated()")

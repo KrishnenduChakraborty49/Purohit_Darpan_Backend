@@ -27,30 +27,37 @@ public class SeedDataRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        new Thread(() -> {
-            try {
-                boolean isProd = activeProfile.contains("prod");
-                logger.info("Database Seeding starting for profile: " + activeProfile);
+        // We now run this synchronously to guarantee database state before the app starts serving requests
+        try {
+            boolean isProd = activeProfile.contains("prod");
+            logger.info("Database Seeding starting for profile: " + activeProfile);
 
-                if (isProd) {
-                    // Render/PostgreSQL logic
-                    jdbcTemplate.execute("TRUNCATE TABLE user_notification_preferences, hindu_festivals, resources, step_samagri, step_mantras, puja_steps, samagri, mantras, pujas, users RESTART IDENTITY CASCADE");
-                    ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-                    populator.addScript(new ClassPathResource("data_postgres.sql"));
-                    populator.setSqlScriptEncoding(StandardCharsets.UTF_8.name());
-                    populator.execute(dataSource);
-                    logger.info("Render Seeding Complete!");
-                } else {
-                    // Local MySQL logic (Prevents the crash)
-                    jdbcTemplate.execute("SET FOREIGN_KEY_CHECKS = 0");
-                    jdbcTemplate.execute("TRUNCATE TABLE users");
-                    jdbcTemplate.execute("TRUNCATE TABLE pujas");
-                    jdbcTemplate.execute("SET FOREIGN_KEY_CHECKS = 1");
-                    logger.info("Local MySQL cleanup complete. Seeding for local skipped to avoid errors.");
-                }
-            } catch (Exception e) {
-                logger.error("Seeding Error: " + e.getMessage());
+            if (isProd) {
+                // Render/PostgreSQL Production Seeding
+                logger.info("Cleaning existing data for fresh seed...");
+                jdbcTemplate.execute("TRUNCATE TABLE user_notification_preferences, hindu_festivals, resources, step_samagri, step_mantras, puja_steps, samagri, mantras, pujas, users RESTART IDENTITY CASCADE");
+
+                logger.info("Executing data_postgres.sql script...");
+                ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
+                populator.addScript(new ClassPathResource("data_postgres.sql"));
+                populator.setSqlScriptEncoding(StandardCharsets.UTF_8.name());
+                populator.execute(dataSource);
+
+                // FINAL SAFETY FIX: Force set is_active=true for all pujas
+                logger.info("Applying final safety update: setting is_active=true for all pujas");
+                jdbcTemplate.execute("UPDATE pujas SET is_active = true");
+
+                logger.info("Render Seeding Complete!");
+            } else {
+                // Local MySQL logic (Simplified cleanup)
+                jdbcTemplate.execute("SET FOREIGN_KEY_CHECKS = 0");
+                jdbcTemplate.execute("TRUNCATE TABLE users");
+                jdbcTemplate.execute("TRUNCATE TABLE pujas");
+                jdbcTemplate.execute("SET FOREIGN_KEY_CHECKS = 1");
+                logger.info("Local MySQL cleanup complete.");
             }
-        }).start();
+        } catch (Exception e) {
+            logger.error("Seeding Error: " + e.getMessage(), e);
+        }
     }
 }
