@@ -74,9 +74,15 @@ INSERT INTO pujas (name, name_devanagari, description, duration_minutes, difficu
  'Housewarming ceremony invoking Vastu Purusha and Panchdeva for blessing the new home.',
  240, 'ADVANCED', 'Samskara', '/images/griha-pravesh.jpg', 1, TRUE),
 
+-- 1. ADD TO PUJAS SECTION (Around Line 77)
 ('Durga Puja', 'दुर्गा पूजा',
  'The grand celebration of Goddess Durga''s victory over the demon Mahishasura. Worship of the Divine Mother for strength, intellect, and prosperity.',
- 300, 'ADVANCED', 'Shakti', '/images/durga-puja.jpg', 1, TRUE);
+ 300, 'ADVANCED', 'Shakti', '/images/durga-puja.jpg', 1, TRUE),
+
+('Saraswati Puja', 'सरस्वती पूजा',
+ 'Worship of Goddess Saraswati, the deity of knowledge, music, arts, and wisdom. Celebrated with great devotion on Basant Panchami.',
+ 60, 'BEGINNER', 'Knowledge', '/images/saraswati-puja.jpg', 1, TRUE);
+
 
 
 -- -------------------------------------------------------

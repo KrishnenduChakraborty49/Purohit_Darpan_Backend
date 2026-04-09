@@ -1,61 +1,41 @@
 package com.purohitdarpan.config;
 
+import com.purohitdarpan.repository.PujaRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import javax.sql.DataSource;
-import java.nio.charset.StandardCharsets;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Component
+@Slf4j
+@RequiredArgsConstructor
 public class SeedDataRunner implements CommandLineRunner {
-    private static final Logger logger = LoggerFactory.getLogger(SeedDataRunner.class);
-    private final JdbcTemplate jdbcTemplate;
+
     private final DataSource dataSource;
-
-    @Value("${spring.profiles.active:dev}")
-    private String activeProfile;
-
-    public SeedDataRunner(JdbcTemplate jdbcTemplate, DataSource dataSource) {
-        this.jdbcTemplate = jdbcTemplate;
-        this.dataSource = dataSource;
-    }
+    private final PujaRepository pujaRepository;
 
     @Override
-    public void run_delayed(String... args) {
-        // Robust startup: Wrap the entire seeder in a try-catch to keep the app ALIVE!
-        try {
-            boolean isProd = activeProfile.contains("prod");
-            logger.info("Initializing seeder for profile: " + activeProfile);
+    public void run(String... args) throws Exception {
+        log.info("Checking database for seeding requirements...");
 
-            if (isProd) {
-                // Production (Render/Postgres) Seeding Logic
-                try {
-                    logger.info("Wiping database for fresh start...");
-                    jdbcTemplate.execute("TRUNCATE TABLE user_notification_preferences, hindu_festivals, resources, step_samagri, step_mantras, puja_steps, samagri, mantras, pujas, users RESTART IDENTITY CASCADE");
-
-                    logger.info("Running script: data_postgres.sql...");
-                    ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-                    populator.addScript(new ClassPathResource("data_postgres.sql"));
-                    populator.setSqlScriptEncoding(StandardCharsets.UTF_8.name());
-                    populator.execute(dataSource);
-
-                    // Final safety: Force all pujas to be live
-                    jdbcTemplate.execute("UPDATE pujas SET is_active = true");
-
-                    logger.info("PRODUCTION SEEDING SUCCESS!");
-                } catch (Exception se) {
-                    logger.warn("Seeding Warning (skipped): " + se.getMessage());
-                }
-            } else {
-                logger.info("Dev profile detected. Skipping production truncate.");
+        // Only seed if the database is empty or missing the new Saraswati Puja (id=8)
+        if (pujaRepository.count() < 8) {
+            log.info("Seeding database with fresh Puja data from data_postgres.sql...");
+            try {
+                ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
+                populator.addScript(new ClassPathResource("data_postgres.sql"));
+                populator.execute(dataSource);
+                log.info("PRODUCTION SEEDING COMPLETED SUCCESSFULLY!");
+            } catch (Exception e) {
+                log.error("Error during database seeding: {}", e.getMessage());
+                // We don't throw the exception to allow the app to start even if seeding fails
             }
-        } catch (Exception e) {
-            logger.error("Critical Seeder Crash: " + e.getMessage());
+        } else {
+            log.info("Database already contains full Puja records. Skipping seeding.");
         }
     }
 }
