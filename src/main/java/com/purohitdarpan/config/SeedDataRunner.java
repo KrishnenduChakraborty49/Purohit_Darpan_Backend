@@ -26,32 +26,22 @@ public class SeedDataRunner implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) { // Fixed: method name must be 'run'
+    public void run(String... args) {
         try {
-            boolean isProd = activeProfile.contains("prod");
-            logger.info("Initializing seeder for profile: " + activeProfile);
+            if (activeProfile.contains("prod")) {
+                logger.info("FORCING DATABASE RELOAD...");
+                jdbcTemplate.execute("TRUNCATE TABLE hindu_festivals, resources, step_samagri, step_mantras, puja_steps, samagri, mantras, pujas RESTART IDENTITY CASCADE");
 
-            if (isProd) {
-                try {
-                    logger.info("Wiping database for fresh start...");
-                    jdbcTemplate.execute("TRUNCATE TABLE user_notification_preferences, hindu_festivals, resources, step_samagri, step_mantras, puja_steps, samagri, mantras, pujas, users RESTART IDENTITY CASCADE");
+                ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
+                populator.addScript(new ClassPathResource("data_postgres.sql"));
+                populator.setSqlScriptEncoding(StandardCharsets.UTF_8.name());
+                populator.execute(dataSource);
 
-                    logger.info("Running script: data_postgres.sql...");
-                    ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-                    populator.addScript(new ClassPathResource("data_postgres.sql"));
-                    populator.setSqlScriptEncoding(StandardCharsets.UTF_8.name());
-                    populator.execute(dataSource);
-
-                    jdbcTemplate.execute("UPDATE pujas SET is_active = true");
-                    logger.info("PRODUCTION SEEDING SUCCESS!");
-                } catch (Exception se) {
-                    logger.warn("Seeding Warning (skipped): " + se.getMessage());
-                }
-            } else {
-                logger.info("Dev profile detected. Skipping production truncate.");
+                logger.info("PRODUCTION SEEDING SUCCESS!");
             }
         } catch (Exception e) {
-            logger.error("Critical Seeder Crash: " + e.getMessage());
+            logger.error("Seeder Error: " + e.getMessage());
         }
     }
+
 }
