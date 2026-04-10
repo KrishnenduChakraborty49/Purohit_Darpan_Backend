@@ -220,9 +220,9 @@ public class AIService {
 
     private void logQuery(Long userId, AiQueryLog.QueryType queryType, String queryText,
                            Long pujaId, Long stepId, String shlok, String response, int durationMs) {
-        // Skip DB logging if userId is null — prevents NPE inside getReferenceById(null)
-        if (userId == null) {
-            log.debug("Skipping AI query log — no userId provided");
+        // Skip DB logging if user is null or does not exist — prevents FK violation crashes
+        if (userId == null || !userRepo.existsById(userId)) {
+            log.warn("Skipping AI query log — user ID {} not found or null", userId);
             return;
         }
         try {

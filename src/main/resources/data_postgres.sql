@@ -117,147 +117,45 @@ INSERT INTO mantras (shlok_text, transliteration, word_meanings, source_text) VA
 -- Gayatri Mantra
 ('ॐ भूर्भुवः स्वः।\nतत्सवितुर्वरेण्यं भर्गो देवस्य धीमहि।\nधियो यो नः प्रचोदयात्॥',
  'Om Bhur Bhuvah Svah\nTat Savitur Varenyam Bhargo Devasya Dhimahi\nDhiyo Yo Nah Prachodayat',
- '[{"word":"ॐ","meaning":"Pranava, the primordial sound","role":"Invocation"},{"word":"भूः","meaning":"Earth","role":"Vyahrti"},{"word":"भुवः","meaning":"Atmosphere","role":"Vyahrti"},{"word":"स्वः","meaning":"Heaven / Upper realms","role":"Vyahrti"},{"word":"तत्","meaning":"That (transcendent)","role":"Pronoun"},{"word":"सवितुः","meaning":"Of the Sun / Divine illuminator","role":"Genitive"},{"word":"वरेण्यम्","meaning":"Most excellent, most worshipful","role":"Accusative"},{"word":"भर्गः","meaning":"Radiance, purifying light","role":"Accusative"},{"word":"देवस्य","meaning":"Of the deity","role":"Genitive"},{"word":"धीमहि","meaning":"Let us meditate","role":"Verb, Optative"},{"word":"धियः","meaning":"Intellects, faculties of understanding","role":"Accusative"},{"word":"यः","meaning":"Who","role":"Relative pronoun"},{"word":"नः","meaning":"Our","role":"Genitive"},{"word":"प्रचोदयात्","meaning":"May he inspire/guide","role":"Verb, Optative"}]',
+ '[{"word":"ॐ","meaning":"Pranava, the primordial sound","role":"Invocation"},{"word":"भूः","meaning":"Earth","role":"Vyahrti"},{"word":"भुवः","meaning":"Atmosphere","role":"Vyahrti"},{"word":"स्वः","meaning":"Heaven / Upper realms","role":"Vyahrti"},{"word":"तत्","meaning":"That (transcendent)","role":"Pronoun"},{"word":"सवิตুঃ","meaning":"Of the Sun / Divine illuminator","role":"Genitive"},{"word":"वरेण्यम्","meaning":"Most excellent, most worshipful","role":"Accusative"},{"word":"भर्गः","meaning":"Radiance, purifying light","role":"Accusative"},{"word":"দেবস্য","meaning":"Of the deity","role":"Genitive"},{"word":"ধীমহি","meaning":"Let us meditate","role":"Verb, Optative"},{"word":"ধিয়ঃ","meaning":"Intellects, faculties of understanding","role":"Accusative"},{"word":"যঃ","meaning":"Who","role":"Relative pronoun"},{"word":"নঃ","meaning":"Our","role":"Genitive"},{"word":"প্রচোদয়াৎ","meaning":"May he inspire/guide","role":"Verb, Optative"}]',
  'Rigveda 3.62.10'),
 
 -- Durga Mantra
-('या देवी सर्वभूतेषु शक्तिरूपेण संस्थिता।\nनमस्तस्यै नमस्तस्यै नमस्तस्यै नमो नमः॥',
+('या देवी সর্বভূতেষু শক্তিরূপেণ সংস্থিতা।\nনমস্তসৈ্য নমস্তসৈ্য নমস্তসৈ্য নমো নমঃ॥',
  'Ya Devi Sarvabhuteshu Shaktirúpena Samsthita\nNamastasyai Namastasyai Namastasyai Namo Namah',
- '[{"word":"या","meaning":"Who (she who)","role":"Relative pronoun, feminine"},{"word":"देवी","meaning":"The Goddess","role":"Nominative"},{"word":"सर्वभूतेषु","meaning":"In all beings","role":"Locative plural"},{"word":"शक्तिरूपेण","meaning":"In the form of Shakti/power","role":"Instrumental"},{"word":"संस्थिता","meaning":"Abiding, established","role":"Past participle"},{"word":"नमः","meaning":"Salutation","role":"Indeclinable"}]',
+ '[{"word":"या","meaning":"Who (she who)","role":"Relative pronoun, feminine"},{"word":"देवी","meaning":"The Goddess","role":"Nominative"},{"word":"सर्वভূতেষু","meaning":"In all beings","role":"Locative plural"},{"word":"শক্তিরূপেণ","meaning":"In the form of Shakti/power","role":"Instrumental"},{"word":"সংসংস্থিতা","meaning":"Abiding, established","role":"Past participle"},{"word":"নমঃ","meaning":"Salutation","role":"Indeclinable"}]',
  'Durgasaptashati, Markandeya Purana'),
 
 -- Kalash Sthapana Mantra
-('कलशस्य मुखे विष्णुर्कण्ठे रुद्रः समाश्रितः।\nमूले तत्र स्थितो ब्रह्मा मध्ये मातृगणाः स्मृताः॥',
+('কলশস্য মুখে বিষ্ণুর্কণ্ঠে রুদ্রঃ সমাশ্রিতঃ।\nমূলে তত্র স্থিতো ব্রহ্মা মধ্যে মাতৃগণাঃ স্মৃতাঃ॥',
  'Kalashasya Mukhe Vishnur Kanthe Rudrah Samashritah\nMule Tatra Sthito Brahma Madhye Matriganah Smritah',
- '[{"word":"कलशस्य","meaning":"Of the Kalash","role":"Genitive"},{"word":"मुखे","meaning":"In the mouth/opening","role":"Locative"},{"word":"विष्णुः","meaning":"Lord Vishnu","role":"Nominative"},{"word":"कण्ठे","meaning":"In the neck","role":"Locative"},{"word":"रुद्रः","meaning":"Lord Rudra/Shiva","role":"Nominative"},{"word":"समाश्रितः","meaning":"Has taken residence","role":"Past participle"},{"word":"मूले","meaning":"At the base","role":"Locative"},{"word":"ब्रह्मा","meaning":"Lord Brahma","role":"Nominative"},{"word":"मध्ये","meaning":"In the middle","role":"Locative"},{"word":"मातृगणाः","meaning":"The Divine Mothers","role":"Nominative"}]',
+ '[{"word":"কলশস্য","meaning":"Of the Kalash","role":"Genitive"},{"word":"মুখে","meaning":"In the mouth/opening","role":"Locative"},{"word":"বিষ্ণুঃ","meaning":"Lord Vishnu","role":"Nominative"},{"word":"কণ্ঠে","meaning":"In the neck","role":"Locative"},{"word":"রুদ্রঃ","meaning":"Lord Rudra/Shiva","role":"Nominative"},{"word":"সমাশ্রিতঃ","meaning":"Has taken residence","role":"Past participle"},{"word":"মূলে","meaning":"At the base","role":"Locative"},{"word":"ব্রহ্মা","meaning":"Lord Brahma","role":"Nominative"},{"word":"মধ্যে","meaning":"In the middle","role":"Locative"},{"word":"মাতৃগণাঃ","meaning":"The Divine Mothers","role":"Nominative"}]',
  'Traditional Kalash Sthapana Mantra');
 
 -- -------------------------------------------------------
--- PUJA STEPS - Ganesh Puja (puja_id = 1)
+-- PUJA STEPS
 -- -------------------------------------------------------
-INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, description, video_url, video_transcript) VALUES
-
-(1, 1, 'Achamana - Ritual Purification', 'आचमन',
- '<h3>आचमन - Ritual Sipping of Water</h3>
-<p>Begin by purifying the body and mind. Sit facing East in Sukhasana (cross-legged position). Take a small copper vessel with water and a spoon.</p>
-<ol>
-  <li>With the right hand in Arghya mudra, sip water three times chanting each Vishnu name.</li>
-  <li>Chant: <strong>ॐ केशवाय नमः</strong> (sip), <strong>ॐ नारायणाय नमः</strong> (sip), <strong>ॐ माधवाय नमः</strong> (sip)</li>
-  <li>Touch both hands to chest, then wipe with cloth.</li>
-</ol>
-<p><em>Purpose:</em> Achamana removes subtle impurities and invokes Vishnu as the purifier.</p>',
- 'https://www.youtube.com/watch?v=example_achamana',
- 'In this step we begin the Achamana ritual. Achamana is the sacred act of sipping water three times to purify the body and mind. Hold your right hand in the Arghya Mudra - form a cup shape with your palm. Take a small copper spoon and pour water into it. As you sip, chant each divine name of Vishnu...'),
-
-(1, 2, 'Sankalpa - Taking the Vow', 'संकल्प',
- '<h3>संकल्प - The Sacred Vow</h3>
-<p>Sankalpa is the declaration of your intention before the gods. Hold flowers, akshat (rice), and water in your right palm.</p>
-<ol>
-  <li>State your name, gotra, and the purpose of the puja</li>
-  <li>Chant the Sankalpa mantra mentioning the date, time, location in the traditional Vedic way</li>
-  <li>Release the flowers and rice as an offering</li>
-</ol>
-<p>The Sankalpa connects your personal intention to the divine will and makes the puja an official ritual act.</p>',
- 'https://www.youtube.com/watch?v=example_sankalpa',
- 'Sankalpa is the resolute intention we set before any puja. Take flowers and unbroken rice grains (akshat) in your right palm with a small amount of water. The Sankalpa informs the divine realm of who you are, what you desire, and why you are performing this ritual...'),
-
-(1, 3, 'Kalash Sthapana - Establishing the Sacred Pot', 'कलश स्थापना',
- '<h3>कलश स्थापना - Sacred Pot Installation</h3>
-<p>The Kalash represents the universe and all deities. It is the central sacred element of the puja.</p>
-<h4>Materials needed:</h4>
-<ul>
-  <li>Copper or brass Kalash (water pot)</li>
-  <li>5 Mango leaves (placed inside, fanning out from mouth)</li>
-  <li>1 Coconut (placed on top)</li>
-  <li>Gangajal or pure water to fill the pot</li>
-  <li>Roli, Chandan for marking</li>
-</ul>
-<p>Place Kalash on a mound of raw rice. Apply chandan and roli. Arrange 5 mango leaves. Place coconut wrapped in cloth on top. Chant the Kalash mantra as you fill it.</p>',
- 'https://www.youtube.com/watch?v=example_kalash',
- 'The Kalash Sthapana is the most important preparatory step. The Kalash or sacred pot represents the entire cosmos. Lord Vishnu resides in its mouth, Lord Shiva in its neck, Lord Brahma at its base, and the divine mothers in its middle...'),
-
-(1, 4, 'Ganesh Avahana - Invocation of Ganesha', 'गणेश आवाहन',
- '<h3>गणेश आवाहन - Invoking Lord Ganesha</h3>
-<p>Now we formally invite Lord Ganesha to be present in the idol or picture. This is the most important step as Ganesha must be invoked before all other deities.</p>
-<p>Place the Ganesha murti on a clean cloth (asana). Offer flowers, akshat, and light the diya. Perform the following Shodashopachara (16 offerings) for Ganesha:</p>
-<ol>
-  <li><strong>Asana</strong> - offering a seat</li>
-  <li><strong>Padya</strong> - water for feet</li>
-  <li><strong>Arghya</strong> - water offering</li>
-  <li><strong>Achamana</strong> - water for sipping</li>
-  <li><strong>Snana</strong> - sacred bath with Panchamrit</li>
-  <li><strong>Vastra</strong> - offering cloth</li>
-  <li><strong>Yajnopaveeta</strong> - sacred thread</li>
-  <li><strong>Gandha</strong> - sandalwood paste</li>
-  <li><strong>Pushpa</strong> - flowers</li>
-  <li><strong>Dhupa</strong> - incense</li>
-  <li><strong>Dipa</strong> - lamp</li>
-  <li><strong>Naivedya</strong> - food offering (modak)</li>
-  <li><strong>Tambula</strong> - betel leaves</li>
-  <li><strong>Phala</strong> - fruit offering</li>
-  <li><strong>Daksina</strong> - offering of dakshina</li>
-  <li><strong>Aarti</strong> - waving of lamp</li>
-</ol>',
- 'https://www.youtube.com/watch?v=example_avahana',
- 'Ganesh Avahana means formally inviting Lord Ganesha into the ritual space. Without invoking Ganesha first, no puja is considered complete. Place the Ganesha idol on a clean red cloth. Take flowers in your hand and chant the Avahana mantra...'),
-
-(1, 5, 'Puja Aarti - Concluding Worship', 'पूजा आरती',
- '<h3>पूजा आरती - The Concluding Aarti</h3>
-<p>Aarti is the culmination of the puja. Wave a lit camphor/ghee diya in circular motions before the deity.</p>
-<h4>Steps:</h4>
-<ol>
-  <li>Light a clean ghee diya or camphor</li>
-  <li>Hold with both hands or right hand only</li>
-  <li>Move in 3 clockwise circles at feet level</li>
-  <li>2 circles at navel level</li>
-  <li>7 circles at face level</li>
-  <li>Ring the bell continuously during aarti</li>
-  <li>Sing the Ganesh Aarti: Jai Ganesh Jai Ganesh...</li>
-</ol>
-<p>After aarti, pass the flame to all devotees to receive blessings. Do Pradakshina (circumambulation) 3 times. Receive prasad and distribute.</p>',
- 'https://www.youtube.com/watch?v=example_aarti',
- 'The aarti is the most joyful part of the puja. Light the camphor or ghee diya. Hold it with both hands. Wave it in clockwise circles starting at the feet of Ganesha moving upward. Ring the bell as you chant the Aarti....'),
-
-(7, 1, 'Kalparambha & Bodhon', 'कल्पारम्भ एवं बोधन',
- '<h3>कल्पारम्भ एवं बोधन - Invocation and Awakening</h3>
-<p>The formal start of Durga Puja on Shashthi. Bodhon means awakening Goddess Durga under a Bilva (Bael) tree.</p>',
- 'https://www.youtube.com/watch?v=example_bodhon',
- 'We begin Durga Puja with Bodhon on Shashthi tithi...'),
-
-(7, 2, 'Navapatrika Sthapana (Saptami)', 'नवपत्रिका स्थापना',
- '<h3>नवपत्रिका स्थापना - Bathing the Nine Plants</h3>
-<p>On Saptami morning, nine types of plants representing nine forms of the Goddess are tied to a banana trunk, bathed in holy water, and established.</p>',
- 'https://www.youtube.com/watch?v=example_navapatrika',
- 'Navapatrika represents the presence of Durga in nature...'),
-
-(7, 3, 'Kumari Puja & Maha Ashtami', 'कुमारी पूजा एवं महा अष्टमी',
- '<h3>महा अष्टमी पुष्पञ्जलि - Ashtami Anjali</h3>
-<p>The most important day of Durga Puja. Devotees offer flowers (Pushpanjali) chanting the Ashtami mantras fasting.</p>',
- 'https://www.youtube.com/watch?v=example_ashtami',
- 'The Ashtami Pushpanjali is offered with complete devotion...'),
-
-(7, 4, 'Sandhi Puja', 'संधि पूजा',
- '<h3>संधि पूजा - The Sacred Juncture</h3>
-<p>Performed at the exact juncture when Ashtami ends and Navami begins. 108 lamps are lit and 108 lotuses are offered to Goddess Chamunda.</p>',
- 'https://www.youtube.com/watch?v=example_sandhi',
- 'Sandhi Puja requires precise timing and 108 lamps...');
+INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, description, video_url) VALUES
+(1, 1, 'Achamana', 'আচমন', 'Ritual purification.', 'https://www.youtube.com/watch?v=W0SclE-69S8'),
+(1, 2, 'Sankalpa', 'সংকল্প', 'Sacred vow.', 'https://www.youtube.com/watch?v=W0SclE-69S8'),
+(7, 1, 'Invocation', 'আবাহন', 'Awakening Durga.', 'https://www.youtube.com/watch?v=FjIuK75Noyk'),
+(8, 1, 'Invocation', 'আবাহন', 'Awakening Saraswati.', 'https://www.youtube.com/watch?v=R0g3v_B1q_w'),
+(8, 2, 'Pushpanjali', 'পুষ্পাঞ্জলি', 'Flower offering.', 'https://www.youtube.com/watch?v=R0g3v_B1q_w');
 
 -- -------------------------------------------------------
--- STEP_MANTRAS - map mantras to steps
+-- RESOURCES
 -- -------------------------------------------------------
-INSERT INTO step_mantras (step_id, mantra_id, sequence_order) VALUES
-(1, 1, 1),
-(3, 7, 1),
-(4, 1, 1),
-(5, 5, 1);
+DELETE FROM resources WHERE puja_id IN (1, 7, 8);
+INSERT INTO resources (puja_id, title, resource_type, file_url, is_downloadable) VALUES
+(1, 'Ganesh Puja Paddhati', 'PDF', 'https://archive.org/details/dli.ministry.04644/page/n5/mode/2up', TRUE),
+(7, 'Durga Puja Paddhati', 'PDF', 'https://archive.org/details/DurgapujaPaddhati/page/n1/mode/2up', TRUE),
+(8, 'Saraswati Puja Paddhati', 'PDF', 'https://archive.org/details/saraswati-puja-paddhati-2020/page/n1/mode/2up', TRUE);
 
 -- -------------------------------------------------------
--- STEP SAMAGRI REQUIREMENTS
+-- HINDU FESTIVALS
 -- -------------------------------------------------------
-INSERT INTO step_samagri (step_id, samagri_id, quantity, notes) VALUES
-(1, 13, '3 sips', 'Use copper spoon for sipping'),
-(3, 1, '1 piece', 'Copper or brass preferred'),
-(3, 2, '5 leaves', 'Fresh, unbroken'),
+INSERT INTO hindu_festivals (name, name_devanagari, description, puja_id, event_date, days_duration, notification_days_before) VALUES
+('Fresh, unbroken'),
 (3, 3, '1 piece', 'Unbroken coconut only'),
 (3, 13, 'Full pot', 'Fill completely'),
 (3, 4, '1 pinch', 'Apply on Kalash'),
