@@ -12,7 +12,6 @@ spring:
     hikari:
       maximum-pool-size: 10
   jpa:
-    defer-datasource-initialization: true
     hibernate:
       ddl-auto: update
     properties:
