@@ -1,5 +1,5 @@
 -- ============================================================
--- Purohit Darpan - Safe Seed Data (Verified Master)
+-- Purohit Darpan - Safe Seed Data (World-Class Aesthetic Master)
 -- ============================================================
 
 -- -------------------------------------------------------
@@ -26,14 +26,14 @@ INSERT INTO samagri (name, name_devanagari, description) VALUES
 ON CONFLICT (name) DO NOTHING;
 
 -- -------------------------------------------------------
--- PUJAS (Safe)
+-- PUJAS (Safe with High-Quality Thumbnails)
 -- -------------------------------------------------------
-INSERT INTO pujas (id, name, name_devanagari, description, duration_minutes, difficulty, category, is_active) VALUES
-(1, 'Ganesh Puja', 'गणेश पूजा', 'Foundational ritual for removing obstacles.', 60, 'BEGINNER', 'Vighnaharta', TRUE),
-(2, 'Lakshmi Puja', 'लक्ष्मी पूजा', 'Worship for wealth and prosperity.', 90, 'BEGINNER', 'Wealth', TRUE),
-(3, 'Durga Puja', 'दुर्गा पूजा', 'Worship of the Divine Mother for victory.', 300, 'ADVANCED', 'Shakti', TRUE),
-(8, 'Saraswati Puja', 'सरस्वती पूजा', 'Worship of Knowledge and Arts.', 60, 'BEGINNER', 'Knowledge', TRUE)
-ON CONFLICT (id) DO NOTHING;
+INSERT INTO pujas (id, name, name_devanagari, description, duration_minutes, difficulty, category, thumbnail_url, is_active) VALUES
+(1, 'Ganesh Puja', 'गणेश पूजा', 'Foundational ritual for removing obstacles.', 60, 'BEGINNER', 'Vighnaharta', 'https://images.unsplash.com/photo-1567591414240-e09197063f25?auto=format&fit=crop&q=80&w=800', TRUE),
+(2, 'Lakshmi Puja', 'लक्ष्मी पूजा', 'Worship for wealth and prosperity.', 90, 'BEGINNER', 'Wealth', 'https://images.unsplash.com/photo-1605030270566-bf966dd26781?auto=format&fit=crop&q=80&w=800', TRUE),
+(3, 'Durga Puja', 'दुर्गा पूजा', 'Worship of the Divine Mother for victory.', 300, 'ADVANCED', 'Shakti', 'https://images.unsplash.com/photo-1590494056285-e369b76c703b?auto=format&fit=crop&q=80&w=800', TRUE),
+(8, 'Saraswati Puja', 'सरस्वती पूजा', 'Worship of Knowledge and Arts.', 60, 'BEGINNER', 'Knowledge', 'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?auto=format&fit=crop&q=80&w=800', TRUE)
+ON CONFLICT (id) DO UPDATE SET thumbnail_url = EXCLUDED.thumbnail_url;
 
 -- -------------------------------------------------------
 -- PUJA STEPS (Safe)
