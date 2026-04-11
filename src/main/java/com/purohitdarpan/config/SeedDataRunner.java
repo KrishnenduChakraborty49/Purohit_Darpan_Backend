@@ -37,6 +37,15 @@ public class SeedDataRunner implements CommandLineRunner {
                 populator.setSqlScriptEncoding(StandardCharsets.UTF_8.name());
                 populator.execute(dataSource);
 
+                // Explicitly link puja steps to their PDF resources via Java (reliable, not SQL file parsing)
+                logger.info("Linking PDF resources to puja steps...");
+                int linked = jdbcTemplate.update(
+                    "UPDATE puja_steps ps SET pdf_resource_id = r.id " +
+                    "FROM resources r " +
+                    "WHERE r.puja_id = ps.puja_id AND r.resource_type = 'PDF'"
+                );
+                logger.info("PDF linking complete — {} steps linked to Paddhati PDFs", linked);
+
                 logger.info("PRODUCTION SEEDING SUCCESS!");
             }
         } catch (Exception e) {
