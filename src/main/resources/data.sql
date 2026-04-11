@@ -106,16 +106,36 @@ WHERE NOT EXISTS (SELECT 1 FROM puja_steps WHERE puja_id = 8 AND step_order = 3)
 
 
 -- -------------------------------------------------------
--- RESOURCES (Safe)
+-- RESOURCES — Paddhati PDFs (Self-Hosted)
 -- -------------------------------------------------------
-INSERT INTO resources (puja_id, title, resource_type, file_url, is_downloadable)
-SELECT 1, 'Ganesh Puja Manual (PDF)', 'PDF', 'https://archive.org/details/dli.ministry.04644/page/n5/mode/2up', TRUE
-WHERE NOT EXISTS (SELECT 1 FROM resources WHERE puja_id = 1 AND title = 'Ganesh Puja Manual (PDF)');
+-- Ganesh Puja Paddhati
+UPDATE resources SET file_url = '/pdfs/Ganesh_Puja_Paddhati.pdf', is_downloadable = TRUE
+WHERE puja_id = 1 AND title = 'Ganesh Puja Paddhati';
 
 INSERT INTO resources (puja_id, title, resource_type, file_url, is_downloadable)
-SELECT 3, 'Durga Puja Manual (PDF)', 'PDF', 'https://archive.org/details/DurgapujaPaddhati/page/n1/mode/2up', TRUE
-WHERE NOT EXISTS (SELECT 1 FROM resources WHERE puja_id = 3 AND title = 'Durga Puja Manual (PDF)');
+SELECT 1, 'Ganesh Puja Paddhati', 'PDF', '/pdfs/Ganesh_Puja_Paddhati.pdf', TRUE
+WHERE NOT EXISTS (SELECT 1 FROM resources WHERE puja_id = 1 AND title = 'Ganesh Puja Paddhati');
+
+-- Lakshmi Puja Paddhati
+UPDATE resources SET file_url = '/pdfs/Laxmi_Puja_Paddhati.pdf', is_downloadable = TRUE
+WHERE puja_id = 2 AND title = 'Lakshmi Puja Paddhati';
 
 INSERT INTO resources (puja_id, title, resource_type, file_url, is_downloadable)
-SELECT 8, 'Saraswati Puja Manual (PDF)', 'PDF', 'https://archive.org/details/saraswati-puja-paddhati-2020/page/n1/mode/2up', TRUE
-WHERE NOT EXISTS (SELECT 1 FROM resources WHERE puja_id = 8 AND title = 'Saraswati Puja Manual (PDF)');
+SELECT 2, 'Lakshmi Puja Paddhati', 'PDF', '/pdfs/Laxmi_Puja_Paddhati.pdf', TRUE
+WHERE NOT EXISTS (SELECT 1 FROM resources WHERE puja_id = 2 AND title = 'Lakshmi Puja Paddhati');
+
+-- Durga Puja Paddhati
+UPDATE resources SET file_url = '/pdfs/Purohit_Darpan_Durgapuja_Paddhati.pdf', is_downloadable = TRUE
+WHERE puja_id = 3 AND title = 'Durga Puja Paddhati';
+
+INSERT INTO resources (puja_id, title, resource_type, file_url, is_downloadable)
+SELECT 3, 'Durga Puja Paddhati', 'PDF', '/pdfs/Purohit_Darpan_Durgapuja_Paddhati.pdf', TRUE
+WHERE NOT EXISTS (SELECT 1 FROM resources WHERE puja_id = 3 AND title = 'Durga Puja Paddhati');
+
+-- Saraswati Puja Paddhati
+UPDATE resources SET file_url = '/pdfs/Saraswati_Puja_Paddhati.pdf', is_downloadable = TRUE
+WHERE puja_id = 8 AND title = 'Saraswati Puja Paddhati';
+
+INSERT INTO resources (puja_id, title, resource_type, file_url, is_downloadable)
+SELECT 8, 'Saraswati Puja Paddhati', 'PDF', '/pdfs/Saraswati_Puja_Paddhati.pdf', TRUE
+WHERE NOT EXISTS (SELECT 1 FROM resources WHERE puja_id = 8 AND title = 'Saraswati Puja Paddhati');
