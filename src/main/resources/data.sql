@@ -139,3 +139,25 @@ WHERE puja_id = 8 AND title = 'Saraswati Puja Paddhati';
 INSERT INTO resources (puja_id, title, resource_type, file_url, is_downloadable)
 SELECT 8, 'Saraswati Puja Paddhati', 'PDF', '/pdfs/Saraswati_Puja_Paddhati.pdf', TRUE
 WHERE NOT EXISTS (SELECT 1 FROM resources WHERE puja_id = 8 AND title = 'Saraswati Puja Paddhati');
+
+
+-- -------------------------------------------------------
+-- LINK PDF RESOURCES TO PUJA STEPS (Required for Study PDF tab)
+-- Each puja step needs pdf_resource_id pointing to its Paddhati PDF
+-- -------------------------------------------------------
+UPDATE puja_steps
+SET pdf_resource_id = (SELECT id FROM resources WHERE puja_id = 1 AND title = 'Ganesh Puja Paddhati' LIMIT 1)
+WHERE puja_id = 1 AND (SELECT id FROM resources WHERE puja_id = 1 AND title = 'Ganesh Puja Paddhati' LIMIT 1) IS NOT NULL;
+
+UPDATE puja_steps
+SET pdf_resource_id = (SELECT id FROM resources WHERE puja_id = 2 AND title = 'Lakshmi Puja Paddhati' LIMIT 1)
+WHERE puja_id = 2 AND (SELECT id FROM resources WHERE puja_id = 2 AND title = 'Lakshmi Puja Paddhati' LIMIT 1) IS NOT NULL;
+
+UPDATE puja_steps
+SET pdf_resource_id = (SELECT id FROM resources WHERE puja_id = 3 AND title = 'Durga Puja Paddhati' LIMIT 1)
+WHERE puja_id = 3 AND (SELECT id FROM resources WHERE puja_id = 3 AND title = 'Durga Puja Paddhati' LIMIT 1) IS NOT NULL;
+
+UPDATE puja_steps
+SET pdf_resource_id = (SELECT id FROM resources WHERE puja_id = 8 AND title = 'Saraswati Puja Paddhati' LIMIT 1)
+WHERE puja_id = 8 AND (SELECT id FROM resources WHERE puja_id = 8 AND title = 'Saraswati Puja Paddhati' LIMIT 1) IS NOT NULL;
+
