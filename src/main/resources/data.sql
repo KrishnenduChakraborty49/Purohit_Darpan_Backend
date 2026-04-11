@@ -106,38 +106,38 @@ WHERE NOT EXISTS (SELECT 1 FROM puja_steps WHERE puja_id = 8 AND step_order = 3)
 
 
 -- -------------------------------------------------------
--- RESOURCES — Paddhati PDFs (Self-Hosted)
+-- RESOURCES — Paddhati PDFs (Self-Hosted on Render Backend)
 -- -------------------------------------------------------
 -- Ganesh Puja Paddhati
-UPDATE resources SET file_url = '/pdfs/Ganesh_Puja_Paddhati.pdf', is_downloadable = TRUE
+UPDATE resources SET file_url = 'https://purohit-darpan-backend-q7b6.onrender.com/pdfs/Ganesh_Puja_Paddhati.pdf', is_downloadable = TRUE
 WHERE puja_id = 1 AND title = 'Ganesh Puja Paddhati';
 
 INSERT INTO resources (puja_id, title, resource_type, file_url, is_downloadable)
-SELECT 1, 'Ganesh Puja Paddhati', 'PDF', '/pdfs/Ganesh_Puja_Paddhati.pdf', TRUE
+SELECT 1, 'Ganesh Puja Paddhati', 'PDF', 'https://purohit-darpan-backend-q7b6.onrender.com/pdfs/Ganesh_Puja_Paddhati.pdf', TRUE
 WHERE NOT EXISTS (SELECT 1 FROM resources WHERE puja_id = 1 AND title = 'Ganesh Puja Paddhati');
 
 -- Lakshmi Puja Paddhati
-UPDATE resources SET file_url = '/pdfs/Laxmi_Puja_Paddhati.pdf', is_downloadable = TRUE
+UPDATE resources SET file_url = 'https://purohit-darpan-backend-q7b6.onrender.com/pdfs/Laxmi_Puja_Paddhati.pdf', is_downloadable = TRUE
 WHERE puja_id = 2 AND title = 'Lakshmi Puja Paddhati';
 
 INSERT INTO resources (puja_id, title, resource_type, file_url, is_downloadable)
-SELECT 2, 'Lakshmi Puja Paddhati', 'PDF', '/pdfs/Laxmi_Puja_Paddhati.pdf', TRUE
+SELECT 2, 'Lakshmi Puja Paddhati', 'PDF', 'https://purohit-darpan-backend-q7b6.onrender.com/pdfs/Laxmi_Puja_Paddhati.pdf', TRUE
 WHERE NOT EXISTS (SELECT 1 FROM resources WHERE puja_id = 2 AND title = 'Lakshmi Puja Paddhati');
 
 -- Durga Puja Paddhati
-UPDATE resources SET file_url = '/pdfs/Purohit_Darpan_Durgapuja_Paddhati.pdf', is_downloadable = TRUE
+UPDATE resources SET file_url = 'https://purohit-darpan-backend-q7b6.onrender.com/pdfs/Purohit_Darpan_Durgapuja_Paddhati.pdf', is_downloadable = TRUE
 WHERE puja_id = 3 AND title = 'Durga Puja Paddhati';
 
 INSERT INTO resources (puja_id, title, resource_type, file_url, is_downloadable)
-SELECT 3, 'Durga Puja Paddhati', 'PDF', '/pdfs/Purohit_Darpan_Durgapuja_Paddhati.pdf', TRUE
+SELECT 3, 'Durga Puja Paddhati', 'PDF', 'https://purohit-darpan-backend-q7b6.onrender.com/pdfs/Purohit_Darpan_Durgapuja_Paddhati.pdf', TRUE
 WHERE NOT EXISTS (SELECT 1 FROM resources WHERE puja_id = 3 AND title = 'Durga Puja Paddhati');
 
 -- Saraswati Puja Paddhati
-UPDATE resources SET file_url = '/pdfs/Saraswati_Puja_Paddhati.pdf', is_downloadable = TRUE
+UPDATE resources SET file_url = 'https://purohit-darpan-backend-q7b6.onrender.com/pdfs/Saraswati_Puja_Paddhati.pdf', is_downloadable = TRUE
 WHERE puja_id = 8 AND title = 'Saraswati Puja Paddhati';
 
 INSERT INTO resources (puja_id, title, resource_type, file_url, is_downloadable)
-SELECT 8, 'Saraswati Puja Paddhati', 'PDF', '/pdfs/Saraswati_Puja_Paddhati.pdf', TRUE
+SELECT 8, 'Saraswati Puja Paddhati', 'PDF', 'https://purohit-darpan-backend-q7b6.onrender.com/pdfs/Saraswati_Puja_Paddhati.pdf', TRUE
 WHERE NOT EXISTS (SELECT 1 FROM resources WHERE puja_id = 8 AND title = 'Saraswati Puja Paddhati');
 
 
