@@ -143,21 +143,11 @@ WHERE NOT EXISTS (SELECT 1 FROM resources WHERE puja_id = 8 AND title = 'Saraswa
 
 -- -------------------------------------------------------
 -- LINK PDF RESOURCES TO PUJA STEPS (Required for Study PDF tab)
--- Each puja step needs pdf_resource_id pointing to its Paddhati PDF
+-- PostgreSQL UPDATE...FROM join syntax to set pdf_resource_id on every step
 -- -------------------------------------------------------
-UPDATE puja_steps
-SET pdf_resource_id = (SELECT id FROM resources WHERE puja_id = 1 AND title = 'Ganesh Puja Paddhati' LIMIT 1)
-WHERE puja_id = 1 AND (SELECT id FROM resources WHERE puja_id = 1 AND title = 'Ganesh Puja Paddhati' LIMIT 1) IS NOT NULL;
-
-UPDATE puja_steps
-SET pdf_resource_id = (SELECT id FROM resources WHERE puja_id = 2 AND title = 'Lakshmi Puja Paddhati' LIMIT 1)
-WHERE puja_id = 2 AND (SELECT id FROM resources WHERE puja_id = 2 AND title = 'Lakshmi Puja Paddhati' LIMIT 1) IS NOT NULL;
-
-UPDATE puja_steps
-SET pdf_resource_id = (SELECT id FROM resources WHERE puja_id = 3 AND title = 'Durga Puja Paddhati' LIMIT 1)
-WHERE puja_id = 3 AND (SELECT id FROM resources WHERE puja_id = 3 AND title = 'Durga Puja Paddhati' LIMIT 1) IS NOT NULL;
-
-UPDATE puja_steps
-SET pdf_resource_id = (SELECT id FROM resources WHERE puja_id = 8 AND title = 'Saraswati Puja Paddhati' LIMIT 1)
-WHERE puja_id = 8 AND (SELECT id FROM resources WHERE puja_id = 8 AND title = 'Saraswati Puja Paddhati' LIMIT 1) IS NOT NULL;
+UPDATE puja_steps ps
+SET pdf_resource_id = r.id
+FROM resources r
+WHERE r.puja_id = ps.puja_id
+  AND r.resource_type = 'PDF';
 
