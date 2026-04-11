@@ -8,9 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "resources", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"puja_id", "title"})
-})
+@Table(name = "resources")
 @Data
 @Builder
 @NoArgsConstructor

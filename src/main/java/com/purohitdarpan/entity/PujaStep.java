@@ -10,9 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "puja_steps", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"puja_id", "step_order"})
-})
+@Table(name = "puja_steps")
 @Data
 @Builder
 @NoArgsConstructor
