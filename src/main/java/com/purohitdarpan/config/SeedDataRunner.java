@@ -33,7 +33,7 @@ public class SeedDataRunner implements CommandLineRunner {
                 jdbcTemplate.execute("TRUNCATE TABLE hindu_festivals, resources, step_samagri, step_mantras, puja_steps, samagri, mantras, pujas RESTART IDENTITY CASCADE");
 
                 ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-                populator.addScript(new ClassPathResource("data_postgres.sql"));
+                populator.addScript(new ClassPathResource("data.sql"));
                 populator.setSqlScriptEncoding(StandardCharsets.UTF_8.name());
                 populator.execute(dataSource);
 
