@@ -85,8 +85,12 @@ WHERE NOT EXISTS (SELECT 1 FROM pujas WHERE id = 8);
 -- PUJA STEPS (Safe)
 -- -------------------------------------------------------
 INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, description, video_url)
-SELECT 1, 1, 'Achamana', 'आचमन', 'Ritual purification.', 'https://www.youtube.com/watch?v=W0SclE-69S8'
+SELECT 1, 1, 'Achamana', 'आचमन', 'Ritual purification with sacred water before beginning the puja.', 'https://www.youtube.com/watch?v=W0SclE-69S8'
 WHERE NOT EXISTS (SELECT 1 FROM puja_steps WHERE puja_id = 1 AND step_order = 1);
+
+INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, description, video_url)
+SELECT 2, 1, 'Sankalpa', 'संकल्प', 'Taking a sacred vow and intention before beginning Lakshmi Puja.', 'https://www.youtube.com/watch?v=3HUAUnEVoRA'
+WHERE NOT EXISTS (SELECT 1 FROM puja_steps WHERE puja_id = 2 AND step_order = 1);
 
 INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, description, video_url)
 SELECT 3, 1, 'Invocation', 'आवाह्न', 'Awakening Durga.', 'https://www.youtube.com/watch?v=FjIuK75Noyk'
