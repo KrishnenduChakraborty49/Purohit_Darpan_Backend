@@ -58,26 +58,26 @@ WHERE NOT EXISTS (SELECT 1 FROM samagri WHERE name = 'Gangajal');
 -- PUJAS (Custom User-Provided Thumbnails)
 -- -------------------------------------------------------
 -- Safely Update existing if they exist
-UPDATE pujas SET thumbnail_url = '/images/ganesh.png', is_active = TRUE WHERE id = 1;
-UPDATE pujas SET thumbnail_url = '/images/laxmi.png', is_active = TRUE WHERE id = 2;
-UPDATE pujas SET thumbnail_url = '/images/durga.png', is_active = TRUE WHERE id = 3;
-UPDATE pujas SET thumbnail_url = '/images/saraswati.png', is_active = TRUE WHERE id = 8;
+UPDATE pujas SET thumbnail_url = 'https://purohit-darpan-backend-q7b6.onrender.com/images/ganesh.png', is_active = TRUE WHERE id = 1;
+UPDATE pujas SET thumbnail_url = 'https://purohit-darpan-backend-q7b6.onrender.com/images/laxmi.png', is_active = TRUE WHERE id = 2;
+UPDATE pujas SET thumbnail_url = 'https://purohit-darpan-backend-q7b6.onrender.com/images/durga.png', is_active = TRUE WHERE id = 3;
+UPDATE pujas SET thumbnail_url = 'https://purohit-darpan-backend-q7b6.onrender.com/images/saraswati.png', is_active = TRUE WHERE id = 8;
 
 -- Safely Insert if they do not exist
 INSERT INTO pujas (id, name, name_devanagari, description, duration_minutes, difficulty, category, thumbnail_url, is_active)
-SELECT 1, 'Ganesh Puja', 'गणेश पूजा', 'Foundational ritual for removing obstacles.', 60, 'BEGINNER', 'Vighnaharta', '/images/ganesh.png', TRUE
+SELECT 1, 'Ganesh Puja', 'गणेश पूजा', 'Foundational ritual for removing obstacles.', 60, 'BEGINNER', 'Vighnaharta', 'https://purohit-darpan-backend-q7b6.onrender.com/images/ganesh.png', TRUE
 WHERE NOT EXISTS (SELECT 1 FROM pujas WHERE id = 1);
 
 INSERT INTO pujas (id, name, name_devanagari, description, duration_minutes, difficulty, category, thumbnail_url, is_active)
-SELECT 2, 'Lakshmi Puja', 'लक्ष्मी पूजा', 'Worship for wealth and prosperity.', 90, 'BEGINNER', 'Wealth', '/images/laxmi.png', TRUE
+SELECT 2, 'Lakshmi Puja', 'लक्ष्मी पूजा', 'Worship for wealth and prosperity.', 90, 'BEGINNER', 'Wealth', 'https://purohit-darpan-backend-q7b6.onrender.com/images/laxmi.png', TRUE
 WHERE NOT EXISTS (SELECT 1 FROM pujas WHERE id = 2);
 
 INSERT INTO pujas (id, name, name_devanagari, description, duration_minutes, difficulty, category, thumbnail_url, is_active)
-SELECT 3, 'Durga Puja', 'दुर्गा पूजा', 'Worship of the Divine Mother for victory.', 300, 'ADVANCED', 'Shakti', '/images/durga.png', TRUE
+SELECT 3, 'Durga Puja', 'दुर्गा पूजा', 'Worship of the Divine Mother for victory.', 300, 'ADVANCED', 'Shakti', 'https://purohit-darpan-backend-q7b6.onrender.com/images/durga.png', TRUE
 WHERE NOT EXISTS (SELECT 1 FROM pujas WHERE id = 3);
 
 INSERT INTO pujas (id, name, name_devanagari, description, duration_minutes, difficulty, category, thumbnail_url, is_active)
-SELECT 8, 'Saraswati Puja', 'सरस्वती पूजा', 'Worship of Knowledge and Arts.', 60, 'BEGINNER', 'Knowledge', '/images/saraswati.png', TRUE
+SELECT 8, 'Saraswati Puja', 'सरस्वती पूजा', 'Worship of Knowledge and Arts.', 60, 'BEGINNER', 'Knowledge', 'https://purohit-darpan-backend-q7b6.onrender.com/images/saraswati.png', TRUE
 WHERE NOT EXISTS (SELECT 1 FROM pujas WHERE id = 8);
 
 
