@@ -84,14 +84,22 @@ WHERE NOT EXISTS (SELECT 1 FROM pujas WHERE id = 8);
 -- -------------------------------------------------------
 -- PUJA STEPS (Safe)
 -- -------------------------------------------------------
-INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, description, video_url)
-SELECT 1, 1, 'Achamana', 'आचमन', 'Ritual purification with sacred water before beginning the puja.', 'https://www.youtube.com/watch?v=W0SclE-69S8'
+
+-- Ganesh Puja — 1 step
+INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, title_bengali, description, video_url)
+SELECT 1, 1, 'Ganesh Puja Procedure', 'गणेश पूजा विधि', 'গণেশ পূজা বিধি', 'Complete procedure of Ganesh Puja — invocation, mantras, offerings and aarti.', 'https://www.youtube.com/watch?v=DUIrds34eeg'
 WHERE NOT EXISTS (SELECT 1 FROM puja_steps WHERE puja_id = 1 AND step_order = 1);
 
-INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, description, video_url)
-SELECT 2, 1, 'Sankalpa', 'संकल्प', 'Taking a sacred vow and intention before beginning Lakshmi Puja.', 'https://www.youtube.com/watch?v=3HUAUnEVoRA'
+-- Lakshmi Puja — 2 steps
+INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, title_bengali, description, video_url)
+SELECT 2, 1, 'Laxmi Puja Mantra', 'लक्ष्मी पूजा मंत्र', 'লক্ষ্মী পূজার মন্ত্র', 'Sacred mantras chanted during Laxmi Puja for invoking the goddess of wealth.', 'https://www.youtube.com/watch?v=XyJGvqf5vd4'
 WHERE NOT EXISTS (SELECT 1 FROM puja_steps WHERE puja_id = 2 AND step_order = 1);
 
+INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, title_bengali, description, video_url)
+SELECT 2, 2, 'Laxmi Panchali', 'लक्ष्मी पांचाली', 'লক্ষ্মীর পাঁচালি', 'Recitation of Laxmi Panchali — devotional hymns in praise of Goddess Laxmi.', 'https://www.youtube.com/watch?v=dsWdH8-U8u8'
+WHERE NOT EXISTS (SELECT 1 FROM puja_steps WHERE puja_id = 2 AND step_order = 2);
+
+-- Durga Puja — 6 steps (Sasthi to Dashami)
 INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, title_bengali, description, video_url)
 SELECT 3, 1, 'Sasthi', 'षष्ठी', 'ষষ্ঠী', 'Sasthi Puja — Invocation and welcome of Goddess Durga on the sixth day.', 'https://www.youtube.com/watch?v=JAl7pjMa2q8'
 WHERE NOT EXISTS (SELECT 1 FROM puja_steps WHERE puja_id = 3 AND step_order = 1);
@@ -116,18 +124,11 @@ INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, title_beng
 SELECT 3, 6, 'Dashami', 'दशमी', 'দশমী', 'Dashami — Visarjan of Goddess Durga, bidding farewell on the tenth day.', 'https://www.youtube.com/watch?v=uBr9f0tMrGs'
 WHERE NOT EXISTS (SELECT 1 FROM puja_steps WHERE puja_id = 3 AND step_order = 6);
 
-
-INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, description, video_url)
-SELECT 8, 1, 'Invocation', 'आवाह्न', 'Awakening Saraswati.', 'https://www.youtube.com/watch?v=R0g3v_B1q_w'
+-- Saraswati Puja — 1 step
+INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, title_bengali, description, video_url)
+SELECT 8, 1, 'Saraswati Puja Mantra', 'सरस्वती पूजा मंत्र', 'সরস্বতী পূজার মন্ত্র', 'Sacred mantras and complete procedure of Saraswati Puja — worship of the goddess of knowledge.', 'https://www.youtube.com/watch?v=8aN-DCABQcc'
 WHERE NOT EXISTS (SELECT 1 FROM puja_steps WHERE puja_id = 8 AND step_order = 1);
 
-INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, description, video_url)
-SELECT 8, 2, 'Pushpanjali', 'पुष्पांजलि', 'Flower offering.', 'https://www.youtube.com/watch?v=R0g3v_B1q_w'
-WHERE NOT EXISTS (SELECT 1 FROM puja_steps WHERE puja_id = 8 AND step_order = 2);
-
-INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, description, video_url)
-SELECT 8, 3, 'Aarti', 'आरती', 'Light offering.', 'https://www.youtube.com/watch?v=R0g3v_B1q_w'
-WHERE NOT EXISTS (SELECT 1 FROM puja_steps WHERE puja_id = 8 AND step_order = 3);
 
 
 -- -------------------------------------------------------
