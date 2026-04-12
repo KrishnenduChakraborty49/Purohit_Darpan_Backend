@@ -92,9 +92,30 @@ INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, descriptio
 SELECT 2, 1, 'Sankalpa', 'संकल्प', 'Taking a sacred vow and intention before beginning Lakshmi Puja.', 'https://www.youtube.com/watch?v=3HUAUnEVoRA'
 WHERE NOT EXISTS (SELECT 1 FROM puja_steps WHERE puja_id = 2 AND step_order = 1);
 
-INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, description, video_url)
-SELECT 3, 1, 'Invocation', 'आवाह्न', 'Awakening Durga.', 'https://www.youtube.com/watch?v=FjIuK75Noyk'
+INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, title_bengali, description, video_url)
+SELECT 3, 1, 'Sasthi', 'षष्ठी', 'ষষ্ঠী', 'Sasthi Puja — Invocation and welcome of Goddess Durga on the sixth day.', 'https://www.youtube.com/watch?v=JAl7pjMa2q8'
 WHERE NOT EXISTS (SELECT 1 FROM puja_steps WHERE puja_id = 3 AND step_order = 1);
+
+INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, title_bengali, description, video_url)
+SELECT 3, 2, 'Saptami', 'सप्तमी', 'সপ্তমী', 'Saptami Puja — Worship of Goddess Durga on the seventh day with Nabapatrika snan.', 'https://www.youtube.com/watch?v=5u-uulot9X4'
+WHERE NOT EXISTS (SELECT 1 FROM puja_steps WHERE puja_id = 3 AND step_order = 2);
+
+INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, title_bengali, description, video_url)
+SELECT 3, 3, 'Aastami', 'अष्टमी', 'অষ্টমী', 'Aastami Puja — The most auspicious day, Pushpanjali and Kumari Puja performed.', 'https://www.youtube.com/watch?v=yQt_GhyWOXc'
+WHERE NOT EXISTS (SELECT 1 FROM puja_steps WHERE puja_id = 3 AND step_order = 3);
+
+INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, title_bengali, description, video_url)
+SELECT 3, 4, 'Sandhi Puja', 'सन्धि पूजा', 'সন্ধি পূজা', 'Sandhi Puja — The junction between Aastami and Navami, most sacred 48-minute window.', 'https://www.youtube.com/watch?v=Ke7NDOzGSXM'
+WHERE NOT EXISTS (SELECT 1 FROM puja_steps WHERE puja_id = 3 AND step_order = 4);
+
+INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, title_bengali, description, video_url)
+SELECT 3, 5, 'Navami', 'नवमी', 'নবমী', 'Navami Puja — Homa and hawan offered to Goddess Durga on the ninth day.', 'https://www.youtube.com/watch?v=roS3QBV_xyU'
+WHERE NOT EXISTS (SELECT 1 FROM puja_steps WHERE puja_id = 3 AND step_order = 5);
+
+INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, title_bengali, description, video_url)
+SELECT 3, 6, 'Dashami', 'दशमी', 'দশমী', 'Dashami — Visarjan of Goddess Durga, bidding farewell on the tenth day.', 'https://www.youtube.com/watch?v=uBr9f0tMrGs'
+WHERE NOT EXISTS (SELECT 1 FROM puja_steps WHERE puja_id = 3 AND step_order = 6);
+
 
 INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, description, video_url)
 SELECT 8, 1, 'Invocation', 'आवाह्न', 'Awakening Saraswati.', 'https://www.youtube.com/watch?v=R0g3v_B1q_w'
