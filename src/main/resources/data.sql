@@ -92,7 +92,7 @@ WHERE NOT EXISTS (SELECT 1 FROM puja_steps WHERE puja_id = 1 AND step_order = 1)
 
 -- Lakshmi Puja — 2 steps
 INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, title_bengali, description, video_url)
-SELECT 2, 1, 'Laxmi Puja Mantra', 'लक्ष्मी पूजा मंत्र', 'লক্ষ্মী পূজার মন্ত্র', 'Sacred mantras chanted during Laxmi Puja for invoking the goddess of wealth.', 'https://www.youtube.com/watch?v=XyJGvqf5vd4'
+SELECT 2, 1, 'Laxmi Puja Mantra', 'लक्ष्मी पूजा मंत्र', 'লক্ষ্মী পূজার মন্ত্র', 'Sacred mantras chanted during Laxmi Puja for invoking the goddess of wealth.', 'https://www.youtube.com/watch?v=knY4cUlCNXc'
 WHERE NOT EXISTS (SELECT 1 FROM puja_steps WHERE puja_id = 2 AND step_order = 1);
 
 INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, title_bengali, description, video_url)
