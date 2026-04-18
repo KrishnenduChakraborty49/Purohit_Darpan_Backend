@@ -26,6 +26,8 @@ public class DiagnosticsController {
             // Count total and active pujas
             status.put("pujas_count", jdbcTemplate.queryForObject("SELECT count(*) FROM pujas", Long.class));
             status.put("is_active_true", jdbcTemplate.queryForObject("SELECT count(*) FROM pujas WHERE is_active = true", Long.class));
+            status.put("notifications_sent", jdbcTemplate.queryForObject("SELECT count(*) FROM notification_logs WHERE delivery_status = 'SENT'", Long.class));
+            status.put("notifications_failed", jdbcTemplate.queryForObject("SELECT count(*) FROM notification_logs WHERE delivery_status = 'FAILED'", Long.class));
 
             // Safe connection check using try-with-resources (no leak)
             try (java.sql.Connection conn = jdbcTemplate.getDataSource().getConnection()) {
