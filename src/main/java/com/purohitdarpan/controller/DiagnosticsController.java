@@ -1,6 +1,7 @@
 package com.purohitdarpan.controller;
 
 import com.purohitdarpan.exception.GlobalExceptionHandler;
+import com.purohitdarpan.scheduler.NotificationScheduler;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,9 +11,28 @@ import java.util.Map;
 @RestController
 public class DiagnosticsController {
     private final JdbcTemplate jdbcTemplate;
+    private final NotificationScheduler notificationScheduler;
 
-    public DiagnosticsController(JdbcTemplate jdbcTemplate) {
+    public DiagnosticsController(JdbcTemplate jdbcTemplate, NotificationScheduler notificationScheduler) {
         this.jdbcTemplate = jdbcTemplate;
+        this.notificationScheduler = notificationScheduler;
+    }
+
+    /**
+     * Manual trigger for notification scheduler.
+     */
+    @GetMapping("/api/diagnostics/trigger-notifications")
+    public Map<String, Object> triggerNotifications() {
+        Map<String, Object> result = new HashMap<>();
+        try {
+            notificationScheduler.sendFestivalReminders();
+            result.put("status", "SUCCESS");
+            result.put("message", "Festival reminders triggered manually.");
+        } catch (Exception e) {
+            result.put("status", "ERROR");
+            result.put("error", e.getMessage());
+        }
+        return result;
     }
 
     /**

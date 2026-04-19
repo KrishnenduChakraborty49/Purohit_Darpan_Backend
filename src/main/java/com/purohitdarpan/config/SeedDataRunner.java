@@ -79,6 +79,32 @@ public class SeedDataRunner implements CommandLineRunner {
 
                 logger.info("Puja step details patched successfully!");
 
+                // ── Seed Hindu Festivals for April 2026 ──
+                logger.info("Seeding sample festivals for notification verification...");
+                jdbcTemplate.execute("TRUNCATE TABLE hindu_festivals RESTART IDENTITY CASCADE");
+                
+                // Today (April 19): Welcome Notification
+                jdbcTemplate.update(
+                    "INSERT INTO hindu_festivals (name, event_date, description, notification_days_before) VALUES (?, ?, ?, ?)",
+                    "Welcome to Purohit Darpan", java.time.LocalDate.of(2026, 4, 19), 
+                    "Exploring the platform and ritual guides.", 0
+                );
+
+                // April 22: Upcoming Ritual Prep
+                jdbcTemplate.update(
+                    "INSERT INTO hindu_festivals (name, event_date, description, notification_days_before) VALUES (?, ?, ?, ?)",
+                    "Auspicious Ritual Prep", java.time.LocalDate.of(2026, 4, 22), 
+                    "Prepare your samagri for the upcoming ritual.", 3
+                );
+
+                // April 30: End of Month Reminder
+                jdbcTemplate.update(
+                    "INSERT INTO hindu_festivals (name, event_date, description, notification_days_before) VALUES (?, ?, ?, ?)",
+                    "Monthly Ritual Review", java.time.LocalDate.of(2026, 4, 30), 
+                    "Review your learning progress for this month.", 11
+                );
+
+                logger.info("Festival seeding complete!");
                 logger.info("PRODUCTION SEEDING SUCCESS!");
             }
         } catch (Exception e) {
