@@ -81,12 +81,12 @@ public class NotificationController {
      */
     @GetMapping("/history/{userId}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Page<NotificationLog>> history(
+    public ResponseEntity<java.util.List<NotificationLog>> history(
             @PathVariable Long userId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "30") int size) {
         return ResponseEntity.ok(
-                logRepo.findByUserIdOrderBySentAtDesc(userId, PageRequest.of(page, size)));
+                logRepo.findByUserIdOrderBySentAtDesc(userId, PageRequest.of(page, size)).getContent());
     }
 
     /**

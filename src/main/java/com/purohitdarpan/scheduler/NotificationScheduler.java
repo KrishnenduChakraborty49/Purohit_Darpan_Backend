@@ -139,8 +139,6 @@ public class NotificationScheduler {
                 List.of(User.Role.STUDENT, User.Role.MENTOR));
 
         for (User user : users) {
-            if (user.getFcmToken() == null) continue;
-
             Optional<UserNotificationPreferences> prefsOpt = prefsRepo.findByUserId(user.getId());
             if (prefsOpt.isPresent() && !prefsOpt.get().getFestivalReminders()) continue;
             if (isInQuietHours(user.getId())) continue;
@@ -159,8 +157,17 @@ public class NotificationScheduler {
                     "tag", tag
             );
 
-            String messageId = fcmService.sendNotification(user.getFcmToken(), title, body, data);
-            NotificationLog.DeliveryStatus status = "FAILED".equals(messageId)
+            String messageId = null;
+            if (user.getFcmToken() != null) {
+                try {
+                    messageId = fcmService.sendNotification(user.getFcmToken(), title, body, data);
+                } catch (Exception e) {
+                    log.warn("FCM Push failed for user {}: {}", user.getId(), e.getMessage());
+                    messageId = "FAILED";
+                }
+            }
+
+            NotificationLog.DeliveryStatus status = (messageId == null || "FAILED".equals(messageId))
                     ? NotificationLog.DeliveryStatus.FAILED
                     : NotificationLog.DeliveryStatus.SENT;
 
