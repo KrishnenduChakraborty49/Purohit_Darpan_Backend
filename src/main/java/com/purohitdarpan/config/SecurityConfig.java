@@ -54,6 +54,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/festivals/**").permitAll()
                         .requestMatchers("/actuator/health").permitAll()
                         .requestMatchers("/api/diagnostics/**").permitAll()
+                        .requestMatchers("/api/notifications/trigger-scheduler").permitAll()
                         .requestMatchers("/api/ai/**").permitAll() // ADDED THIS TO FIX ASK GURU
                         .requestMatchers("/pdfs/**", "/images/**", "/docs/**").permitAll()
                         // Protected
