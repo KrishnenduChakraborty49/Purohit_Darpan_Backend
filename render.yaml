@@ -10,29 +10,14 @@ services:
       - key: SPRING_PROFILES_ACTIVE
         value: prod
       - key: DB_HOST
-        fromDatabase:
-          name: purohit-db
-          property: host
+        value: ep-raspy-thunder-apmzpbny-pooler.c-7.us-east-1.aws.neon.tech
       - key: DB_PORT
-        fromDatabase:
-          name: purohit-db
-          property: port
+        value: 5432
       - key: DB_NAME
-        fromDatabase:
-          name: purohit-db
-          property: database
+        value: neondb
       - key: DB_USERNAME
-        fromDatabase:
-          name: purohit-db
-          property: user
+        value: neondb_owner
       - key: DB_PASSWORD
-        fromDatabase:
-          name: purohit-db
-          property: password
+        value: npg_tN1VK8mzayWr
       - key: CORS_ALLOWED_ORIGINS
         value: https://purohit-darpan-frontend.vercel.app
-
-databases:
-  - name: purohit-db
-    plan: free
-    region: ohio
