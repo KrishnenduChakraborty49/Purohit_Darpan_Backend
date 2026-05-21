@@ -138,7 +138,7 @@ WHERE NOT EXISTS (SELECT 1 FROM puja_steps WHERE puja_id = 8 AND step_order = 1)
 
 -- Shiv Puja — 3 steps
 INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, title_bengali, description, video_url)
-SELECT 9, 1, 'Shiv Puja Procedure', 'शिव पूजा विधि', 'শিব পূজা বিধি', 'Complete Shiv Puja vidhi — Shodashopachara worship of Lord Shiva with Panchamrita abhishek, Bilva patra, Dhoop and Deepa.', 'https://www.youtube.com/watch?v=9N3GZ-LU67A'
+SELECT 9, 1, 'Shiv Puja Procedure', 'शिव पूजा विधि', 'শিব পূজা বিধি', 'Complete Shiv Puja vidhi — Shodashopachara worship of Lord Shiva with Panchamrita abhishek, Bilva patra, Dhoop and Deepa.', 'https://www.youtube.com/watch?v=vDC-zR9X6mw'
 WHERE NOT EXISTS (SELECT 1 FROM puja_steps WHERE puja_id = 9 AND step_order = 1);
 
 INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, title_bengali, description, video_url)

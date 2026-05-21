@@ -82,7 +82,7 @@ public class SeedDataRunner implements CommandLineRunner {
                     "Shiv Puja Procedure", "\u0936\u093f\u0935 \u092a\u0942\u091c\u093e \u0935\u093f\u0927\u093f",
                     "\u09b6\u09bf\u09ac \u09aa\u09c2\u099c\u09be \u09ac\u09bf\u09a7\u09bf",
                     "Complete Shiv Puja vidhi \u2014 Shodashopachara worship of Lord Shiva with Panchamrita abhishek, Bilva patra, Dhoop and Deepa.",
-                    "https://www.youtube.com/watch?v=9N3GZ-LU67A");
+                    "https://www.youtube.com/watch?v=vDC-zR9X6mw");
 
                 upsertStep(9, 2,
                     "Shiv Mantras & Stotram", "\u0936\u093f\u0935 \u092e\u0902\u0924\u094d\u0930 \u090f\u0935\u0902 \u0938\u094d\u0924\u094b\u0924\u094d\u0930",
