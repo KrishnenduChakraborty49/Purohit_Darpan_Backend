@@ -77,6 +77,25 @@ public class SeedDataRunner implements CommandLineRunner {
                     "Sacred mantras and complete procedure of Saraswati Puja \u2014 worship of the goddess of knowledge.",
                     "https://www.youtube.com/watch?v=8aN-DCABQcc");
 
+                // Shiv Puja — Steps 1, 2, 3
+                upsertStep(9, 1,
+                    "Shiv Puja Procedure", "\u0936\u093f\u0935 \u092a\u0942\u091c\u093e \u0935\u093f\u0927\u093f",
+                    "\u09b6\u09bf\u09ac \u09aa\u09c2\u099c\u09be \u09ac\u09bf\u09a7\u09bf",
+                    "Complete Shiv Puja vidhi \u2014 Shodashopachara worship of Lord Shiva with Panchamrita abhishek, Bilva patra, Dhoop and Deepa.",
+                    "https://www.youtube.com/watch?v=9N3GZ-LU67A");
+
+                upsertStep(9, 2,
+                    "Shiv Mantras & Stotram", "\u0936\u093f\u0935 \u092e\u0902\u0924\u094d\u0930 \u090f\u0935\u0902 \u0938\u094d\u0924\u094b\u0924\u094d\u0930",
+                    "\u09b6\u09bf\u09ac \u09ae\u09a8\u09cd\u09a4\u09cd\u09b0 \u0993 \u09b8\u09cd\u09a4\u09cb\u09a4\u09cd\u09b0",
+                    "Sacred Shiva mantras including Om Namah Shivaya, Maha Mrityunjaya Mantra, and Shiva Tandava Stotram with pronunciation guide.",
+                    "https://www.youtube.com/watch?v=vHgPz-HFdXg");
+
+                upsertStep(9, 3,
+                    "Shivalinga Abhishek", "\u0936\u093f\u0935\u0932\u093f\u0902\u0917 \u0905\u092d\u093f\u0937\u0947\u0915",
+                    "\u09b6\u09bf\u09ac\u09b2\u09bf\u0999\u09cd\u0997 \u0985\u09ad\u09bf\u09b7\u09c7\u0995",
+                    "Step-by-step Panchamrita Abhishek of Shivalinga \u2014 bathing the linga with milk, curd, ghee, honey and sugar water while chanting sacred mantras.",
+                    "https://www.youtube.com/watch?v=mWYDKIAEVHE");
+
                 logger.info("Puja step details patched successfully!");
 
                 // ── Seed Hindu Festivals for April 2026 ──

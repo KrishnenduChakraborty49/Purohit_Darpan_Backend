@@ -80,6 +80,13 @@ INSERT INTO pujas (id, name, name_devanagari, description, duration_minutes, dif
 SELECT 8, 'Saraswati Puja', 'सरस्वती पूजा', 'Worship of Knowledge and Arts.', 60, 'BEGINNER', 'Knowledge', 'https://purohit-darpan-backend-q7b6.onrender.com/images/saraswati.png', TRUE
 WHERE NOT EXISTS (SELECT 1 FROM pujas WHERE id = 8);
 
+-- Shiv Puja
+UPDATE pujas SET thumbnail_url = 'https://purohit-darpan-backend-q7b6.onrender.com/images/shiv.png', is_active = TRUE WHERE id = 9;
+
+INSERT INTO pujas (id, name, name_devanagari, description, duration_minutes, difficulty, category, thumbnail_url, is_active)
+SELECT 9, 'Shiv Puja', 'शिव पूजा', 'Worship of Lord Mahadev — the destroyer and transformer. Attain blessings, peace and liberation.', 90, 'INTERMEDIATE', 'Shaivism', 'https://purohit-darpan-backend-q7b6.onrender.com/images/shiv.png', TRUE
+WHERE NOT EXISTS (SELECT 1 FROM pujas WHERE id = 9);
+
 
 -- -------------------------------------------------------
 -- PUJA STEPS (Safe)
@@ -129,6 +136,19 @@ INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, title_beng
 SELECT 8, 1, 'Saraswati Puja Mantra', 'सरस्वती पूजा मंत्र', 'সরস্বতী পূজার মন্ত্র', 'Sacred mantras and complete procedure of Saraswati Puja — worship of the goddess of knowledge.', 'https://www.youtube.com/watch?v=8aN-DCABQcc'
 WHERE NOT EXISTS (SELECT 1 FROM puja_steps WHERE puja_id = 8 AND step_order = 1);
 
+-- Shiv Puja — 3 steps
+INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, title_bengali, description, video_url)
+SELECT 9, 1, 'Shiv Puja Procedure', 'शिव पूजा विधि', 'শিব পূজা বিধি', 'Complete Shiv Puja vidhi — Shodashopachara worship of Lord Shiva with Panchamrita abhishek, Bilva patra, Dhoop and Deepa.', 'https://www.youtube.com/watch?v=9N3GZ-LU67A'
+WHERE NOT EXISTS (SELECT 1 FROM puja_steps WHERE puja_id = 9 AND step_order = 1);
+
+INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, title_bengali, description, video_url)
+SELECT 9, 2, 'Shiv Mantras & Stotram', 'शिव मंत्र एवं स्तोत्र', 'শিব মন্ত্র ও স্তোত্র', 'Sacred Shiva mantras including Om Namah Shivaya, Maha Mrityunjaya Mantra, and Shiva Tandava Stotram with pronunciation guide.', 'https://www.youtube.com/watch?v=vHgPz-HFdXg'
+WHERE NOT EXISTS (SELECT 1 FROM puja_steps WHERE puja_id = 9 AND step_order = 2);
+
+INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, title_bengali, description, video_url)
+SELECT 9, 3, 'Shivalinga Abhishek', 'शिवलिंग अभिषेक', 'শিবলিঙ্গ অভিষেক', 'Step-by-step Panchamrita Abhishek of Shivalinga — bathing the linga with milk, curd, ghee, honey and sugar water while chanting sacred mantras.', 'https://www.youtube.com/watch?v=mWYDKIAEVHE'
+WHERE NOT EXISTS (SELECT 1 FROM puja_steps WHERE puja_id = 9 AND step_order = 3);
+
 
 
 -- -------------------------------------------------------
@@ -165,6 +185,14 @@ WHERE puja_id = 8 AND title = 'Saraswati Puja Paddhati';
 INSERT INTO resources (puja_id, title, resource_type, file_url, is_downloadable)
 SELECT 8, 'Saraswati Puja Paddhati', 'PDF', 'https://purohit-darpan-backend-q7b6.onrender.com/pdfs/Saraswati_Puja_Paddhati.pdf', TRUE
 WHERE NOT EXISTS (SELECT 1 FROM resources WHERE puja_id = 8 AND title = 'Saraswati Puja Paddhati');
+
+-- Shiv Puja Paddhati
+UPDATE resources SET file_url = 'https://purohit-darpan-backend-q7b6.onrender.com/pdfs/Shiv_Puja_Paddhati.pdf', is_downloadable = TRUE
+WHERE puja_id = 9 AND title = 'Shiv Puja Paddhati';
+
+INSERT INTO resources (puja_id, title, resource_type, file_url, is_downloadable)
+SELECT 9, 'Shiv Puja Paddhati', 'PDF', 'https://purohit-darpan-backend-q7b6.onrender.com/pdfs/Shiv_Puja_Paddhati.pdf', TRUE
+WHERE NOT EXISTS (SELECT 1 FROM resources WHERE puja_id = 9 AND title = 'Shiv Puja Paddhati');
 
 
 -- -------------------------------------------------------

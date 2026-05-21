@@ -52,6 +52,7 @@ public class RagVectorStoreService {
         indexDocxFile("Laxmi_Puja_Paddhati_Pandit_Krishnendu_Chakraborty (2).docx", "Laxmi Puja", docs);
         indexDocxFile("Purohit_Darpan_Durgapuja_Paddhati.docx", "Durga Puja", docs);
         indexDocxFile("Saraswati_Puja_Paddhati_Pandit_Krishnendu_Chakraborty.docx", "Saraswati Puja", docs);
+        indexDocxFile("Shiv_Puja_Padhati_Complete.docx", "Shiv Puja", docs);
 
         // Index all Pujas (name + description)
         for (Puja puja : pujaRepository.findAll()) {
