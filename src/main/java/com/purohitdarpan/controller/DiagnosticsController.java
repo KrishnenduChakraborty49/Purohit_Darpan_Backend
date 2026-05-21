@@ -77,7 +77,7 @@ public class DiagnosticsController {
             jdbcTemplate.update(
                 "INSERT INTO pujas (id, name, name_devanagari, description, duration_minutes, difficulty, category, thumbnail_url, is_active) " +
                 "SELECT 9, 'Shiv Puja', '\u0936\u093f\u0935 \u092a\u0942\u091c\u093e', 'Worship of Lord Mahadev \u2014 the destroyer and transformer. Attain blessings, peace and liberation.', 90, 'INTERMEDIATE', 'Shaivism', " +
-                "'https://purohit-darpan-backend-q7b6.onrender.com/images/shiv.png', TRUE " +
+                "'/images/shiv_closeup.jpg', TRUE " +
                 "WHERE NOT EXISTS (SELECT 1 FROM pujas WHERE id = 9)"
             );
             jdbcTemplate.update(
