@@ -82,21 +82,9 @@ public class DiagnosticsController {
             );
             jdbcTemplate.update(
                 "INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, title_bengali, description, video_url) " +
-                "SELECT 9, 1, 'Shiv Puja Procedure', '\u0936\u093f\u0935 \u092a\u0942\u091c\u093e \u0935\u093f\u0927\u093f', '\u09b6\u09bf\u09ac \u09aa\u09c2\u099c\u09be \u09ac\u09bf\u09a7\u09bf', " +
-                "'Complete Shiv Puja vidhi with Panchamrita abhishek, Bilva patra, Dhoop and Deepa.', 'https://www.youtube.com/watch?v=vDC-zR9X6mw' " +
+                "SELECT 9, 1, 'Shiv Puja Mantra', '\u0936\u093f\u0935 \u092a\u0942\u091c\u093e \u092e\u0902\u0924\u094d\u0930', '\u09b6\u09bf\u09ac \u09aa\u09c2\u099c\u09be\u09b0 \u09ae\u09a8\u09cd\u09a4\u09cd\u09b0', " +
+                "'Sacred mantras and complete Shiv Puja vidhi with Panchamrita abhishek.', 'https://www.youtube.com/watch?v=vDC-zR9X6mw' " +
                 "WHERE NOT EXISTS (SELECT 1 FROM puja_steps WHERE puja_id = 9 AND step_order = 1)"
-            );
-            jdbcTemplate.update(
-                "INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, title_bengali, description, video_url) " +
-                "SELECT 9, 2, 'Shiv Mantras & Stotram', '\u0936\u093f\u0935 \u092e\u0902\u0924\u094d\u0930', '\u09b6\u09bf\u09ac \u09ae\u09a8\u09cd\u09a4\u09cd\u09b0 \u0993 \u09b8\u09cd\u09a4\u09cb\u09a4\u09cd\u09b0', " +
-                "'Om Namah Shivaya, Maha Mrityunjaya Mantra, and Shiva Tandava Stotram.', 'https://www.youtube.com/watch?v=vHgPz-HFdXg' " +
-                "WHERE NOT EXISTS (SELECT 1 FROM puja_steps WHERE puja_id = 9 AND step_order = 2)"
-            );
-            jdbcTemplate.update(
-                "INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, title_bengali, description, video_url) " +
-                "SELECT 9, 3, 'Shivalinga Abhishek', '\u0936\u093f\u0935\u0932\u093f\u0902\u0917 \u0905\u092d\u093f\u0937\u0947\u0915', '\u09b6\u09bf\u09ac\u09b2\u09bf\u0999\u09cd\u0997 \u0985\u09ad\u09bf\u09b7\u09c7\u0995', " +
-                "'Panchamrita Abhishek of Shivalinga with milk, curd, ghee, honey and sugar water.', 'https://www.youtube.com/watch?v=mWYDKIAEVHE' " +
-                "WHERE NOT EXISTS (SELECT 1 FROM puja_steps WHERE puja_id = 9 AND step_order = 3)"
             );
             jdbcTemplate.update(
                 "INSERT INTO resources (puja_id, title, resource_type, file_url, is_downloadable) " +

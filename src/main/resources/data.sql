@@ -136,18 +136,10 @@ INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, title_beng
 SELECT 8, 1, 'Saraswati Puja Mantra', 'सरस्वती पूजा मंत्र', 'সরস্বতী পূজার মন্ত্র', 'Sacred mantras and complete procedure of Saraswati Puja — worship of the goddess of knowledge.', 'https://www.youtube.com/watch?v=8aN-DCABQcc'
 WHERE NOT EXISTS (SELECT 1 FROM puja_steps WHERE puja_id = 8 AND step_order = 1);
 
--- Shiv Puja — 3 steps
+-- Shiv Puja — 1 step
 INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, title_bengali, description, video_url)
-SELECT 9, 1, 'Shiv Puja Procedure', 'शिव पूजा विधि', 'শিব পূজা বিধি', 'Complete Shiv Puja vidhi — Shodashopachara worship of Lord Shiva with Panchamrita abhishek, Bilva patra, Dhoop and Deepa.', 'https://www.youtube.com/watch?v=vDC-zR9X6mw'
+SELECT 9, 1, 'Shiv Puja Mantra', 'शिव पूजा मंत्र', 'শিব পূজার মন্ত্র', 'Sacred mantras and complete Shiv Puja vidhi with Panchamrita abhishek.', 'https://www.youtube.com/watch?v=vDC-zR9X6mw'
 WHERE NOT EXISTS (SELECT 1 FROM puja_steps WHERE puja_id = 9 AND step_order = 1);
-
-INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, title_bengali, description, video_url)
-SELECT 9, 2, 'Shiv Mantras & Stotram', 'शिव मंत्र एवं स्तोत्र', 'শিব মন্ত্র ও স্তোত্র', 'Sacred Shiva mantras including Om Namah Shivaya, Maha Mrityunjaya Mantra, and Shiva Tandava Stotram with pronunciation guide.', 'https://www.youtube.com/watch?v=vHgPz-HFdXg'
-WHERE NOT EXISTS (SELECT 1 FROM puja_steps WHERE puja_id = 9 AND step_order = 2);
-
-INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, title_bengali, description, video_url)
-SELECT 9, 3, 'Shivalinga Abhishek', 'शिवलिंग अभिषेक', 'শিবলিঙ্গ অভিষেক', 'Step-by-step Panchamrita Abhishek of Shivalinga — bathing the linga with milk, curd, ghee, honey and sugar water while chanting sacred mantras.', 'https://www.youtube.com/watch?v=mWYDKIAEVHE'
-WHERE NOT EXISTS (SELECT 1 FROM puja_steps WHERE puja_id = 9 AND step_order = 3);
 
 
 
