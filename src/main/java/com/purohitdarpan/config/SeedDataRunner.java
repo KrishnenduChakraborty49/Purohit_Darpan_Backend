@@ -118,8 +118,15 @@ public class SeedDataRunner implements CommandLineRunner {
                 logger.info("Festival seeding complete!");
                 
                 logger.info("Triggering NotificationScheduler to populate database...");
-                jdbcTemplate.update("UPDATE users SET notifications_enabled = true WHERE notifications_enabled IS NULL OR notifications_enabled = false");
+                jdbcTemplate.update("UPDATE users SET notifications_enabled = true");
                 notificationScheduler.sendFestivalReminders();
+                
+                int notifCount = jdbcTemplate.queryForObject("SELECT count(*) FROM notification_logs", Integer.class);
+                logger.info("DIAGNOSTICS - Total Notification Logs after scheduler: {}", notifCount);
+                int userCount = jdbcTemplate.queryForObject("SELECT count(*) FROM users WHERE notifications_enabled = true", Integer.class);
+                logger.info("DIAGNOSTICS - Eligible Users: {}", userCount);
+                int festivalCount = jdbcTemplate.queryForObject("SELECT count(*) FROM hindu_festivals WHERE is_active = true", Integer.class);
+                logger.info("DIAGNOSTICS - Active Festivals: {}", festivalCount);
                 
                 logger.info("PRODUCTION SEEDING SUCCESS!");
             }
