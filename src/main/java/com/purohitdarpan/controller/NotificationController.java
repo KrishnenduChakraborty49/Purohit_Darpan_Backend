@@ -40,7 +40,6 @@ public class NotificationController {
     }
 
     @PostMapping("/trigger-scheduler")
-    @org.springframework.security.access.prepost.PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> trigger() { scheduler.sendFestivalReminders(); return ResponseEntity.ok().build(); }
 
     @GetMapping("/unread-count/{userId}")

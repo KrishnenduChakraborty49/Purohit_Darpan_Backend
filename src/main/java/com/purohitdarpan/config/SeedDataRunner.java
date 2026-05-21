@@ -118,6 +118,7 @@ public class SeedDataRunner implements CommandLineRunner {
                 logger.info("Festival seeding complete!");
                 
                 logger.info("Triggering NotificationScheduler to populate database...");
+                jdbcTemplate.update("UPDATE users SET notifications_enabled = true WHERE notifications_enabled IS NULL OR notifications_enabled = false");
                 notificationScheduler.sendFestivalReminders();
                 
                 logger.info("PRODUCTION SEEDING SUCCESS!");
