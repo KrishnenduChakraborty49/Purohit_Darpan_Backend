@@ -81,10 +81,10 @@ SELECT 8, 'Saraswati Puja', 'सरस्वती पूजा', 'Worship of Kn
 WHERE NOT EXISTS (SELECT 1 FROM pujas WHERE id = 8);
 
 -- Shiv Puja
-UPDATE pujas SET thumbnail_url = '/images/shiv_closeup.jpg', is_active = TRUE WHERE id = 9;
+UPDATE pujas SET thumbnail_url = 'https://purohit-darpan-backend-q7b6.onrender.com/images/shiv_closeup.jpg', is_active = TRUE WHERE id = 9;
 
 INSERT INTO pujas (id, name, name_devanagari, description, duration_minutes, difficulty, category, thumbnail_url, is_active)
-SELECT 9, 'Shiv Puja', 'शिव पूजा', 'Worship of Lord Mahadev — the destroyer and transformer. Attain blessings, peace and liberation.', 90, 'INTERMEDIATE', 'Shaivism', '/images/shiv_closeup.jpg', TRUE
+SELECT 9, 'Shiv Puja', 'शिव पूजा', 'Worship of Lord Mahadev — the destroyer and transformer. Attain blessings, peace and liberation.', 90, 'INTERMEDIATE', 'Shaivism', 'https://purohit-darpan-backend-q7b6.onrender.com/images/shiv_closeup.jpg', TRUE
 WHERE NOT EXISTS (SELECT 1 FROM pujas WHERE id = 9);
 
 
