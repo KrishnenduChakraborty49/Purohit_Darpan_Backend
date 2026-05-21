@@ -16,13 +16,15 @@ public class SeedDataRunner implements CommandLineRunner {
     private static final Logger logger = LoggerFactory.getLogger(SeedDataRunner.class);
     private final JdbcTemplate jdbcTemplate;
     private final DataSource dataSource;
+    private final com.purohitdarpan.scheduler.NotificationScheduler notificationScheduler;
 
     @Value("${spring.profiles.active:dev}")
     private String activeProfile;
 
-    public SeedDataRunner(JdbcTemplate jdbcTemplate, DataSource dataSource) {
+    public SeedDataRunner(JdbcTemplate jdbcTemplate, DataSource dataSource, com.purohitdarpan.scheduler.NotificationScheduler notificationScheduler) {
         this.jdbcTemplate = jdbcTemplate;
         this.dataSource = dataSource;
+        this.notificationScheduler = notificationScheduler;
     }
 
     @Override
@@ -90,28 +92,34 @@ public class SeedDataRunner implements CommandLineRunner {
                 logger.info("Seeding sample festivals for notification verification...");
                 jdbcTemplate.execute("TRUNCATE TABLE hindu_festivals RESTART IDENTITY CASCADE");
                 
-                // Today (April 19): Welcome Notification
+                java.time.LocalDate today = java.time.LocalDate.now();
+                
+                // Event in 0 days (Today)
                 jdbcTemplate.update(
                     "INSERT INTO hindu_festivals (name, event_date, description, notification_days_before) VALUES (?, ?, ?, ?)",
-                    "Welcome to Purohit Darpan", java.time.LocalDate.of(2026, 4, 19), 
-                    "Exploring the platform and ritual guides.", 0
+                    "Today's Special Puja", today, 
+                    "Auspicious day for meditation and learning.", 0
                 );
 
-                // April 22: Upcoming Ritual Prep
+                // Event in 1 day (Tomorrow)
                 jdbcTemplate.update(
                     "INSERT INTO hindu_festivals (name, event_date, description, notification_days_before) VALUES (?, ?, ?, ?)",
-                    "Auspicious Ritual Prep", java.time.LocalDate.of(2026, 4, 22), 
-                    "Prepare your samagri for the upcoming ritual.", 3
+                    "Auspicious Ritual Prep", today.plusDays(1), 
+                    "Prepare your samagri for the upcoming ritual.", 1
                 );
 
-                // April 30: End of Month Reminder
+                // Event in 7 days (Next Week)
                 jdbcTemplate.update(
                     "INSERT INTO hindu_festivals (name, event_date, description, notification_days_before) VALUES (?, ?, ?, ?)",
-                    "Monthly Ritual Review", java.time.LocalDate.of(2026, 4, 30), 
-                    "Review your learning progress for this month.", 11
+                    "Monthly Ritual Review", today.plusDays(7), 
+                    "Review your learning progress for this month.", 7
                 );
 
                 logger.info("Festival seeding complete!");
+                
+                logger.info("Triggering NotificationScheduler to populate database...");
+                notificationScheduler.sendFestivalReminders();
+                
                 logger.info("PRODUCTION SEEDING SUCCESS!");
             }
         } catch (Exception e) {

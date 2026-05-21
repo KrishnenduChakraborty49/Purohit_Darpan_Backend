@@ -136,7 +136,7 @@ public class NotificationScheduler {
                                          String body, String url,
                                          NotificationLog.NotificationType type) {
         List<User> users = userRepo.findByRoleInAndNotificationsEnabledTrue(
-                List.of(User.Role.STUDENT, User.Role.MENTOR));
+                List.of(User.Role.STUDENT, User.Role.MENTOR, User.Role.ADMIN));
 
         for (User user : users) {
             Optional<UserNotificationPreferences> prefsOpt = prefsRepo.findByUserId(user.getId());

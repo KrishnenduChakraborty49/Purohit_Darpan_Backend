@@ -5,12 +5,12 @@
 -- -------------------------------------------------------
 -- ADMIN USER (Safe)
 -- -------------------------------------------------------
-INSERT INTO users (username, email, password_hash, full_name, role, is_active)
-SELECT 'admin', 'admin@purohitdarpan.com', '$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMlLLIezHSmVBYGVa5RkBHG0q2', 'Platform Admin', 'ADMIN', TRUE
+INSERT INTO users (username, email, password_hash, full_name, role, is_active, notifications_enabled)
+SELECT 'admin', 'admin@purohitdarpan.com', '$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMlLLIezHSmVBYGVa5RkBHG0q2', 'Platform Admin', 'ADMIN', TRUE, TRUE
 WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = 'admin');
 
-INSERT INTO users (username, email, password_hash, full_name, role, is_active)
-SELECT 'guru_sharma', 'guru@purohitdarpan.com', '$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMlLLIezHSmVBYGVa5RkBHG0q2', 'Pt. Rajesh Sharma', 'MENTOR', TRUE
+INSERT INTO users (username, email, password_hash, full_name, role, is_active, notifications_enabled)
+SELECT 'guru_sharma', 'guru@purohitdarpan.com', '$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMlLLIezHSmVBYGVa5RkBHG0q2', 'Pt. Rajesh Sharma', 'MENTOR', TRUE, TRUE
 WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = 'guru_sharma');
 
 
