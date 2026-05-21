@@ -96,21 +96,21 @@ public class SeedDataRunner implements CommandLineRunner {
                 
                 // Event in 0 days (Today)
                 jdbcTemplate.update(
-                    "INSERT INTO hindu_festivals (name, event_date, description, notification_days_before) VALUES (?, ?, ?, ?)",
+                    "INSERT INTO hindu_festivals (name, event_date, description, notification_days_before, is_active) VALUES (?, ?, ?, ?, true)",
                     "Today's Special Puja", today, 
                     "Auspicious day for meditation and learning.", 0
                 );
 
                 // Event in 1 day (Tomorrow)
                 jdbcTemplate.update(
-                    "INSERT INTO hindu_festivals (name, event_date, description, notification_days_before) VALUES (?, ?, ?, ?)",
+                    "INSERT INTO hindu_festivals (name, event_date, description, notification_days_before, is_active) VALUES (?, ?, ?, ?, true)",
                     "Auspicious Ritual Prep", today.plusDays(1), 
                     "Prepare your samagri for the upcoming ritual.", 1
                 );
 
                 // Event in 7 days (Next Week)
                 jdbcTemplate.update(
-                    "INSERT INTO hindu_festivals (name, event_date, description, notification_days_before) VALUES (?, ?, ?, ?)",
+                    "INSERT INTO hindu_festivals (name, event_date, description, notification_days_before, is_active) VALUES (?, ?, ?, ?, true)",
                     "Monthly Ritual Review", today.plusDays(7), 
                     "Review your learning progress for this month.", 7
                 );

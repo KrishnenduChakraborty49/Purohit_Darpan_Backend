@@ -39,6 +39,15 @@ public class DiagnosticsController {
      * Diagnostic endpoint to check DB connectivity and reveal internal errors.
      * FIX: Includes the system-wide 'lastError' tracked by GlobalExceptionHandler.
      */
+    @GetMapping("/users")
+    public ResponseEntity<?> getUsers() {
+        try {
+            return ResponseEntity.ok(jdbcTemplate.queryForList("SELECT id, username, role, notifications_enabled FROM users"));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(java.util.Map.of("error", e.getMessage(), "type", e.getClass().getName()));
+        }
+    }
+
     @GetMapping("/api/diagnostics/db-status")
     public Map<String, Object> getDbStatus() {
         Map<String, Object> status = new HashMap<>();
