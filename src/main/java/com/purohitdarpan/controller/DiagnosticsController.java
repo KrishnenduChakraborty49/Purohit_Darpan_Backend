@@ -66,4 +66,49 @@ public class DiagnosticsController {
 
         return status;
     }
+
+    /**
+     * One-time endpoint to insert Shiv Puja directly into the live database.
+     */
+    @GetMapping("/api/diagnostics/seed-shiv-puja")
+    public Map<String, Object> seedShivPuja() {
+        Map<String, Object> result = new HashMap<>();
+        try {
+            jdbcTemplate.update(
+                "INSERT INTO pujas (id, name, name_devanagari, description, duration_minutes, difficulty, category, thumbnail_url, is_active) " +
+                "SELECT 9, 'Shiv Puja', '\u0936\u093f\u0935 \u092a\u0942\u091c\u093e', 'Worship of Lord Mahadev \u2014 the destroyer and transformer. Attain blessings, peace and liberation.', 90, 'INTERMEDIATE', 'Shaivism', " +
+                "'https://purohit-darpan-backend-q7b6.onrender.com/images/shiv.png', TRUE " +
+                "WHERE NOT EXISTS (SELECT 1 FROM pujas WHERE id = 9)"
+            );
+            jdbcTemplate.update(
+                "INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, title_bengali, description, video_url) " +
+                "SELECT 9, 1, 'Shiv Puja Procedure', '\u0936\u093f\u0935 \u092a\u0942\u091c\u093e \u0935\u093f\u0927\u093f', '\u09b6\u09bf\u09ac \u09aa\u09c2\u099c\u09be \u09ac\u09bf\u09a7\u09bf', " +
+                "'Complete Shiv Puja vidhi with Panchamrita abhishek, Bilva patra, Dhoop and Deepa.', 'https://www.youtube.com/watch?v=vDC-zR9X6mw' " +
+                "WHERE NOT EXISTS (SELECT 1 FROM puja_steps WHERE puja_id = 9 AND step_order = 1)"
+            );
+            jdbcTemplate.update(
+                "INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, title_bengali, description, video_url) " +
+                "SELECT 9, 2, 'Shiv Mantras & Stotram', '\u0936\u093f\u0935 \u092e\u0902\u0924\u094d\u0930', '\u09b6\u09bf\u09ac \u09ae\u09a8\u09cd\u09a4\u09cd\u09b0 \u0993 \u09b8\u09cd\u09a4\u09cb\u09a4\u09cd\u09b0', " +
+                "'Om Namah Shivaya, Maha Mrityunjaya Mantra, and Shiva Tandava Stotram.', 'https://www.youtube.com/watch?v=vHgPz-HFdXg' " +
+                "WHERE NOT EXISTS (SELECT 1 FROM puja_steps WHERE puja_id = 9 AND step_order = 2)"
+            );
+            jdbcTemplate.update(
+                "INSERT INTO puja_steps (puja_id, step_order, title, title_devanagari, title_bengali, description, video_url) " +
+                "SELECT 9, 3, 'Shivalinga Abhishek', '\u0936\u093f\u0935\u0932\u093f\u0902\u0917 \u0905\u092d\u093f\u0937\u0947\u0915', '\u09b6\u09bf\u09ac\u09b2\u09bf\u0999\u09cd\u0997 \u0985\u09ad\u09bf\u09b7\u09c7\u0995', " +
+                "'Panchamrita Abhishek of Shivalinga with milk, curd, ghee, honey and sugar water.', 'https://www.youtube.com/watch?v=mWYDKIAEVHE' " +
+                "WHERE NOT EXISTS (SELECT 1 FROM puja_steps WHERE puja_id = 9 AND step_order = 3)"
+            );
+            jdbcTemplate.update(
+                "INSERT INTO resources (puja_id, title, resource_type, file_url, is_downloadable) " +
+                "SELECT 9, 'Shiv Puja Paddhati', 'PDF', 'https://purohit-darpan-backend-q7b6.onrender.com/pdfs/Shiv_Puja_Paddhati.pdf', TRUE " +
+                "WHERE NOT EXISTS (SELECT 1 FROM resources WHERE puja_id = 9 AND title = 'Shiv Puja Paddhati')"
+            );
+            result.put("status", "SUCCESS");
+            result.put("message", "Shiv Puja seeded successfully into the live database!");
+        } catch (Exception e) {
+            result.put("status", "ERROR");
+            result.put("error", e.getMessage());
+        }
+        return result;
+    }
 }
