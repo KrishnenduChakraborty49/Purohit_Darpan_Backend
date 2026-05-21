@@ -19,6 +19,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.io.InputStream;
+import org.springframework.core.io.ClassPathResource;
+import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 
 @Service
 @RequiredArgsConstructor
@@ -37,9 +42,16 @@ public class RagVectorStoreService {
             safeDelete("type == 'MANTRA'");
             safeDelete("type == 'PUJA_STEP'");
             safeDelete("type == 'PUJA'");
+            safeDelete("type == 'DOCUMENT'");
         }
 
         List<Document> docs = new ArrayList<>();
+        
+        // 1. Index static DOCX files
+        indexDocxFile("Ganesh_Puja_Paddhati.docx", "Ganesh Puja", docs);
+        indexDocxFile("Laxmi_Puja_Paddhati_Pandit_Krishnendu_Chakraborty (2).docx", "Laxmi Puja", docs);
+        indexDocxFile("Purohit_Darpan_Durgapuja_Paddhati.docx", "Durga Puja", docs);
+        indexDocxFile("Saraswati_Puja_Paddhati_Pandit_Krishnendu_Chakraborty.docx", "Saraswati Puja", docs);
 
         // Index all Pujas (name + description)
         for (Puja puja : pujaRepository.findAll()) {
@@ -128,6 +140,41 @@ public class RagVectorStoreService {
             // we don't want to crash the whole application.
             log.error("Vector index build failed (will not crash app). error={}", e.getMessage());
             return 0;
+        }
+    }
+
+    private void indexDocxFile(String fileName, String pujaContext, List<Document> docs) {
+        try {
+            ClassPathResource resource = new ClassPathResource(fileName);
+            if (!resource.exists()) {
+                log.warn("DOCX file not found in resources: {}", fileName);
+                return;
+            }
+            try (InputStream is = resource.getInputStream();
+                 XWPFDocument document = new XWPFDocument(is);
+                 XWPFWordExtractor extractor = new XWPFWordExtractor(document)) {
+                 
+                String text = extractor.getText();
+                if (text == null || text.isBlank()) return;
+                
+                // Chunk the document text so it fits into the LLM context limits
+                TokenTextSplitter splitter = new TokenTextSplitter(500, 100, 10, 10000, true);
+                List<String> chunks = splitter.split(text, 500);
+                
+                int chunkId = 1;
+                for (String chunk : chunks) {
+                    if (chunk == null || chunk.isBlank()) continue;
+                    docs.add(new Document(chunk, Map.of(
+                            "type", "DOCUMENT",
+                            "source", fileName,
+                            "pujaName", pujaContext,
+                            "chunkId", String.valueOf(chunkId++)
+                    )));
+                }
+                log.info("Successfully parsed and chunked {} into {} chunks", fileName, chunks.size());
+            }
+        } catch (Exception e) {
+            log.error("Failed to parse DOCX file: {}", fileName, e);
         }
     }
 

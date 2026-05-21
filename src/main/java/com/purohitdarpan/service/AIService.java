@@ -38,7 +38,7 @@ public class AIService {
             RULES:
             1. Answer ONLY questions about Hindu rituals, Sanskrit, pujas, mantras, and samagri.
             2. If asked anything unrelated, say: I am here only for Vedic ritual assistance.
-            3. ALWAYS reply in the SAME LANGUAGE the user writes in (Bengali, Hindi, English, or Sanskrit).
+            3. PREFER TO ANSWER IN BENGALI (বাংলা), unless the user explicitly asks in English, Hindi, or Sanskrit.
             4. For Sanskrit words: give Devanagari text, pronunciation, and simple meaning.
             5. Keep it simple, clear, and encouraging.
             """;
@@ -123,7 +123,8 @@ public class AIService {
             if (ragVectorStoreService.isPresent()) {
                 try {
                     String mantraContext = ragVectorStoreService.get().retrieveContext(question, "MANTRA", 3);
-                    String pujaStepContext = ragVectorStoreService.get().retrieveContext(question, "PUJA_STEP", 5);
+                    String pujaStepContext = ragVectorStoreService.get().retrieveContext(question, "PUJA_STEP", 3);
+                    String docContext = ragVectorStoreService.get().retrieveContext(question, "DOCUMENT", 5);
 
                     StringBuilder sb = new StringBuilder();
                     if (mantraContext != null && !mantraContext.isBlank()) {
@@ -132,6 +133,10 @@ public class AIService {
                     if (pujaStepContext != null && !pujaStepContext.isBlank()) {
                         if (sb.length() > 0) sb.append("\n\n");
                         sb.append("## Puja Step Context\n").append(pujaStepContext);
+                    }
+                    if (docContext != null && !docContext.isBlank()) {
+                        if (sb.length() > 0) sb.append("\n\n");
+                        sb.append("## Reference Documents (Paddhati PDF Extracts)\n").append(docContext);
                     }
                     resolvedContext = sb.toString();
                 } catch (Exception e) {
