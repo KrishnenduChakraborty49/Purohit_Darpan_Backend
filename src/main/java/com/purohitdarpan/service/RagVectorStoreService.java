@@ -160,17 +160,17 @@ public class RagVectorStoreService {
                 
                 // Chunk the document text so it fits into the LLM context limits
                 TokenTextSplitter splitter = new TokenTextSplitter(500, 100, 10, 10000, true);
-                List<String> chunks = splitter.split(text, 500);
+                Document originalDoc = new Document(text, Map.of(
+                        "type", "DOCUMENT",
+                        "source", fileName,
+                        "pujaName", pujaContext
+                ));
+                List<Document> chunks = splitter.split(originalDoc);
                 
                 int chunkId = 1;
-                for (String chunk : chunks) {
-                    if (chunk == null || chunk.isBlank()) continue;
-                    docs.add(new Document(chunk, Map.of(
-                            "type", "DOCUMENT",
-                            "source", fileName,
-                            "pujaName", pujaContext,
-                            "chunkId", String.valueOf(chunkId++)
-                    )));
+                for (Document chunk : chunks) {
+                    chunk.getMetadata().put("chunkId", String.valueOf(chunkId++));
+                    docs.add(chunk);
                 }
                 log.info("Successfully parsed and chunked {} into {} chunks", fileName, chunks.size());
             }
