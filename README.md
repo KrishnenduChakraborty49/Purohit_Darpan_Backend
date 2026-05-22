@@ -16,16 +16,20 @@
 ## 📸 Screenshots
 
 ### 1. Dashboard Overview
-*(Drag and drop the Dashboard screenshot here)*
+<img width="1912" height="961" alt="Screenshot 2026-05-22 203710" src="https://github.com/user-attachments/assets/e6c83e6f-0c5c-4454-9b14-fed711b2af56" />
+
 
 ### 2. Puja Learning Library
-*(Drag and drop the Puja Library screenshot here)*
+<img width="1914" height="964" alt="Screenshot 2026-05-22 203739" src="https://github.com/user-attachments/assets/48389959-8f26-4df8-8feb-7ab47356b453" />
+
 
 ### 3. Advanced Panjika (Hindu Calendar)
-*(Drag and drop the Panchang screenshot here)*
+<img width="1916" height="963" alt="Screenshot 2026-05-22 203817" src="https://github.com/user-attachments/assets/21cf6eec-5b94-42e1-8b6e-68dac637f671" />
+
 
 ### 4. AI-Powered "Ask Guru" Assistant
-*(Drag and drop the Ask Guru Chat screenshot here)*
+<img width="1915" height="959" alt="Screenshot 2026-05-22 203845" src="https://github.com/user-attachments/assets/9bd62070-e6d0-4012-ac74-8b10a72ca7e9" />
+
 
 ---
 
