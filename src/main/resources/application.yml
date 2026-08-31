@@ -45,5 +45,5 @@ logging:
 panchang:
   api:
     key: ${PANCHIKA_API_KEY:}
-    base-url: ${PANCHANG_API_BASE_URL:https://api.prokerala.com/v2/astrology}
-    use-mock: ${PANCHANG_API_USE_MOCK:true}
+    base-url: ${PANCHANG_API_BASE_URL:https://astro.tantragurukul.org/api}
+    use-mock: ${PANCHANG_API_USE_MOCK:false}
