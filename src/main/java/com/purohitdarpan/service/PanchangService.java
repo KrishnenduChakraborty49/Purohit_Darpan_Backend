@@ -24,19 +24,19 @@ public class PanchangService {
     private final PanchangCacheRepository cacheRepo;
     private final WebClient.Builder webClientBuilder;
 
-    @Value("${panchang.api.base-url}")
+    @Value("${panchang.api.base-url:https://api.prokerala.com/v2/astrology}")
     private String apiBaseUrl;
 
-    @Value("${panchang.api.token-url}")
+    @Value("${panchang.api.token-url:https://api.prokerala.com/token}")
     private String tokenUrl;
 
-    @Value("${panchang.api.client-id}")
+    @Value("${panchang.api.client-id:}")
     private String clientId;
 
-    @Value("${panchang.api.client-secret}")
+    @Value("${panchang.api.client-secret:}")
     private String clientSecret;
 
-    @Value("${panchang.api.use-mock}")
+    @Value("${panchang.api.use-mock:true}")
     private boolean useMock;
 
     private String cachedToken = null;
