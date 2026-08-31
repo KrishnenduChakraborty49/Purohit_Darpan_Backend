@@ -27,11 +27,20 @@ public class PanchangService {
     @Value("${panchang.api.base-url}")
     private String apiBaseUrl;
 
-    @Value("${panchang.api.key}")
-    private String apiKey;
+    @Value("${panchang.api.token-url}")
+    private String tokenUrl;
+
+    @Value("${panchang.api.client-id}")
+    private String clientId;
+
+    @Value("${panchang.api.client-secret}")
+    private String clientSecret;
 
     @Value("${panchang.api.use-mock}")
     private boolean useMock;
+
+    private String cachedToken = null;
+    private long tokenExpiry = 0;
 
     // ──────────────────────────────────────────────────────────
     // PUBLIC API
@@ -73,15 +82,16 @@ public class PanchangService {
 
     private PanchangCache fetchFromApi(LocalDate date) {
         try {
+            String token = getAccessToken();
             WebClient client = webClientBuilder.baseUrl(apiBaseUrl).build();
             Map response = client.get()
                     .uri(uriBuilder -> uriBuilder
                             .path("/panchang")
-                            .queryParam("date", date.toString())
-                            .queryParam("api_key", apiKey)
-                            .queryParam("lang", "en")
-                            .queryParam("tz", "5.5")
+                            .queryParam("datetime", date.atStartOfDay().toString() + "+05:30")
+                            .queryParam("coordinates", "22.5726,88.3639")
+                            .queryParam("ayanamsa", "1")
                             .build())
+                    .header("Authorization", "Bearer " + token)
                     .retrieve()
                     .bodyToMono(Map.class)
                     .block();
@@ -90,6 +100,33 @@ public class PanchangService {
         } catch (Exception e) {
             log.warn("Panchang API error for {}, using mock: {}", date, e.getMessage());
             return generateMockPanchang(date);
+        }
+    }
+
+    private synchronized String getAccessToken() {
+        if (cachedToken != null && System.currentTimeMillis() < tokenExpiry) {
+            return cachedToken;
+        }
+        
+        try {
+            WebClient client = webClientBuilder.baseUrl(tokenUrl).build();
+            Map response = client.post()
+                    .uri(uriBuilder -> uriBuilder
+                            .queryParam("grant_type", "client_credentials")
+                            .queryParam("client_id", clientId)
+                            .queryParam("client_secret", clientSecret)
+                            .build())
+                    .retrieve()
+                    .bodyToMono(Map.class)
+                    .block();
+                    
+            cachedToken = (String) response.get("access_token");
+            Integer expiresIn = (Integer) response.get("expires_in");
+            tokenExpiry = System.currentTimeMillis() + ((expiresIn != null ? expiresIn : 3600) * 1000L) - 60000;
+            return cachedToken;
+        } catch (Exception e) {
+            log.error("Failed to get ProKerala token: {}", e.getMessage());
+            throw new RuntimeException("Could not authenticate with Panchang API", e);
         }
     }
 
