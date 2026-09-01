@@ -51,6 +51,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/pujas/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/panchang/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/api/panchang/cache").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/festivals/**").permitAll()
                         .requestMatchers("/actuator/health").permitAll()
                         .requestMatchers("/api/diagnostics/**").permitAll()
