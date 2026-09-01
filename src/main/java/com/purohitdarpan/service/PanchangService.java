@@ -75,9 +75,10 @@ public class PanchangService {
     }
 
     private PanchangCache fetchFromApi(LocalDate date) {
+        String rawJson = null;
         try {
             WebClient client = webClientBuilder.baseUrl(apiBaseUrl).build();
-            Map response = client.get()
+            rawJson = client.get()
                     .uri(uriBuilder -> uriBuilder
                             .path("/panchanga")
                             .queryParam("date", date.toString())
@@ -85,22 +86,29 @@ public class PanchangService {
                             .build())
                     .header("X-API-Key", apiKey)
                     .retrieve()
-                    .bodyToMono(Map.class)
+                    .bodyToMono(String.class)
                     .block();
 
+            com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
+            Map response = mapper.readValue(rawJson, Map.class);
             return parsePanchangResponse(response, date);
         } catch (Exception e) {
             log.warn("Panchang API error for {}, using mock: {}", date, e.getMessage());
             PanchangCache mock = generateMockPanchang(date);
-            mock.setTithi("API Error: " + e.getMessage());
+            // Put the raw JSON in the Tithi field so we can read it on the frontend!
+            mock.setTithi(rawJson != null ? "RAW: " + rawJson.substring(0, Math.min(rawJson.length(), 200)) : "API Error: " + e.getMessage());
             return mock;
         }
     }
 
     @SuppressWarnings("unchecked")
     private PanchangCache parsePanchangResponse(Map<?,?> response, LocalDate date) {
-        Map<?,?> status = (Map<?,?>) response.get("status");
+        // We know it throws NullPointerException because 'response.get("panchang")' is null.
         Map<?,?> data = (Map<?,?>) response.get("panchang");
+        if (data == null) {
+            // Let's just try to parse fields directly from response if it doesn't have "panchang" wrapper
+            data = response;
+        }
 
         String tithi     = extractString(data, "tithi");
         String nakshatra = extractString(data, "nakshatra");
