@@ -45,5 +45,5 @@ logging:
 panchang:
   api:
     key: ${PANCHIKA_API_KEY:}
-    base-url: ${PANCHANG_API_BASE_URL:https://astro.tantragurukul.org/api}
+    base-url: ${PANCHANG_API_BASE_URL:https://astro.tantragurukul.org/v1/vedic}
     use-mock: ${PANCHANG_API_USE_MOCK:false}

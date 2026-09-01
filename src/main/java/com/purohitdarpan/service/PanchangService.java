@@ -24,7 +24,7 @@ public class PanchangService {
     private final PanchangCacheRepository cacheRepo;
     private final WebClient.Builder webClientBuilder;
 
-    @Value("${panchang.api.base-url:https://astro.tantragurukul.org/api}")
+    @Value("${panchang.api.base-url:https://astro.tantragurukul.org/v1/vedic}")
     private String apiBaseUrl;
 
     @Value("${panchang.api.key:}")
@@ -79,10 +79,9 @@ public class PanchangService {
             WebClient client = webClientBuilder.baseUrl(apiBaseUrl).build();
             Map response = client.get()
                     .uri(uriBuilder -> uriBuilder
-                            .path("/v1/panchanga")
-                            .queryParam("datetime", date.atStartOfDay().toString() + "+05:30")
-                            .queryParam("coordinates", "22.5726,88.3639")
-                            .queryParam("ayanamsa", "1")
+                            .path("/panchanga")
+                            .queryParam("date", date.toString())
+                            .queryParam("place", "Kolkata")
                             .build())
                     .header("X-API-Key", apiKey)
                     .retrieve()
