@@ -42,6 +42,12 @@ public class PanchangController {
 
     // ── Festival endpoints ─────────────────────────────────────
 
+    @DeleteMapping("/api/panchang/cache")
+    public ResponseEntity<String> clearCache() {
+        panchangService.clearCache();
+        return ResponseEntity.ok("Panchang cache cleared successfully.");
+    }
+
     @GetMapping("/api/festivals/upcoming")
     public ResponseEntity<List<HinduFestival>> upcoming(
             @RequestParam(defaultValue = "30") int days) {

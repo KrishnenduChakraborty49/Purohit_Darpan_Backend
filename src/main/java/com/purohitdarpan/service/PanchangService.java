@@ -62,6 +62,10 @@ public class PanchangService {
         return cached;
     }
 
+    public void clearCache() {
+        cacheRepo.deleteAll();
+    }
+
     // ──────────────────────────────────────────────────────────
     // INTERNAL FETCH & CACHE
     // ──────────────────────────────────────────────────────────
