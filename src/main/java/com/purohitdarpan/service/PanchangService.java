@@ -100,14 +100,16 @@ public class PanchangService {
                     .bodyToMono(String.class)
                     .block();
 
+            log.info("Panchang API raw response for {}: {}", date, rawJson);
             com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
             Map response = mapper.readValue(rawJson, Map.class);
             return parsePanchangResponse(response, date);
         } catch (Exception e) {
-            log.warn("Panchang API error for {}, using mock: {}", date, e.getMessage());
+            log.warn("Panchang API error for {}: {}", date, e.getMessage());
             PanchangCache mock = generateMockPanchang(date);
-            // Put the raw JSON in the Tithi field so we can read it on the frontend!
-            mock.setTithi(rawJson != null ? "RAW: " + rawJson.substring(0, Math.min(rawJson.length(), 200)) : "API Error: " + e.getMessage());
+            // Truncate error to fit VARCHAR(100)
+            String errMsg = "API Err: " + e.getMessage();
+            mock.setTithi(errMsg.length() > 95 ? errMsg.substring(0, 95) : errMsg);
             return mock;
         }
     }
@@ -128,8 +130,9 @@ public class PanchangService {
         String vara      = extractString(data, "vara");
 
         if (tithi == null || tithi.isEmpty()) {
-            tithi = "RAW: " + extractString(response, "message") + " " + response.toString();
-            if (tithi.length() > 200) tithi = tithi.substring(0, 200);
+            String msg = extractString(response, "message");
+            tithi = (msg != null && !msg.isEmpty()) ? msg : "Unknown";
+            if (tithi.length() > 95) tithi = tithi.substring(0, 95);
         }
 
         return buildPanchangCache(date, tithi, nakshatra, yoga, karana, vara);
