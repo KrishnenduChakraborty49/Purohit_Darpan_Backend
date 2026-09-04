@@ -62,8 +62,15 @@ public class PanchangService {
         return cached;
     }
 
+    @org.springframework.cache.annotation.CacheEvict(value = "panchang", allEntries = true)
     public void clearCache() {
         cacheRepo.deleteAll();
+    }
+
+    @org.springframework.context.event.EventListener(org.springframework.boot.context.event.ApplicationReadyEvent.class)
+    public void wipeCacheOnStartup() {
+        clearCache();
+        log.info("Panchang Cache wiped on startup to fix bad records.");
     }
 
     // ──────────────────────────────────────────────────────────
@@ -119,6 +126,11 @@ public class PanchangService {
         String yoga      = extractString(data, "yoga");
         String karana    = extractString(data, "karana");
         String vara      = extractString(data, "vara");
+
+        if (tithi == null || tithi.isEmpty()) {
+            tithi = "RAW: " + extractString(response, "message") + " " + response.toString();
+            if (tithi.length() > 200) tithi = tithi.substring(0, 200);
+        }
 
         return buildPanchangCache(date, tithi, nakshatra, yoga, karana, vara);
     }
