@@ -135,26 +135,51 @@ public class PanchangService {
 
     @SuppressWarnings("unchecked")
     private PanchangCache parsePanchangResponse(Map<?,?> response, LocalDate date) {
-        // We know it throws NullPointerException because 'response.get("panchang")' is null.
-        Map<?,?> data = (Map<?,?>) response.get("panchang");
-        if (data == null) {
-            // Let's just try to parse fields directly from response if it doesn't have "panchang" wrapper
-            data = response;
+        // Tantrakulam response structure:
+        // { "success": true, "panchanga": { "tithi": { "current": { "name": "..." } }, "nakshatra": { "current": { "name": "..." } }, ... } }
+        Map<?,?> panchanga = (Map<?,?>) response.get("panchanga");
+        if (panchanga == null) panchanga = response;
+
+        // Extract tithi
+        String tithi = extractNested(panchanga, "tithi", "current", "name");
+        // Extract nakshatra
+        String nakshatra = extractNested(panchanga, "nakshatra", "current", "name");
+        // Extract yoga
+        String yoga = extractNested(panchanga, "yoga", "current", "name");
+        // Extract karana
+        String karana = extractNested(panchanga, "karana", "current", "name");
+        // Extract vara (day of week) - direct string
+        String vara = extractString(panchanga, "vara");
+        // Extract sunrise/sunset - these are strings like "05:20 IST", convert to HH:mm:ss
+        String sunrise = convertToTimeStr(extractString(panchanga, "sunrise"));
+        String sunset  = convertToTimeStr(extractString(panchanga, "sunset"));
+
+        if (tithi == null || tithi.isEmpty()) tithi = "Unknown";
+
+        PanchangCache cache = buildPanchangCache(date, tithi, nakshatra, yoga, karana, vara);
+        if (!sunrise.isEmpty()) cache.setSunrise(sunrise);
+        if (!sunset.isEmpty())  cache.setSunset(sunset);
+        return cache;
+    }
+
+    @SuppressWarnings("unchecked")
+    private String extractNested(Map<?,?> map, String... keys) {
+        Object current = map;
+        for (String key : keys) {
+            if (!(current instanceof Map)) return "";
+            current = ((Map<?,?>) current).get(key);
         }
+        return current != null ? current.toString() : "";
+    }
 
-        String tithi     = extractString(data, "tithi");
-        String nakshatra = extractString(data, "nakshatra");
-        String yoga      = extractString(data, "yoga");
-        String karana    = extractString(data, "karana");
-        String vara      = extractString(data, "vara");
-
-        if (tithi == null || tithi.isEmpty()) {
-            String msg = extractString(response, "message");
-            tithi = (msg != null && !msg.isEmpty()) ? msg : "Unknown";
-            if (tithi.length() > 95) tithi = tithi.substring(0, 95);
-        }
-
-        return buildPanchangCache(date, tithi, nakshatra, yoga, karana, vara);
+    /** Convert "05:20 IST" → "05:20:00" */
+    private String convertToTimeStr(String timeStr) {
+        if (timeStr == null || timeStr.isEmpty()) return "";
+        // Remove timezone suffix (e.g. " IST")
+        timeStr = timeStr.replaceAll("\\s+[A-Z]+$", "").trim();
+        // Add seconds if missing
+        if (timeStr.matches("\\d{1,2}:\\d{2}")) timeStr = timeStr + ":00";
+        return timeStr;
     }
 
     private String extractString(Map<?,?> map, String key) {
