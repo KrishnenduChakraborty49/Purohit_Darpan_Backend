@@ -48,6 +48,11 @@ public class PanchangController {
         return ResponseEntity.ok("Panchang cache cleared successfully.");
     }
 
+    @GetMapping("/api/panchang/debug-raw")
+    public ResponseEntity<String> debugRaw() {
+        return ResponseEntity.ok(panchangService.fetchRawApiResponse());
+    }
+
     @GetMapping("/api/festivals/upcoming")
     public ResponseEntity<List<HinduFestival>> upcoming(
             @RequestParam(defaultValue = "30") int days) {

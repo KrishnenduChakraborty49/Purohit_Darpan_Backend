@@ -67,6 +67,25 @@ public class PanchangService {
         cacheRepo.deleteAll();
     }
 
+    public String fetchRawApiResponse() {
+        try {
+            WebClient client = webClientBuilder.baseUrl(apiBaseUrl).build();
+            String raw = client.get()
+                    .uri(uriBuilder -> uriBuilder
+                            .path("/panchanga")
+                            .queryParam("date", java.time.LocalDate.now().toString())
+                            .queryParam("place", "Kolkata")
+                            .build())
+                    .header("X-API-Key", apiKey)
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
+            return "BASE_URL=" + apiBaseUrl + "\nAPI_KEY_EMPTY=" + (apiKey == null || apiKey.isEmpty()) + "\nRAW_RESPONSE=" + raw;
+        } catch (Exception e) {
+            return "BASE_URL=" + apiBaseUrl + "\nAPI_KEY_EMPTY=" + (apiKey == null || apiKey.isEmpty()) + "\nERROR=" + e.getMessage();
+        }
+    }
+
     @org.springframework.context.event.EventListener(org.springframework.boot.context.event.ApplicationReadyEvent.class)
     public void wipeCacheOnStartup() {
         clearCache();
