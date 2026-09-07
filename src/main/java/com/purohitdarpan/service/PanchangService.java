@@ -97,7 +97,7 @@ public class PanchangService {
     // ──────────────────────────────────────────────────────────
 
     private PanchangCache fetchAndCache(LocalDate date) {
-        if (useMock || apiKey == null || apiKey.isEmpty()) {
+        if (useMock) {
              return cacheRepo.save(generateMockPanchang(date));
         }
         PanchangCache data = fetchFromApi(date);
