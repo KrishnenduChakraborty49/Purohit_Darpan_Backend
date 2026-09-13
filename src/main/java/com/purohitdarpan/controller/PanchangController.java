@@ -53,6 +53,48 @@ public class PanchangController {
         return ResponseEntity.ok(panchangService.fetchRawApiResponse());
     }
 
+    @GetMapping("/api/panchang/debug-parse")
+    public ResponseEntity<String> debugParse() {
+        try {
+            // Bypass the database cache entirely and do the raw flow
+            org.springframework.web.reactive.function.client.WebClient client = 
+                 org.springframework.web.reactive.function.client.WebClient.builder()
+                 .baseUrl("https://astro.tantragurukul.org/v1/vedic").build();
+            String rawJson = client.get()
+                    .uri(uriBuilder -> uriBuilder
+                            .path("/panchanga")
+                            .queryParam("date", LocalDate.now().toString())
+                            .queryParam("place", "Kolkata")
+                            .build())
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
+            
+            com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
+            java.util.Map response = mapper.readValue(rawJson, java.util.Map.class);
+            java.util.Map panchanga = (java.util.Map) response.get("panchanga");
+            if (panchanga == null) panchanga = response;
+
+            String extractedTithi = "";
+            Object current = panchanga;
+            String[] keys = {"tithi", "current", "name"};
+            for (String key : keys) {
+                if (!(current instanceof java.util.Map)) {
+                     extractedTithi = "FAILED_NOT_MAP_AT_KEY_" + key + "_CURRENT_CLASS_" + (current != null ? current.getClass().getName() : "null");
+                     break;
+                }
+                current = ((java.util.Map<?,?>) current).get(key);
+            }
+            if (extractedTithi.isEmpty()) {
+                extractedTithi = current != null ? current.toString() : "NULL";
+            }
+
+            return ResponseEntity.ok("RAW=" + rawJson.substring(0, Math.min(200, rawJson.length())) + "\nEXTRACTED_TITHI=" + extractedTithi);
+        } catch(Exception e) {
+            return ResponseEntity.ok("EXCEPTION=" + e.getMessage());
+        }
+    }
+
     @GetMapping("/api/festivals/upcoming")
     public ResponseEntity<List<HinduFestival>> upcoming(
             @RequestParam(defaultValue = "30") int days) {
