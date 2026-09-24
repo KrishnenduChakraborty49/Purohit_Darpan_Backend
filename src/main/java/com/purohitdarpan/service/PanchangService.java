@@ -157,9 +157,18 @@ public class PanchangService {
         if (tithi == null || tithi.isEmpty()) tithi = "Unknown";
 
         PanchangCache cache = buildPanchangCache(date, tithi, nakshatra, yoga, karana, vara);
-        if (!sunrise.isEmpty()) cache.setSunrise(sunrise);
-        if (!sunset.isEmpty())  cache.setSunset(sunset);
+        if (!sunrise.isEmpty()) {
+            try { cache.setSunrise(LocalTime.parse(padTimeStr(sunrise))); } catch (Exception ignored) {}
+        }
+        if (!sunset.isEmpty()) {
+            try { cache.setSunset(LocalTime.parse(padTimeStr(sunset))); } catch (Exception ignored) {}
+        }
         return cache;
+    }
+
+    private String padTimeStr(String t) {
+        if (t.matches("^\\d:\\d{2}.*")) return "0" + t;
+        return t;
     }
 
     @SuppressWarnings("unchecked")
