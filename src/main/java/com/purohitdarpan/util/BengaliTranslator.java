@@ -18,6 +18,7 @@ public class BengaliTranslator {
         TITHI_MAP.put("Tritiya", "তৃতীয়া");
         TITHI_MAP.put("Chaturthi", "চতুর্থী");
         TITHI_MAP.put("Panchami", "পঞ্চমী");
+        TITHI_MAP.put("Shashti", "ষষ্ঠী");
         TITHI_MAP.put("Shashthi", "ষষ্ঠী");
         TITHI_MAP.put("Saptami", "সপ্তমী");
         TITHI_MAP.put("Ashtami", "অষ্টমী");
