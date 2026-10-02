@@ -156,7 +156,23 @@ public class PanchangService {
 
         if (tithi == null || tithi.isEmpty()) tithi = "Unknown";
 
-        PanchangCache cache = buildPanchangCache(date, tithi, nakshatra, yoga, karana, vara);
+        boolean isPurnima = "Purnima".equalsIgnoreCase(tithi);
+        boolean isAmavasya = "Amavasya".equalsIgnoreCase(tithi);
+        boolean isEkadashi = tithi != null && tithi.toLowerCase().contains("ekadashi");
+
+        String tithiBn = com.purohitdarpan.util.BengaliTranslator.translateTithi(tithi);
+        String nakshatraBn = com.purohitdarpan.util.BengaliTranslator.translateNakshatra(nakshatra);
+        String yogaBn = com.purohitdarpan.util.BengaliTranslator.translateYoga(yoga);
+        String karanaBn = com.purohitdarpan.util.BengaliTranslator.translateKarana(karana);
+        String varaBn = com.purohitdarpan.util.BengaliTranslator.translateDay(vara);
+
+        PanchangCache cache = buildPanchangCache(date, tithiBn, nakshatraBn, yogaBn, karanaBn, varaBn)
+                .toBuilder()
+                .isPurnima(isPurnima)
+                .isAmavasya(isAmavasya)
+                .isEkadashi(isEkadashi)
+                .build();
+
         if (!sunrise.isEmpty()) {
             try { cache.setSunrise(LocalTime.parse(padTimeStr(sunrise))); } catch (Exception ignored) {}
         }
@@ -251,7 +267,13 @@ public class PanchangService {
         boolean isAmavasya = "Amavasya".equals(tithi);
         boolean isEkadashi = tithi.contains("Ekadashi");
 
-        return buildPanchangCache(date, tithi, nakshatra, yoga, karana, vara)
+        String tithiBn = com.purohitdarpan.util.BengaliTranslator.translateTithi(tithi);
+        String nakshatraBn = com.purohitdarpan.util.BengaliTranslator.translateNakshatra(nakshatra);
+        String yogaBn = com.purohitdarpan.util.BengaliTranslator.translateYoga(yoga);
+        String karanaBn = com.purohitdarpan.util.BengaliTranslator.translateKarana(karana);
+        String varaBn = com.purohitdarpan.util.BengaliTranslator.translateDay(vara);
+
+        return buildPanchangCache(date, tithiBn, nakshatraBn, yogaBn, karanaBn, varaBn)
                 .toBuilder()
                 .isPurnima(isPurnima)
                 .isAmavasya(isAmavasya)
