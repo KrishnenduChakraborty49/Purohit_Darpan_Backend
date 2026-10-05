@@ -147,7 +147,7 @@ public class DocumentRetrievalService {
             "have", "from", "they", "will", "what", "can", "does", "how",
             "tell", "about", "please", "give", "me", "kya", "hai", "mein",
             "aur", "ki", "ke", "ka", "ko", "se", "ek", "koi", "karo",
-            "ami", "tumi", "apni", "ki", "kore", "keno", "eta", "ota"
+            "ami", "tumi", "apni", "kore", "keno", "eta", "ota"
     );
 
     public int getChunkCount() { return allChunks.size(); }
