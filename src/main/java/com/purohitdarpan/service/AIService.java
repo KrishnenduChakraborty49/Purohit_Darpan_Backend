@@ -9,16 +9,14 @@ import com.purohitdarpan.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.messages.SystemMessage;
-import org.springframework.ai.chat.messages.UserMessage;
-import org.springframework.ai.chat.model.ChatResponse;
-import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Flux;
 
 import java.time.Instant;
 import java.util.Optional;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,19 +28,35 @@ public class AIService {
     private final AiFeedbackRepository feedbackRepo;
     private final UserRepository userRepo;
     private final Optional<RagVectorStoreService> ragVectorStoreService;
+    private final DocumentRetrievalService documentRetrievalService;
 
     private static final String SYSTEM_PROMPT = """
-            You are Guru, a helpful Hindu ritual assistant inside Purohit Darpan.
-            Your job is to help priests understand Sanskrit mantras, puja rituals, and samagri.
+            You are Guru — a wise, knowledgeable, and compassionate Hindu ritual assistant
+            embedded inside Purohit Darpan, an app for Hindu priests (purohits).
 
-            LANGUAGE DETECTION RULES (follow these strictly):
-            1. If the user writes using Bengali pronunciation in English letters (words like "somporke", "bolo", "puja", "ki", "karo", "ektu", "ekhon", "boro", "choto", "kotha") → you MUST reply ONLY in Bengali script (বাংলা).
-            2. If the user writes using Hindi pronunciation in English letters (words like "batao", "karo", "chahiye", "kya", "mujhe", "aur", "ke baare mein", "bata", "karein") → you MUST reply ONLY in Hindi script (हिन्दी).
-            3. If the user writes in clear English (e.g. "tell me about", "what is", "how to", "explain") → reply in English.
-            4. If the user writes directly in Bengali script → reply in Bengali script.
-            5. If the user writes directly in Hindi/Devanagari script → reply in Hindi script.
-            6. NEVER mix languages in a single response. Pick ONE language and reply entirely in that language's native script.
-            7. Answer ONLY questions about Hindu rituals, Sanskrit, pujas, mantras, and samagri. For anything else, say so in the detected language.
+            YOUR KNOWLEDGE BASE:
+            You have access to actual Puja Paddhati (ritual procedure) documents written by
+            Pandit Krishnendu Chakraborty covering: Ganesh Puja, Laxmi Puja, Durga Puja,
+            Saraswati Puja, and Shiv Puja. When relevant context from these documents is
+            provided above the user's question, USE IT as your primary source of truth.
+
+            HOW TO ANSWER:
+            - Be warm, respectful, and speak like a knowledgeable pandit.
+            - Give structured answers: use numbered steps for procedures, bullet points for samagri lists.
+            - For mantras: give the Sanskrit text, its transliteration, and its meaning.
+            - If the question is about a specific puja procedure, walk through it step by step.
+            - If the provided context contains the answer, base your response on it directly.
+            - If you are not sure, say so honestly — never make up mantras or rituals.
+            - Keep answers concise but complete. Avoid unnecessary padding.
+
+            LANGUAGE DETECTION RULES (follow strictly — never mix scripts in one response):
+            1. Bengali transliteration in English (e.g. "puja ki, bolo, somporke, ektu, ekhon, kotha") → reply ONLY in Bengali script (বাংলা).
+            2. Hindi transliteration in English (e.g. "batao, karo, chahiye, kya, mujhe, bata") → reply ONLY in Hindi script (हिन्दी).
+            3. Clear English (e.g. "tell me, what is, how to, explain") → reply in English.
+            4. Direct Bengali script input → reply in Bengali script.
+            5. Direct Hindi/Devanagari script input → reply in Hindi script.
+            6. Only answer questions about Hindu rituals, Sanskrit, pujas, mantras, samagri, festivals,
+               and related spiritual topics. For unrelated questions, politely decline in the detected language.
             """;
 
     /**
@@ -121,40 +135,75 @@ public class AIService {
     public String answerRitualQuestion(String question, String userContext,
                                         Long userId, Long contextPujaId, Long contextStepId) {
         String resolvedContext = userContext;
-        if (resolvedContext == null || resolvedContext.isBlank()) {
-            if (ragVectorStoreService.isPresent()) {
-                try {
-                    String mantraContext = ragVectorStoreService.get().retrieveContext(question, "MANTRA", 3);
-                    String pujaStepContext = ragVectorStoreService.get().retrieveContext(question, "PUJA_STEP", 3);
-                    String docContext = ragVectorStoreService.get().retrieveContext(question, "DOCUMENT", 5);
 
-                    StringBuilder sb = new StringBuilder();
-                    if (mantraContext != null && !mantraContext.isBlank()) {
-                        sb.append("## Mantra Context\n").append(mantraContext);
-                    }
-                    if (pujaStepContext != null && !pujaStepContext.isBlank()) {
-                        if (sb.length() > 0) sb.append("\n\n");
-                        sb.append("## Puja Step Context\n").append(pujaStepContext);
-                    }
-                    if (docContext != null && !docContext.isBlank()) {
-                        if (sb.length() > 0) sb.append("\n\n");
-                        sb.append("## Reference Documents (Paddhati PDF Extracts)\n").append(docContext);
-                    }
-                    resolvedContext = sb.toString();
-                } catch (Exception e) {
-                    // Qdrant is offline — gracefully fall back to pure LLM mode
-                    log.warn("Vector store unavailable, falling back to pure LLM mode. error={}", e.getMessage());
-                    resolvedContext = "";
+        // Step 1: Use in-memory document retrieval (always available, no API key needed)
+        if (resolvedContext == null || resolvedContext.isBlank()) {
+            try {
+                List<DocumentRetrievalService.Chunk> chunks = documentRetrievalService.retrieve(question, 5);
+                if (!chunks.isEmpty()) {
+                    String docContext = chunks.stream()
+                            .map(c -> "[" + c.pujaName() + "]\n" + c.text())
+                            .collect(Collectors.joining("\n\n---\n\n"));
+                    resolvedContext = "## Relevant Puja Paddhati Excerpts\n" + docContext;
+                    log.debug("Retrieved {} document chunks for question: {}", chunks.size(), question);
                 }
+            } catch (Exception e) {
+                log.warn("Document retrieval failed, falling back to pure LLM: {}", e.getMessage());
             }
         }
 
-        String prompt = resolvedContext != null && !resolvedContext.isBlank()
-                ? String.format("Context: %s\n\nUser question: %s", resolvedContext, question)
+        // Step 2: Also try Qdrant RAG if available (optional, graceful fallback)
+        if ((resolvedContext == null || resolvedContext.isBlank()) && ragVectorStoreService.isPresent()) {
+            try {
+                String mantraCtx = ragVectorStoreService.get().retrieveContext(question, "MANTRA", 3);
+                String stepCtx   = ragVectorStoreService.get().retrieveContext(question, "PUJA_STEP", 3);
+                StringBuilder sb = new StringBuilder();
+                if (mantraCtx != null && !mantraCtx.isBlank()) sb.append("## Mantra Context\n").append(mantraCtx);
+                if (stepCtx   != null && !stepCtx.isBlank())   { if (!sb.isEmpty()) sb.append("\n\n"); sb.append("## Puja Steps\n").append(stepCtx); }
+                resolvedContext = sb.toString();
+            } catch (Exception e) {
+                log.warn("Vector store unavailable: {}", e.getMessage());
+            }
+        }
+
+        String prompt = (resolvedContext != null && !resolvedContext.isBlank())
+                ? "Use the following context to answer the question accurately.\n\n"
+                  + resolvedContext + "\n\n---\n\nUser question: " + question
                 : question;
 
         return callAI(prompt, AiQueryLog.QueryType.GENERAL_QUESTION, userId,
                 contextPujaId, contextStepId, null);
+    }
+
+    /**
+     * Streaming version — returns a Flux<String> of tokens for SSE endpoint.
+     */
+    public Flux<String> answerRitualQuestionStream(String question, String userContext) {
+        String resolvedContext = userContext;
+        if (resolvedContext == null || resolvedContext.isBlank()) {
+            try {
+                List<DocumentRetrievalService.Chunk> chunks = documentRetrievalService.retrieve(question, 5);
+                if (!chunks.isEmpty()) {
+                    resolvedContext = "## Relevant Puja Paddhati Excerpts\n" +
+                            chunks.stream()
+                                  .map(c -> "[" + c.pujaName() + "]\n" + c.text())
+                                  .collect(Collectors.joining("\n\n---\n\n"));
+                }
+            } catch (Exception e) {
+                log.warn("Document retrieval failed for stream: {}", e.getMessage());
+            }
+        }
+
+        String prompt = (resolvedContext != null && !resolvedContext.isBlank())
+                ? "Use the following context to answer accurately.\n\n"
+                  + resolvedContext + "\n\n---\n\nUser question: " + question
+                : question;
+
+        return chatClient.prompt()
+                .system(SYSTEM_PROMPT)
+                .user(prompt)
+                .stream()
+                .content();
     }
 
     /**

@@ -2,16 +2,20 @@ package com.purohitdarpan.controller;
 
 import com.purohitdarpan.repository.AiQueryLogRepository;
 import com.purohitdarpan.service.AIService;
+import com.purohitdarpan.service.DocumentRetrievalService;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 
 import java.util.Map;
 
@@ -22,6 +26,7 @@ public class AIController {
 
     private final AIService aiService;
     private final AiQueryLogRepository queryLogRepo;
+    private final DocumentRetrievalService documentRetrievalService;
 
     /**
      * GET /api/ai/health — public Ollama connectivity test (no auth required)
@@ -86,6 +91,36 @@ public class AIController {
             @RequestParam(defaultValue = "20") int size) {
         return ResponseEntity.ok(
                 queryLogRepo.findByUserIdOrderByCreatedAtDesc(userId, PageRequest.of(page, size)));
+    }
+
+    /**
+     * GET /api/ai/ask/stream?question=...&userContext=...
+     * Streams the Guru's answer word-by-word as Server-Sent Events (SSE)
+     */
+    @GetMapping(value = "/ask/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<ServerSentEvent<String>> streamAnswer(
+            @RequestParam String question,
+            @RequestParam(required = false) String userContext) {
+        return aiService.answerRitualQuestionStream(question, userContext)
+                .map(token -> ServerSentEvent.<String>builder()
+                        .event("token")
+                        .data(token)
+                        .build())
+                .concatWith(Flux.just(ServerSentEvent.<String>builder()
+                        .event("done")
+                        .data("[DONE]")
+                        .build()));
+    }
+
+    /**
+     * GET /api/ai/rag/stats — shows how many document chunks are loaded in memory
+     */
+    @GetMapping("/rag/stats")
+    public ResponseEntity<Map<String, Object>> ragStats() {
+        return ResponseEntity.ok(Map.of(
+                "chunksLoaded", documentRetrievalService.getChunkCount(),
+                "status", documentRetrievalService.getChunkCount() > 0 ? "READY" : "EMPTY"
+        ));
     }
 
     /**
