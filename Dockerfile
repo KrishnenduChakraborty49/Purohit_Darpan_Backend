@@ -1,7 +1,15 @@
-FROM maven:3.9.7-eclipse-temurin-21
+# Stage 1: Build with Maven (heavy image, not deployed)
+FROM maven:3.9.7-eclipse-temurin-21 AS build
 WORKDIR /app
 COPY . .
 RUN mvn clean package -DskipTests
-EXPOSE 8080
-# Use a specific filename. If this fails, the build fails (good for debugging).
-CMD ["sh", "-c", "java -Xmx384m -Dserver.port=${PORT} -Dserver.address=0.0.0.0 -jar target/purohit-darpan-1.0.0.jar"]
+
+# Stage 2: Run with slim JRE only (~200MB vs 1.5GB)
+FROM eclipse-temurin:21-jre-alpine
+WORKDIR /app
+COPY --from=build /app/target/purohit-darpan-1.0.0.jar app.jar
+
+EXPOSE 10000
+
+# Memory optimized for Render free tier (512MB total RAM)
+CMD ["sh", "-c", "java -Xmx380m -Xms64m -XX:+UseSerialGC -XX:MaxMetaspaceSize=80m -Dserver.port=${PORT:-10000} -Dserver.address=0.0.0.0 -jar app.jar"]
