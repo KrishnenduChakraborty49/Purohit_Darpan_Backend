@@ -11,4 +11,4 @@ COPY --from=build /app/target/purohit-darpan-1.0.0.jar app.jar
 
 EXPOSE 10000
 
-CMD ["sh", "-c", "java -Xmx380m -Xms64m -XX:+UseSerialGC -XX:MaxMetaspaceSize=80m -Dserver.address=0.0.0.0 -jar app.jar"]
+CMD ["sh", "-c", "java -Xmx300m -XX:+UseSerialGC -Dserver.address=0.0.0.0 -jar app.jar"]
