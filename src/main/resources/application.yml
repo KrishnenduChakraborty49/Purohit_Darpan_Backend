@@ -23,10 +23,10 @@ spring:
   ai:
     openai:
       api-key: ${GROQ_API_KEY}
-      base-url: https://api.groq.com/openai
+      base-url: ${GROQ_BASE_URL:https://api.groq.com/openai/v1}
       chat:
         options:
-          model: llama3-8b-8192
+          model: ${GROQ_MODEL:llama-3.3-70b-versatile}
 
 server:
   port: ${PORT:10000}
