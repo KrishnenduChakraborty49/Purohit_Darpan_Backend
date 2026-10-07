@@ -28,6 +28,9 @@ public class AIController {
     private final AiQueryLogRepository queryLogRepo;
     private final DocumentRetrievalService documentRetrievalService;
 
+    @org.springframework.beans.factory.annotation.Value("${spring.ai.openai.api-key:}")
+    private String groqApiKey;
+
     /**
      * GET /api/ai/health — public Ollama connectivity test (no auth required)
      */
@@ -36,6 +39,25 @@ public class AIController {
         String result = aiService.testOllamaDirectly();
         boolean ok = !result.startsWith("ERROR");
         return ResponseEntity.ok(Map.of("status", ok ? "OK" : "FAIL", "response", result));
+    }
+
+    /**
+     * GET /api/ai/models — diagnostics: returns exact model IDs supported by the Groq key
+     */
+    @GetMapping(value = "/models", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> listModels() {
+        try {
+            java.net.http.HttpClient client = java.net.http.HttpClient.newHttpClient();
+            java.net.http.HttpRequest req = java.net.http.HttpRequest.newBuilder()
+                    .uri(java.net.URI.create("https://api.groq.com/openai/v1/models"))
+                    .header("Authorization", "Bearer " + groqApiKey)
+                    .GET()
+                    .build();
+            java.net.http.HttpResponse<String> resp = client.send(req, java.net.http.HttpResponse.BodyHandlers.ofString());
+            return ResponseEntity.status(resp.statusCode()).body(resp.body());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("{\"error\": \"" + e.getMessage() + "\"}");
+        }
     }
 
     /**
