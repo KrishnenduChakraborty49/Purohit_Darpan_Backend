@@ -11,5 +11,4 @@ COPY --from=build /app/target/purohit-darpan-1.0.0.jar app.jar
 
 EXPOSE 10000
 
-# Memory optimized for Render free tier (512MB total RAM)
-CMD ["sh", "-c", "java -Xmx380m -Xms64m -XX:+UseSerialGC -XX:MaxMetaspaceSize=80m -Dserver.port=${PORT:-10000} -Dserver.address=0.0.0.0 -jar app.jar"]
+CMD ["sh", "-c", "java -Xmx380m -Xms64m -XX:+UseSerialGC -XX:MaxMetaspaceSize=80m -Dserver.address=0.0.0.0 -jar app.jar"]
