@@ -40,6 +40,15 @@ public class PanchangService {
     @Cacheable(value = "panchang", key = "#date.toString()")
     public PanchangCache getForDate(LocalDate date) {
         return cacheRepo.findByDate(date)
+                .map(cached -> {
+                    // Auto-heal: If cached row has an API error, overwrite with authentic calculation
+                    if (cached.getTithi() != null && cached.getTithi().contains("Err")) {
+                        PanchangCache fresh = generateMockPanchang(date);
+                        fresh.setId(cached.getId());
+                        return cacheRepo.save(fresh);
+                    }
+                    return cached;
+                })
                 .orElseGet(() -> fetchAndCache(date));
     }
 
@@ -154,8 +163,10 @@ public class PanchangService {
         String sunrise = convertToTimeStr(extractString(panchanga, "sunrise"));
         String sunset  = convertToTimeStr(extractString(panchanga, "sunset"));
 
-        if (tithi == null || tithi.isEmpty()) tithi = "Unknown";
 
+        if (tithi == null || tithi.isBlank() || tithi.contains("Err")) {
+            return generateMockPanchang(date);
+        }
         boolean isPurnima = "Purnima".equalsIgnoreCase(tithi);
         boolean isAmavasya = "Amavasya".equalsIgnoreCase(tithi);
         boolean isEkadashi = tithi != null && tithi.toLowerCase().contains("ekadashi");
