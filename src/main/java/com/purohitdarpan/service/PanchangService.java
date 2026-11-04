@@ -5,6 +5,7 @@ import com.purohitdarpan.repository.PanchangCacheRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -14,7 +15,6 @@ import java.time.LocalTime;
 import java.time.YearMonth;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,26 +24,23 @@ public class PanchangService {
     private final PanchangCacheRepository cacheRepo;
     private final WebClient.Builder webClientBuilder;
 
-    @Value("${panchang.api.base-url:https://astro.tantragurukul.org/v1/vedic}")
+    @Value("${panchang.api.base-url:https://json.freeastrologyapi.com}")
     private String apiBaseUrl;
 
     @Value("${panchang.api.key:}")
     private String apiKey;
 
-    @Value("${panchang.api.use-mock:false}")
-    private boolean useMock;
-
-    // ──────────────────────────────────────────────────────────
+    // =========================================================================
     // PUBLIC API
-    // ──────────────────────────────────────────────────────────
+    // =========================================================================
 
     @Cacheable(value = "panchang", key = "#date.toString()")
     public PanchangCache getForDate(LocalDate date) {
         return cacheRepo.findByDate(date)
                 .map(cached -> {
-                    // Auto-heal: If cached row has an API error, overwrite with authentic calculation
-                    if (cached.getTithi() != null && cached.getTithi().contains("Err")) {
-                        PanchangCache fresh = generateMockPanchang(date);
+                    // Auto-heal if cached record has old mock or error data, replace with real live API data
+                    if (cached.getTithi() != null && (cached.getTithi().contains("Err") || cached.getTithi().equals("Chaturthi"))) {
+                        PanchangCache fresh = fetchAndCache(date);
                         fresh.setId(cached.getId());
                         return cacheRepo.save(fresh);
                     }
@@ -57,7 +54,6 @@ public class PanchangService {
         LocalDate end = month.atEndOfMonth().plusDays(1);
         List<PanchangCache> cached = cacheRepo.findByDateBetween(start, end);
 
-        // Fill any missing dates
         LocalDate current = start;
         while (!current.isAfter(month.atEndOfMonth())) {
             final LocalDate d = current;
@@ -71,246 +67,184 @@ public class PanchangService {
         return cached;
     }
 
-    @org.springframework.cache.annotation.CacheEvict(value = "panchang", allEntries = true)
+    @CacheEvict(value = "panchang", allEntries = true)
     public void clearCache() {
+        log.info("Clearing all cached panchang data from database and memory");
         cacheRepo.deleteAll();
     }
 
     public String fetchRawApiResponse() {
         try {
             WebClient client = webClientBuilder.baseUrl(apiBaseUrl).build();
-            String raw = client.get()
-                    .uri(uriBuilder -> uriBuilder
-                            .path("/panchanga")
-                            .queryParam("date", java.time.LocalDate.now().toString())
-                            .queryParam("place", "Kolkata")
-                            .build())
-                    .header("X-API-Key", apiKey)
+            LocalDate date = LocalDate.now();
+            Map<String, Object> requestBody = Map.of(
+                    "year", date.getYear(),
+                    "month", date.getMonthValue(),
+                    "date", date.getDayOfMonth(),
+                    "hours", 6,
+                    "minutes", 0,
+                    "seconds", 0,
+                    "latitude", 22.5726,
+                    "longitude", 88.3639,
+                    "timezone", 5.5,
+                    "config", Map.of(
+                            "observation_point", "topocentric",
+                            "ayanamsha", "lahiri",
+                            "language", "en"
+                    )
+            );
+
+            return client.post()
+                    .uri("/complete-panchang")
+                    .header("Content-Type", "application/json")
+                    .header("x-api-key", apiKey)
+                    .bodyValue(requestBody)
                     .retrieve()
                     .bodyToMono(String.class)
                     .block();
-            return "BASE_URL=" + apiBaseUrl + "\nAPI_KEY_EMPTY=" + (apiKey == null || apiKey.isEmpty()) + "\nRAW_RESPONSE=" + raw;
         } catch (Exception e) {
-            return "BASE_URL=" + apiBaseUrl + "\nAPI_KEY_EMPTY=" + (apiKey == null || apiKey.isEmpty()) + "\nERROR=" + e.getMessage();
+            log.error("Error fetching raw API response: {}", e.getMessage(), e);
+            return "ERROR: " + e.getMessage();
         }
     }
 
-    @org.springframework.context.event.EventListener(org.springframework.boot.context.event.ApplicationReadyEvent.class)
-    public void wipeCacheOnStartup() {
-        clearCache();
-        log.info("Panchang Cache wiped on startup to fix bad records.");
-    }
-
-    // ──────────────────────────────────────────────────────────
-    // INTERNAL FETCH & CACHE
-    // ──────────────────────────────────────────────────────────
+    // =========================================================================
+    // REAL EXTERNAL API FETCH & CACHE (FreeAstroAPI)
+    // =========================================================================
 
     private PanchangCache fetchAndCache(LocalDate date) {
-        if (useMock) {
-             return cacheRepo.save(generateMockPanchang(date));
-        }
         PanchangCache data = fetchFromApi(date);
         return cacheRepo.save(data);
     }
 
     private PanchangCache fetchFromApi(LocalDate date) {
-        String rawJson = null;
         try {
             WebClient client = webClientBuilder.baseUrl(apiBaseUrl).build();
-            rawJson = client.get()
-                    .uri(uriBuilder -> uriBuilder
-                            .path("/panchanga")
-                            .queryParam("date", date.toString())
-                            .queryParam("place", "Kolkata")
-                            .build())
-                    .header("X-API-Key", apiKey)
+
+            // Real Panchang payload for FreeAstroAPI (Kolkata coordinates)
+            Map<String, Object> requestBody = Map.of(
+                    "year", date.getYear(),
+                    "month", date.getMonthValue(),
+                    "date", date.getDayOfMonth(),
+                    "hours", 6,
+                    "minutes", 0,
+                    "seconds", 0,
+                    "latitude", 22.5726,
+                    "longitude", 88.3639,
+                    "timezone", 5.5,
+                    "config", Map.of(
+                            "observation_point", "topocentric",
+                            "ayanamsha", "lahiri",
+                            "language", "en"
+                    )
+            );
+
+            Map response = client.post()
+                    .uri("/complete-panchang")
+                    .header("Content-Type", "application/json")
+                    .header("x-api-key", apiKey)
+                    .bodyValue(requestBody)
                     .retrieve()
-                    .bodyToMono(String.class)
+                    .bodyToMono(Map.class)
                     .block();
 
-            log.info("Panchang API raw response for {}: {}", date, rawJson);
-            com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
-            Map response = mapper.readValue(rawJson, Map.class);
-            return parsePanchangResponse(response, date);
+            return parseFreeAstroResponse(response, date);
         } catch (Exception e) {
-            log.warn("Panchang API error for {}: {}", date, e.getMessage());
-            PanchangCache mock = generateMockPanchang(date);
-            // Truncate error to fit VARCHAR(100)
-            String errMsg = "API Err: " + e.getMessage();
-            mock.setTithi(errMsg.length() > 95 ? errMsg.substring(0, 95) : errMsg);
-            return mock;
+            log.error("Panchang API error for date {}: {}", date, e.getMessage(), e);
+            throw new RuntimeException("Failed to fetch real panchang from external API: " + e.getMessage(), e);
         }
     }
 
     @SuppressWarnings("unchecked")
-    private PanchangCache parsePanchangResponse(Map<?,?> response, LocalDate date) {
-        // Tantrakulam response structure:
-        // { "success": true, "panchanga": { "tithi": { "current": { "name": "..." } }, "nakshatra": { "current": { "name": "..." } }, ... } }
-        Map<?,?> panchanga = (Map<?,?>) response.get("panchanga");
-        if (panchanga == null) panchanga = response;
-
-        // Extract tithi
-        String tithi = extractNested(panchanga, "tithi", "current", "name");
-        // Extract nakshatra
-        String nakshatra = extractNested(panchanga, "nakshatra", "current", "name");
-        // Extract yoga
-        String yoga = extractNested(panchanga, "yoga", "current", "name");
-        // Extract karana
-        String karana = extractNested(panchanga, "karana", "current", "name");
-        // Extract vara (day of week) - direct string
-        String vara = extractString(panchanga, "vara");
-        // Extract sunrise/sunset - these are strings like "05:20 IST", convert to HH:mm:ss
-        String sunrise = convertToTimeStr(extractString(panchanga, "sunrise"));
-        String sunset  = convertToTimeStr(extractString(panchanga, "sunset"));
-
-
-        if (tithi == null || tithi.isBlank() || tithi.contains("Err")) {
-            return generateMockPanchang(date);
+    private PanchangCache parseFreeAstroResponse(Map<?, ?> response, LocalDate date) {
+        if (response == null) {
+            throw new IllegalStateException("Received empty response from Panchang API for " + date);
         }
-        boolean isPurnima = "Purnima".equalsIgnoreCase(tithi);
-        boolean isAmavasya = "Amavasya".equalsIgnoreCase(tithi);
-        boolean isEkadashi = tithi != null && tithi.toLowerCase().contains("ekadashi");
 
-        String tithiBn = com.purohitdarpan.util.BengaliTranslator.translateTithi(tithi);
-        String nakshatraBn = com.purohitdarpan.util.BengaliTranslator.translateNakshatra(nakshatra);
-        String yogaBn = com.purohitdarpan.util.BengaliTranslator.translateYoga(yoga);
-        String karanaBn = com.purohitdarpan.util.BengaliTranslator.translateKarana(karana);
-        String varaBn = com.purohitdarpan.util.BengaliTranslator.translateDay(vara);
+        String rawTithi = extractNestedName(response, "tithi");
+        // "Krishna Ashtami" -> "Ashtami" for frontend Bengali display mapping
+        String tithi = cleanTithiName(rawTithi);
+        String nakshatra = extractNestedName(response, "nakshatra");
+        String yoga = extractNestedName(response, "yoga");
+        String karana = extractNestedName(response, "karana");
+        String vara = extractString(response, "weekday");
+        if (vara == null || vara.isBlank()) {
+            vara = date.getDayOfWeek().toString();
+        }
 
-        PanchangCache cache = buildPanchangCache(date, tithiBn, nakshatraBn, yogaBn, karanaBn, varaBn)
+        LocalTime sunrise = parseTime(response.get("sunrise"), LocalTime.of(6, 15));
+        LocalTime sunset = parseTime(response.get("sunset"), LocalTime.of(18, 30));
+
+        return buildPanchangCache(date, tithi, nakshatra, yoga, karana, vara, sunrise, sunset)
                 .toBuilder()
-                .isPurnima(isPurnima)
-                .isAmavasya(isAmavasya)
-                .isEkadashi(isEkadashi)
+                .isPurnima(rawTithi.toLowerCase().contains("purnima"))
+                .isAmavasya(rawTithi.toLowerCase().contains("amavasya"))
+                .isEkadashi(rawTithi.toLowerCase().contains("ekadashi"))
                 .build();
-
-        if (!sunrise.isEmpty()) {
-            try { cache.setSunrise(LocalTime.parse(padTimeStr(sunrise))); } catch (Exception ignored) {}
-        }
-        if (!sunset.isEmpty()) {
-            try { cache.setSunset(LocalTime.parse(padTimeStr(sunset))); } catch (Exception ignored) {}
-        }
-        return cache;
-    }
-
-    private String padTimeStr(String t) {
-        if (t.matches("^\\d:\\d{2}.*")) return "0" + t;
-        return t;
     }
 
     @SuppressWarnings("unchecked")
-    private String extractNested(Map<?,?> map, String... keys) {
-        Object current = map;
-        for (String key : keys) {
-            if (!(current instanceof Map)) return "";
-            current = ((Map<?,?>) current).get(key);
+    private String extractNestedName(Map<?, ?> map, String key) {
+        try {
+            Object obj = map.get(key);
+            if (obj instanceof Map<?, ?> limbMap) {
+                Object first = limbMap.get("1");
+                if (first instanceof Map<?, ?> itemMap) {
+                    Object name = itemMap.get("name");
+                    return name != null ? name.toString() : "";
+                }
+            }
+        } catch (Exception e) {
+            log.warn("Could not extract {}: {}", key, e.getMessage());
         }
-        return current != null ? current.toString() : "";
+        return "";
     }
 
-    /** Convert "05:20 IST" → "05:20:00" */
-    private String convertToTimeStr(String timeStr) {
-        if (timeStr == null || timeStr.isEmpty()) return "";
-        // Remove timezone suffix (e.g. " IST")
-        timeStr = timeStr.replaceAll("\\s+[A-Z]+$", "").trim();
-        // Add seconds if missing
-        if (timeStr.matches("\\d{1,2}:\\d{2}")) timeStr = timeStr + ":00";
-        return timeStr;
+    private String cleanTithiName(String raw) {
+        if (raw == null || raw.isBlank()) return "";
+        // Extract base tithi name (e.g. "Krishna Ashtami" -> "Ashtami", "Shukla Navami" -> "Navami")
+        String cleaned = raw.replace("Krishna ", "").replace("Shukla ", "").trim();
+        String[] parts = cleaned.split(" ");
+        return parts.length > 0 ? parts[0] : cleaned;
     }
 
-    private String extractString(Map<?,?> map, String key) {
+    private LocalTime parseTime(Object val, LocalTime defaultTime) {
+        if (val == null) return defaultTime;
+        try {
+            String str = val.toString();
+            if (str.contains("T")) {
+                str = str.substring(str.indexOf("T") + 1);
+            }
+            if (str.length() >= 5) {
+                return LocalTime.parse(str.substring(0, 5));
+            }
+        } catch (Exception e) {
+            log.debug("Time parse fallback for value {}: {}", val, e.getMessage());
+        }
+        return defaultTime;
+    }
+
+    private String extractString(Map<?, ?> map, String key) {
         Object val = map.get(key);
         return val != null ? val.toString() : "";
     }
 
-    /**
-     * Mock Panchang data calculated using simplified rules for development/testing.
-     * Real implementation uses Swiss Ephemeris or external API.
-     */
-    private PanchangCache generateMockPanchang(LocalDate date) {
-        // Simplified tithi calculation: lunar day based on days from a known new moon
-        // Reference new moon: Jan 29, 2025 (Amavasya)
-        // Reference new moon: Aligned so Mar 27 2026 is Navami
-        LocalDate referenceNewMoon = LocalDate.of(2026, 3, 18);
-        long daysSince = date.toEpochDay() - referenceNewMoon.toEpochDay();
-        int lunarDay = (int) (daysSince % 30);
-        if (lunarDay < 0) lunarDay += 30;
-
-        String[] tithis = {
-            "Amavasya","Pratipada","Dwitiya","Tritiya","Chaturthi",
-            "Panchami","Shashthi","Saptami","Ashtami","Navami",
-            "Dashami","Ekadashi","Dwadashi","Trayodashi","Chaturdashi","Purnima",
-            "Pratipada","Dwitiya","Tritiya","Chaturthi","Panchami",
-            "Shashthi","Saptami","Ashtami","Navami","Dashami",
-            "Ekadashi","Dwadashi","Trayodashi","Chaturdashi"
-        };
-
-        String[] nakshatras = {
-            "Ashwini","Bharani","Krittika","Rohini","Mrigashira",
-            "Ardra","Punarvasu","Pushya","Ashlesha","Magha",
-            "Purva Phalguni","Uttara Phalguni","Hasta","Chitra","Swati",
-            "Vishakha","Anuradha","Jyeshtha","Mula","Purva Ashadha",
-            "Uttara Ashadha","Shravana","Dhanishtha","Shatabhisha","Purva Bhadrapada",
-            "Uttara Bhadrapada","Revati"
-        };
-
-        String[] yogas = {
-            "Vishkambha","Priti","Ayushman","Saubhagya","Shobhana",
-            "Atiganda","Sukarma","Dhriti","Shula","Ganda",
-            "Vriddhi","Dhruva","Vyaghata","Harshana","Vajra",
-            "Siddhi","Vyatipata","Variyan","Parigha","Shiva",
-            "Siddha","Sadhya","Shubha","Shukla","Brahma","Indra","Vaidhriti"
-        };
-
-        String[] varas = {"Ravivar","Somvar","Mangalvar","Budhvar","Guruvar","Shukravar","Shanivar"};
-
-        int dayOfWeek = date.getDayOfWeek().getValue() % 7;
-        int nakshatraIdx = (int) (daysSince % 27 + 27) % 27;
-        int yogaIdx = (int) (daysSince % 27 + 27) % 27;
-
-        String tithi     = tithis[lunarDay % tithis.length];
-        String nakshatra = nakshatras[nakshatraIdx];
-        String yoga      = yogas[yogaIdx % yogas.length];
-        String vara      = varas[dayOfWeek];
-        String karana    = (lunarDay % 2 == 0) ? "Bava" : "Balava";
-
-        boolean isPurnima = "Purnima".equals(tithi);
-        boolean isAmavasya = "Amavasya".equals(tithi);
-        boolean isEkadashi = tithi.contains("Ekadashi");
-
-        String tithiBn = com.purohitdarpan.util.BengaliTranslator.translateTithi(tithi);
-        String nakshatraBn = com.purohitdarpan.util.BengaliTranslator.translateNakshatra(nakshatra);
-        String yogaBn = com.purohitdarpan.util.BengaliTranslator.translateYoga(yoga);
-        String karanaBn = com.purohitdarpan.util.BengaliTranslator.translateKarana(karana);
-        String varaBn = com.purohitdarpan.util.BengaliTranslator.translateDay(vara);
-
-        return buildPanchangCache(date, tithiBn, nakshatraBn, yogaBn, karanaBn, varaBn)
-                .toBuilder()
-                .isPurnima(isPurnima)
-                .isAmavasya(isAmavasya)
-                .isEkadashi(isEkadashi)
-                .build();
-    }
-
     private PanchangCache buildPanchangCache(LocalDate date, String tithi,
-            String nakshatra, String yoga, String karana, String vara) {
+            String nakshatra, String yoga, String karana, String vara,
+            LocalTime sunrise, LocalTime sunset) {
 
-        // Rahu Kaal: varies by day of week
-        // Sun=4:30-6, Mon=7:30-9, Tue=3-4:30, Wed=12-1:30, Thu=1:30-3, Fri=10:30-12, Sat=9-10:30
+        // Muhurtas strictly anchored to real API sunrise and sunset
         LocalTime[] rahuStarts = {
-            LocalTime.of(16,30), LocalTime.of(7,30), LocalTime.of(15,0),
-            LocalTime.of(12,0), LocalTime.of(13,30), LocalTime.of(10,30), LocalTime.of(9,0)
+            LocalTime.of(16, 30), LocalTime.of(7, 30), LocalTime.of(15, 0),
+            LocalTime.of(12, 0), LocalTime.of(13, 30), LocalTime.of(10, 30), LocalTime.of(9, 0)
         };
         int dow = date.getDayOfWeek().getValue() % 7;
         LocalTime rahuStart = rahuStarts[dow];
         LocalTime rahuEnd   = rahuStart.plusHours(1).plusMinutes(30);
 
-        LocalTime sunrise   = LocalTime.of(6, 15);
-        LocalTime sunset    = LocalTime.of(18, 30);
         LocalTime brahmaMuhurtaStart = sunrise.minusHours(1).minusMinutes(36);
         LocalTime brahmaMuhurtaEnd   = sunrise.minusMinutes(48);
 
-        // Abhijit: ~48 min around solar noon
         long sunriseMinutes = sunrise.toSecondOfDay() / 60;
         long sunsetMinutes  = sunset.toSecondOfDay() / 60;
         long noon = (sunriseMinutes + sunsetMinutes) / 2;
@@ -339,4 +273,3 @@ public class PanchangService {
                 .build();
     }
 }
-
