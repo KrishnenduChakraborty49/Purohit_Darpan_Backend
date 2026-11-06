@@ -53,6 +53,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/panchang/**").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/api/panchang/cache").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/festivals/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/horoscope/**").permitAll()
                         .requestMatchers("/","/actuator/health").permitAll()
                         .requestMatchers("/api/diagnostics/**").permitAll()
                         .requestMatchers("/api/notifications/trigger-scheduler").permitAll()
@@ -99,3 +100,4 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder(12);
     }
 }
+
