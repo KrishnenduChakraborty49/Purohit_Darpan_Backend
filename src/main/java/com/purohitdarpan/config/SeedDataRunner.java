@@ -94,25 +94,32 @@ public class SeedDataRunner implements CommandLineRunner {
                 
                 java.time.LocalDate today = java.time.LocalDate.now();
                 
-                // Event in 0 days (Today)
+                // Event in 0 days (Today: Kali Puja & Diwali)
                 jdbcTemplate.update(
-                    "INSERT INTO hindu_festivals (name, event_date, description, notification_days_before, is_active) VALUES (?, ?, ?, ?, true)",
-                    "Today's Special Puja", today, 
-                    "Auspicious day for meditation and learning.", 0
+                    "INSERT INTO hindu_festivals (name, name_devanagari, event_date, description, notification_days_before, is_active) VALUES (?, ?, ?, ?, ?, true)",
+                    "Kali Puja & Diwali (শ্রী শ্রী শ্যামাপূজা ও দীপাবলি)", "काली पूजा व दीपावली", today, 
+                    "মা কালীর নিশীথ আরাধনা, মঙ্গল প্রদীপ প্রজ্বলন ও শুভ দীপাবলি উৎসব।", 0
                 );
 
-                // Event in 1 day (Tomorrow)
+                // Event in 2 days (In this week: Bhai Phonta)
                 jdbcTemplate.update(
-                    "INSERT INTO hindu_festivals (name, event_date, description, notification_days_before, is_active) VALUES (?, ?, ?, ?, true)",
-                    "Auspicious Ritual Prep", today.plusDays(1), 
-                    "Prepare your samagri for the upcoming ritual.", 1
+                    "INSERT INTO hindu_festivals (name, name_devanagari, event_date, description, notification_days_before, is_active) VALUES (?, ?, ?, ?, ?, true)",
+                    "Bhai Phonta (ভ্রাতৃদ্বিতীয়া - ভাইফোঁটা)", "भाई दूज", today.plusDays(2), 
+                    "ভাইয়ের দীর্ঘায়ু কামনায় বোনেদের পবিত্র ফোঁটা ও শুভ প্রার্থনা।", 2
                 );
 
-                // Event in 7 days (Next Week)
+                // Event in 9 days (Jagaddhatri Puja)
                 jdbcTemplate.update(
-                    "INSERT INTO hindu_festivals (name, event_date, description, notification_days_before, is_active) VALUES (?, ?, ?, ?, true)",
-                    "Monthly Ritual Review", today.plusDays(7), 
-                    "Review your learning progress for this month.", 7
+                    "INSERT INTO hindu_festivals (name, name_devanagari, event_date, description, notification_days_before, is_active) VALUES (?, ?, ?, ?, ?, true)",
+                    "Jagaddhatri Puja (শ্রী শ্রী জগদ্ধাত্রী পূজা)", "जगদ্ধাত্রী পূজা", today.plusDays(9), 
+                    "জগদ্ধারিণী দেবী জগদ্ধাত্রীর মহাপূজা ও নির্ঘণ্ট।", 7
+                );
+
+                // Event in 15 days (Rash Yatra)
+                jdbcTemplate.update(
+                    "INSERT INTO hindu_festivals (name, name_devanagari, event_date, description, notification_days_before, is_active) VALUES (?, ?, ?, ?, ?, true)",
+                    "Rash Yatra (শ্রী শ্রী রাসযাত্রা - রাস পূর্ণিমা)", "रास यात्रा", today.plusDays(15), 
+                    "শ্রী রাধাকৃষ্ণের মহারাসোৎসব ও পুণ্য স্নান।", 7
                 );
 
                 logger.info("Festival seeding complete!");

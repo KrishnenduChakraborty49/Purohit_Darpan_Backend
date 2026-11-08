@@ -41,7 +41,7 @@ public class NotificationScheduler {
         log.info("Running festival notification scheduler for date: {}", today);
 
         // Check for festivals at multiple day windows
-        int[] daysBeforeWindows = {20, 7, 1, 0};
+        int[] daysBeforeWindows = {20, 14, 7, 5, 3, 2, 1, 0};
 
         for (int window : daysBeforeWindows) {
             List<HinduFestival> festivals = festivalRepo.findFestivalsInDays(
@@ -100,21 +100,21 @@ public class NotificationScheduler {
         String pujaPart = pujaId.isBlank() ? "/pujas" : "/puja/" + pujaId;
 
         if (daysLeft == 0) {
-            title = "🙏 Today is " + festival.getName();
-            body  = "Begin the guided puja. Open the step-by-step ritual module and perform with confidence.";
-            url   = pujaPart + "/player";
+            title = "🙏 আজ " + festival.getName() + "!";
+            body  = "পরম শুভ উপলক্ষ। পূজা বিধি ও পঞ্জিকা দেখে তিথি ও শুভ মুহূর্তে আরাধনা শুরু করুন।";
+            url   = "/panchang";
         } else if (daysLeft == 1) {
-            title = "🌸 " + festival.getName() + " is tomorrow!";
-            body  = "Check today's Muhurat and prepare your Samagri checklist now.";
-            url   = pujaPart;
-        } else if (daysLeft == 7) {
-            title = "⏰ " + festival.getName() + " — 1 week away";
-            body  = "Review the complete puja steps and check the Panchang for auspicious timings.";
+            title = "🌸 আগামীকাল " + festival.getName() + "!";
+            body  = "পূজার প্রস্তুতি নিন এবং পঞ্জিকায় শুভ সময় ও নির্ঘণ্ট দেখে সামগ্রী প্রস্তুত রাখুন।";
+            url   = "/panchang";
+        } else if (daysLeft <= 7) {
+            title = "⏰ আসন্ন " + festival.getName() + " — আর " + daysLeft + " দিন বাকি";
+            body  = "এই সপ্তাহের বিশেষ পূজার নির্ঘণ্ট ও পদ্ধতি পঞ্জিকায় দেখে নিন।";
             url   = "/panchang";
         } else {
-            title = "🪔 " + festival.getName() + " in " + daysLeft + " days";
-            body  = "Prepare early! Open the learning module and start practicing today.";
-            url   = pujaPart;
+            title = "🪔 " + festival.getName() + " — আর " + daysLeft + " দিন";
+            body  = "আগাম প্রস্তুতি শুরু করুন এবং পূজার নির্দেশিকা অনুশীলন করুন।";
+            url   = pujaPart.isBlank() ? "/panchang" : pujaPart;
         }
 
         sendToAllEligibleUsers(festival, title, body, url,
