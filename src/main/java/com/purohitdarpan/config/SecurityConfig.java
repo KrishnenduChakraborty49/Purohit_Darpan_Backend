@@ -49,7 +49,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Public endpoints
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/pujas/**").permitAll()
+                        .requestMatchers("/api/pujas/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/panchang/**").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/api/panchang/cache").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/festivals/**").permitAll()
